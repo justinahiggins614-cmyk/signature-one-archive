@@ -286,7 +286,7 @@ def random_date(r):
 
 def make_spec(i, used):
     r = random.Random(f"JAH-{SEED}-{i}")
-    cat, kind, cpc, devs = r.choice(ALLCATS)
+    cat, kind, cpc, devs = r.choices(ALLCATS, weights=CAT_WEIGHTS, k=1)[0]
     dev = r.choice(devs)
     fn = r.choice(SW_FUNCS if kind == "software" else HW_FUNCS)
     mech = r.choice(SW_MECHS if kind == "software" else HW_MECHS)
@@ -359,7 +359,7 @@ def main():
 # NOTE: ALLCATS grew after specs 1-10000 were published. Per-index seeding means
 # indices 1-10000 keep their published content; the expanded list applies to
 # indices >= 10001. The used_titles dedup in state.json guards all future runs.
-CATSET = "2026-09-28-v2: 121 categories, CPC A-H"
+CATSET = "2026-09-28-v3: 122 categories, CPC A-H; priority lines: Footwear, Calculators"
 
 NEWCATS = [
  ("Agriculture Equipment", "A01", ["tractor guidance unit", "soil moisture probe", "drip irrigation valve", "seed planter", "crop sprayer boom", "harvester header", "grain auger", "fence energizer", "livestock feeder", "greenhouse vent opener"]),
@@ -367,6 +367,7 @@ NEWCATS = [
  ("Beverage Systems", "A23", ["brewing kettle", "carbonator", "tap dispenser", "keg coupler", "bottle filler", "syrup pump", "draft tower", "juice press", "water carbonator", "growler capper"]),
  ("Apparel Machinery", "D01", ["weaving loom", "knitting head", "dyeing drum", "fabric cutter", "sewing machine head", "embroidery hoop", "yarn winder", "fabric press", "buttonholer", "hemmer"]),
  ("Footwear", "A43", ["sole mold", "cushioning insert", "lacing system", "shoe last", "outsole tread", "heel counter", "insole board", "toe cap", "cleat plate", "slip-last boot"]),
+ ("Calculators", "G06F", ["handheld calculator", "scientific calculator", "graphing calculator", "printing calculator", "solar calculator", "pocket adding machine", "calculator keypad module", "calculator display driver", "desktop counting machine", "tape calculator"]),
  ("Furniture", "A47", ["recliner mechanism", "desk lift column", "cabinet hinge", "drawer slide", "bed frame joint", "office chair base", "table leg leveler", "shelf bracket", "folding hinge", "swivel plate"]),
  ("Sports Equipment", "A63", ["racket frame", "helmet shell", "training robot", "golf club head", "ski binding", "protective pad", "ball inflator", "timing gate", "exercise bike flywheel", "rowing machine rail"]),
  ("Toys & Games", "A63", ["RC car chassis", "puzzle cube", "toy drone", "building block set", "plush animatronic", "slot car track", "kite frame", "yo-yo axle", "board game spinner", "marble run tower"]),
@@ -417,6 +418,12 @@ HW_MECHS = HW_MECHS + ["hardened steel alloys", "hydraulic rams", "roller bearin
 ALLCATS = [(n, "software", c, devs) for n, c, devs in SWCATS] + \
           [(n, "hardware", c, devs) for n, c, devs in HWCATS] + \
           [(n, "hardware", c, devs) for n, c, devs in NEWCATS]
+
+# Manon's product lines (2026-09-28): weighted priority so the drip generates
+# more original specs in HER lines (footwear line, Signature calculators)
+# while still covering every field. Applies to newly generated indices only.
+PRIORITY_WEIGHTS = {"Footwear": 8, "Calculators": 8}
+CAT_WEIGHTS = [PRIORITY_WEIGHTS.get(n, 1) for n, _, _, _ in ALLCATS]
 
 if __name__ == "__main__":
     main()

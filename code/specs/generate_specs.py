@@ -274,6 +274,7 @@ def load_state():
     return {"seed": SEED, "next_index": 1, "used_titles": []}
 
 def save_state(st):
+    st["catset"] = CATSET
     tmp = STATE + ".tmp"
     with open(tmp, "w", encoding="utf-8") as fh:
         json.dump(st, fh, separators=(",", ":"))
@@ -341,6 +342,81 @@ def main():
     size_kb = os.path.getsize(DATA) / 1024
     total = start + count - 1
     print(f"done: +{made} new, {total} total specs ({size_kb:,.0f} KB)")
+
+
+# ----------------------------------------------------------------------------
+# BOUNDARY (2026-09-28): every spec is an ORIGINAL invention concept generated
+# fresh through the Signature-One framework. Nothing here copies, closely
+# paraphrases, or re-attributes any real patent record (including records from
+# the cyber-patent-catalog dataset). The CPC subclass codes below are used ONLY
+# as a coverage checklist for breadth - which technology areas to cover across
+# every field that has ever had a patent (sections A through H). All titles,
+# abstracts, parameter sets, and tool mappings are newly generated original
+# content by Justin Addam Higgins (JAH).
+# ----------------------------------------------------------------------------
+
+# v2 expansion (2026-09-28): all-fields coverage, CPC sections A-H.
+# NOTE: ALLCATS grew after specs 1-10000 were published. Per-index seeding means
+# indices 1-10000 keep their published content; the expanded list applies to
+# indices >= 10001. The used_titles dedup in state.json guards all future runs.
+CATSET = "2026-09-28-v2: 121 categories, CPC A-H"
+
+NEWCATS = [
+ ("Agriculture Equipment", "A01", ["tractor guidance unit", "soil moisture probe", "drip irrigation valve", "seed planter", "crop sprayer boom", "harvester header", "grain auger", "fence energizer", "livestock feeder", "greenhouse vent opener"]),
+ ("Food Processing", "A23", ["dough mixer", "pasteurizer", "conveyor oven", "slicing blade", "filling nozzle", "capping head", "retort sterilizer", "extrusion die", "blast chiller", "inspection conveyor"]),
+ ("Beverage Systems", "A23", ["brewing kettle", "carbonator", "tap dispenser", "keg coupler", "bottle filler", "syrup pump", "draft tower", "juice press", "water carbonator", "growler capper"]),
+ ("Apparel Machinery", "D01", ["weaving loom", "knitting head", "dyeing drum", "fabric cutter", "sewing machine head", "embroidery hoop", "yarn winder", "fabric press", "buttonholer", "hemmer"]),
+ ("Footwear", "A43", ["sole mold", "cushioning insert", "lacing system", "shoe last", "outsole tread", "heel counter", "insole board", "toe cap", "cleat plate", "slip-last boot"]),
+ ("Furniture", "A47", ["recliner mechanism", "desk lift column", "cabinet hinge", "drawer slide", "bed frame joint", "office chair base", "table leg leveler", "shelf bracket", "folding hinge", "swivel plate"]),
+ ("Sports Equipment", "A63", ["racket frame", "helmet shell", "training robot", "golf club head", "ski binding", "protective pad", "ball inflator", "timing gate", "exercise bike flywheel", "rowing machine rail"]),
+ ("Toys & Games", "A63", ["RC car chassis", "puzzle cube", "toy drone", "building block set", "plush animatronic", "slot car track", "kite frame", "yo-yo axle", "board game spinner", "marble run tower"]),
+ ("Musical Instruments", "G10", ["digital piano keybed", "drum trigger pad", "guitar effects pedal", "wind controller", "metronome", "tuner clip", "mixer fader", "synthesizer knob", "speaker cabinet", "microphone stand"]),
+ ("Chemical Processing", "B01", ["reactor vessel", "distillation column", "industrial mixer", "filter press", "centrifuge bowl", "evaporator", "crystallizer", "absorption tower", "heat-traced pipe", "agitator blade"]),
+ ("Water Treatment", "C02", ["filtration membrane", "UV sterilizer", "desalination unit", "clarifier rake", "dosing pump", "aeration diffuser", "sludge scraper", "ion exchange tank", "ozone generator", "backwash valve"]),
+ ("Machine Tools", "B23", ["lathe chuck", "milling head", "drill press table", "CNC spindle", "tool changer", "collet holder", "workholding vise", "coolant nozzle", "boring bar", "surface grinder wheel"]),
+ ("Welding", "B23", ["MIG torch", "spot welder", "plasma cutter", "welding helmet", "electrode holder", "ground clamp", "wire feeder", "positioner table", "fume extractor", "arc starter"]),
+ ("Material Handling", "B65", ["conveyor belt", "palletizer", "forklift mast", "roller conveyor", "sortation chute", "lift table", "drum handler", "vacuum lifter", "cart pusher", "tote stacker"]),
+ ("Packaging Machinery", "B65", ["shrink wrapper", "carton erector", "label applicator", "case sealer", "pallet wrapper", "fill-level inspector", "cap tightener", "pouch sealer", "strapping machine", "box former"]),
+ ("Industrial Printing", "B41", ["flexo press", "ink mixer", "gravure cylinder", "screen printer", "pad printer", "inkjet array", "curing tunnel", "web tensioner", "die cutter", "laminator"]),
+ ("Paper Products", "D21", ["paper machine roller", "cardboard corrugator", "sheet cutter", "pulp refiner", "embosser", "rewinder", "coating blade", "dryer can", "bale press", "core winder"]),
+ ("Construction Equipment", "E02", ["excavator arm", "crane hoist", "concrete mixer", "compactor plate", "scaffold frame", "boom lift", "dump trailer", "trench box", "rebar tier", "laser level"]),
+ ("Building Materials", "E04", ["insulation panel", "roofing membrane", "window frame", "drywall lift", "flooring plank", "siding panel", "vapor barrier", "anchor bolt", "joist hanger", "flashing strip"]),
+ ("Plumbing", "E03", ["faucet valve", "pipe fitting", "water heater", "drain snake", "sump basin", "backflow preventer", "shower head", "toilet fill valve", "pex expander", "trap primer"]),
+ ("Locks & Security Hardware", "E05", ["deadbolt", "padlock body", "safe door", "door closer", "access panel", "keypad lock", "hinge pin", "strike plate", "exit device", "security hasp"]),
+ ("Engines", "F01", ["piston", "turbocharger", "crankshaft", "camshaft", "cylinder head", "flywheel", "oil pump", "timing chain", "engine mount", "exhaust manifold"]),
+ ("Compressors", "F04", ["air compressor", "refrigerant compressor", "scroll housing", "piston ring set", "intercooler", "receiver tank", "pressure switch", "unloader valve", "oil separator", "vibration isolator"]),
+ ("Fans & Blowers", "F04", ["ceiling fan", "industrial blower", "duct fan", "impeller", "fan shroud", "speed controller", "louver vent", "attic fan", "range hood blower", "cooling tower fan"]),
+ ("Heat Exchangers", "F28", ["plate exchanger", "radiator core", "condenser coil", "shell-and-tube unit", "fin stock", "header tank", "brazed joint", "fouling sensor", "expansion joint", "air cooler"]),
+ ("Refrigeration", "F25", ["walk-in freezer", "ice maker", "cold plate", "display cooler", "compressor rack", "defrost heater", "evaporator fan", "insulated door", "temperature logger", "condensing unit"]),
+ ("Optics", "G02", ["camera lens", "mirror mount", "prism", "optical filter", "collimator", "beam splitter", "lens barrel", "fiber coupler", "diffuser", "polarizer"]),
+ ("Clocks & Watches", "G04", ["watch movement", "escapement", "smart crown", "watch case", "bracelet clasp", "dial hand set", "mainspring barrel", "bezel ring", "crystal gasket", "rotor weight"]),
+ ("Radiation Instrumentation", "G21", ["radiation detector", "shielding panel", "survey meter", "dosimeter badge", "lead container", "scintillator", "count-rate meter", "calibration source holder", "area monitor", "interlock switch"]),
+ ("Elevators", "B66", ["hoist machine", "door operator", "counterweight", "guide rail", "safety gear", "landing button", "car frame", "rope gripper", "governor", "buffer spring"]),
+ ("Vending", "G07", ["dispenser coil", "coin mechanism", "bill validator", "refrigerated cabinet", "selection keypad", "drop sensor", "product spiral", "cash box", "telemetry modem", "door lock"]),
+ ("Cleaning Equipment", "B08", ["vacuum head", "pressure washer", "floor scrubber", "steam cleaner", "dust extractor", "squeegee blade", "mop wringer", "carpet extractor", "air mover", "gutter scoop"]),
+ ("Personal Care Appliances", "A45", ["hair dryer", "beard trimmer", "electric shaver", "curling iron", "scalp massager", "skincare device", "nail drill", "epilator", "facial steamer", "toothbrush head"]),
+ ("Pet Products", "A01", ["automatic feeder", "pet tracker", "grooming clipper", "water fountain", "training collar", "pet door", "litter box", "aquarium filter", "bird cage", "leash reel"]),
+ ("Marine Equipment", "B63", ["bilge pump", "propeller", "navigation light", "cleat", "anchor windlass", "thru-hull fitting", "marine battery box", "fishfinder mount", "dock fender", "trolling motor"]),
+ ("Rail Equipment", "B61", ["bogie frame", "coupler", "rail brake", "wheelset", "pantograph", "door interlock", "ballast tamper", "signal mast", "axle box", "suspension spring"]),
+ ("Bicycles", "B62", ["bike frame", "derailleur", "e-bike motor", "disc brake", "wheel hub", "pedal crank", "suspension fork", "dropper post", "chain ring", "cargo rack"]),
+ ("Tires & Wheels", "B60", ["tire carcass", "alloy rim", "valve stem", "bead seater", "wheel balancer", "tire changer", "pressure gauge", "run-flat insert", "spare carrier", "lug wrench"]),
+ ("Glass & Ceramics", "C03", ["glass kiln", "glass cutter", "tempering furnace", "ceramic press", "glaze sprayer", "annealing lehr", "mold release", "frit feeder", "edge grinder", "laminating autoclave"]),
+ ("Adhesives", "C09", ["glue dispenser", "mixing nozzle", "curing lamp", "adhesive film", "hot-melt gun", "laminating roller", "primer applicator", "bond tester", "cartridge plunger", "static mixer"]),
+ ("Fertilizer Equipment", "C05", ["fertilizer spreader", "granulator", "blending drum", "coating pan", "bagging scale", "conveyor auger", "dust collector", "sieve screen", "hopper gate", "weigh belt"]),
+ ("Ropes & Cables", "D07", ["rope braider", "cable winch", "swaging tool", "thimble", "turnbuckle", "wire rope clip", "pulling grip", "reel stand", "lubricator", "tension meter"]),
+ ("Drilling & Mining", "E21", ["drill bit", "rock crusher", "mine conveyor", "roof bolter", "ventilation fan", "dewatering pump", "blast hole drill", "ore sorter", "dust suppressor", "cap lamp"]),
+ ("Road Equipment", "E01", ["asphalt paver", "road roller", "traffic barrier", "pothole patcher", "line striper", "snow plow", "street sweeper", "guardrail post", "manhole cover", "storm drain"]),
+ ("Doors & Windows", "E06", ["door hinge", "window operator", "sliding track", "weather seal", "door closer", "sidelight frame", "skylight curb", "garage spring", "threshold ramp", "peephole viewer"]),
+]
+
+# Extra mechanical-domain functions / mechanisms for the expanded fields.
+HW_FUNCS = HW_FUNCS + ["heavy lifting", "abrasive cutting", "high-pressure sealing", "corrosion resistance", "seismic stability", "bulk material transport", "precision dispensing", "continuous duty cycling", "outdoor weathering", "food-grade sanitation"]
+HW_MECHS = HW_MECHS + ["hardened steel alloys", "hydraulic rams", "roller bearings", "gear reduction", "belt drives", "chain drives", "welded frames", "cast housings", "powder coating", "galvanized finishes"]
+
+# Rebuild the master category list with the expansion.
+ALLCATS = [(n, "software", c, devs) for n, c, devs in SWCATS] + \
+          [(n, "hardware", c, devs) for n, c, devs in HWCATS] + \
+          [(n, "hardware", c, devs) for n, c, devs in NEWCATS]
 
 if __name__ == "__main__":
     main()

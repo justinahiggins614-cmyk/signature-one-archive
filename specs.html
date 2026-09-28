@@ -98,6 +98,10 @@
   .era.Current { background: #d7f0dd; color: #1d6b34; }
   .era.Future { background: #e3dcf7; color: #4b2e9e; }
   .statusline { font-size: .82em; color: #8a6d1f; font-weight: 700; margin-top: 10px; }
+  .sigbadge { display: inline-block; font-size: .72em; font-weight: 800; letter-spacing: .08em;
+    color: #fff; background: #16337a; border: 1px solid #c9a227; border-radius: 3px;
+    padding: 2px 8px; margin: 6px 0 2px; }
+  .sigenote { font-size: .82em; color: #5b6b7f; margin-top: 4px; }
   #letters { position: sticky; top: 0; z-index: 20; background: #ffffff;
              border-top: 1px solid #d3dce6; border-bottom: 1px solid #d3dce6;
              box-shadow: 0 2px 6px rgba(20,40,80,.08);
@@ -738,6 +742,7 @@ STATUS=SIGNATURE-1_VALID</pre>
   <div class="fname">The Spec Catalog</div>
   <p>Draft invention specifications authored by Justin Addam Higgins (JAH), in the forced Signature-One format.<br>
   Drafts &mdash; ready to review and file. Not granted patents. Not affiliated with the USPTO or any government agency.<br>
+  Specs badged <b>SIGNATURE LINE</b> are JAH's original designs in the same product area as a public patent record &mdash; not the patented invention itself.<br>
   Published by Manon &nbsp;&middot;&nbsp; 2026 &nbsp;&middot;&nbsp; <a href="index.html">The Signature-One Archive</a></p>
 </footer>
 <script>
@@ -804,8 +809,11 @@ function card(r, i) {
   var meta = "Inventor: " + esc("Justin Addam Higgins") + " &middot; Owner: " + esc("Justin Addam Higgins") +
              "<br>Prepared: " + esc(r[6]) + " &middot; CPC: " + esc(r[4]);
   var h = '<div class="spec-card card" id="s' + i + '" data-letter="' + r[11] + '">' +
-    '<div class="num">' + id + '</div><h3>' + title + '</h3>' +
+    '<div class="num">' + id + '</div>' +
+    (r[12] === "Signature" ? '<div><span class="sigbadge">SIGNATURE LINE</span></div>' : '') +
+    '<h3>' + title + '</h3>' +
     '<div class="meta">' + meta + '</div>' +
+    (r[13] ? '<div class="sigenote">' + esc(r[13]) + '</div>' : '') +
     '<div><span class="tag">' + esc(r[3]) + '</span>' +
     '<span class="era ' + esc(r[5]) + '">' + esc(r[5]) + '</span></div>' +
     '<div class="abs">' + abs + '</div>' +
@@ -926,7 +934,8 @@ function buildFilters() {
         var d = JSON.parse(ln);
         DATA.push([d.spec_id, d.title, d.abstract, d.category, d.cpc, d.era,
                    d.prepared_date, d.signature_tool_mapping, d.key_parameters,
-                   d.autoread_block, d.algorithm_steps, letterOf(d.title)]);
+                   d.autoread_block, d.algorithm_steps, letterOf(d.title),
+                   d.line || "", d.line_note || ""]);
       } catch (e) { /* skip bad line */ }
     }
     var seen = {};

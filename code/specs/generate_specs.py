@@ -284,9 +284,9 @@ def random_date(r):
     days = (DATE_END - DATE_START).days
     return (DATE_START + __import__("datetime").timedelta(days=r.randint(0, days))).isoformat()
 
-def make_spec(i, used):
-    r = random.Random(f"JAH-{SEED}-{i}")
-    cat, kind, cpc, devs = r.choices(ALLCATS, weights=CAT_WEIGHTS, k=1)[0]
+def make_spec(i, used, seed=None, category=None):
+    r = random.Random(seed if seed is not None else f"JAH-{SEED}-{i}")
+    cat, kind, cpc, devs = category if category is not None else r.choices(ALLCATS, weights=CAT_WEIGHTS, k=1)[0]
     dev = r.choice(devs)
     fn = r.choice(SW_FUNCS if kind == "software" else HW_FUNCS)
     mech = r.choice(SW_MECHS if kind == "software" else HW_MECHS)

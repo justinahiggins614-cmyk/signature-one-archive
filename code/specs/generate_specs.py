@@ -359,7 +359,7 @@ def main():
 # NOTE: ALLCATS grew after specs 1-10000 were published. Per-index seeding means
 # indices 1-10000 keep their published content; the expanded list applies to
 # indices >= 10001. The used_titles dedup in state.json guards all future runs.
-CATSET = "2026-09-28-v3: 122 categories, CPC A-H; priority lines: Footwear, Calculators"
+CATSET = "2026-09-28-v3: 122 categories, CPC A-H; uniform coverage, all products"
 
 NEWCATS = [
  ("Agriculture Equipment", "A01", ["tractor guidance unit", "soil moisture probe", "drip irrigation valve", "seed planter", "crop sprayer boom", "harvester header", "grain auger", "fence energizer", "livestock feeder", "greenhouse vent opener"]),
@@ -419,10 +419,9 @@ ALLCATS = [(n, "software", c, devs) for n, c, devs in SWCATS] + \
           [(n, "hardware", c, devs) for n, c, devs in HWCATS] + \
           [(n, "hardware", c, devs) for n, c, devs in NEWCATS]
 
-# Manon's product lines (2026-09-28): weighted priority so the drip generates
-# more original specs in HER lines (footwear line, Signature calculators)
-# while still covering every field. Applies to newly generated indices only.
-PRIORITY_WEIGHTS = {"Footwear": 8, "Calculators": 8}
+# Coverage (2026-09-28): Manon wants ALL products covered uniformly - no priority
+# lines. Every category gets equal weight; the drip fills every field evenly.
+PRIORITY_WEIGHTS = {}
 CAT_WEIGHTS = [PRIORITY_WEIGHTS.get(n, 1) for n, _, _, _ in ALLCATS]
 
 if __name__ == "__main__":

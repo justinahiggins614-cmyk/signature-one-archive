@@ -260,6 +260,166 @@ def build_autoread(spec_id, title, cat, cpc, era, params):
     return "\n".join(lines)
 
 # ----------------------------------------------------------------------------
+# Full patent draft + manufacture means + working demo (2026-09-28)
+# Every spec ships as a complete filing-ready package: a full patent draft
+# (field, background, summary, drawings, detailed description, claims,
+# abstract), means of manufacture, and an interactive working demo --
+# even for hardware (a working simulation of the mechanism).
+# ----------------------------------------------------------------------------
+HW_MATERIALS = ["anodized aluminum 6061", "injection-molded polycarbonate",
+    "stainless steel 304", "FR-4 PCB substrate", "oxygen-free copper trace",
+    "silicone gasket", "neodymium magnet N52", "borosilicate glass",
+    "carbon-fiber composite", "brass C360 fitting", "PTFE bearing",
+    "lithium cell pack"]
+HW_PROCESSES = ["CNC milling", "injection molding", "SMT PCB assembly",
+    "laser cutting", "SLS 3D printing", "anodizing", "calibration and QA burn-in"]
+SW_MATERIALS = ["source code (Signature-One toolchain)", "container image",
+    "build pipeline definition", "automated test suite", "deployment manifest",
+    "observability instrumentation"]
+SW_PROCESSES = ["compilation", "unit and integration testing", "containerization",
+    "staged deployment", "load validation", "monitoring instrumentation"]
+
+def _dev_of(title):
+    t = title[10:] if title.startswith("Signature ") else title
+    return t.split(" for ")[0].strip() or t
+
+def build_patent_draft(r, kind, title, category, params, toolmap):
+    dev = _dev_of(title)
+    pk = list(params.items())
+    p1 = f"{pk[0][0]} of {pk[0][1]}" if pk else "tuned operating parameters"
+    p2 = f"{pk[1][0]} of {pk[1][1]}" if len(pk) > 1 else "rated duty cycle"
+    subj = "system" if kind == "software" else "apparatus"
+    field = (f"This invention relates to {category}, and more particularly to {article(dev)} "
+             f"with Signature-One six-tool geometry control.")
+    background = (f"Conventional {category.lower()} products address only isolated aspects of their task, "
+                  f"leaving geometry, decision branching, and tolerance flow to ad-hoc design. "
+                  f"There remains a need for {article(dev)} that unifies line, triangle, square, cross, "
+                  f"circle, and curvature control in a single solvable origin.")
+    summary = (f"The present invention provides {article(dev)} forced through the universal reverse "
+               f"reduction algorithm: a {subj} comprising six-tool mapped elements, key parameters "
+               f"including {p1} and {p2}, and a machine-readable autoread block ending "
+               f"STATUS=SIGNATURE-1 VALID.")
+    drawings = ["FIG. 1 is a six-tool schematic of the invention.",
+                "FIG. 2 is a parametric diagram of the key operating parameters.",
+                "FIG. 3 is a process flow of the reversed universal allowance algorithm."]
+    det = (f"The {dev} is constructed by collapsing all shape, rule, and dimension into one "
+           f"controlled origin and re-expanding through the six tools. LINE governs {toolmap['LINE']}; "
+           f"TRIANGLE governs {toolmap['TRIANGLE']}; SQUARE bounds {toolmap['SQUARE']}; "
+           f"CROSS decides {toolmap['CROSS']}; CIRCLE anchors {toolmap['CIRCLE']}; "
+           f"CURVATURE shapes {toolmap['CURVATURE']}. In operation the five reversed-allowance steps "
+           f"run in order: universal-bit starter, reverse-target, combinatorial mix, human variance, "
+           f"and multi-path solved reality, yielding the {dev} at {p1} and {p2}.")
+    claims = [
+        f"1. A {subj} for {category}, comprising: six-tool mapped elements wherein LINE, TRIANGLE, "
+        f"SQUARE, CROSS, CIRCLE, and CURVATURE jointly define the {dev}; and an autoread block "
+        f"ending STATUS=SIGNATURE-1 VALID.",
+        f"2. The {subj} of claim 1, wherein the six-tool mapped elements comprise {toolmap['LINE']} "
+        f"under LINE and {toolmap['CIRCLE']} under CIRCLE.",
+        f"3. The {subj} of claim 1, further configured to operate at {p1}.",
+        f"4. The {subj} of claim 1, further configured to operate at {p2}.",
+        f"5. The {subj} of claim 1, produced by the reversed universal allowance algorithm of "
+        f"universal-bit starter, reverse-target, combinatorial mix, human variance, and "
+        f"multi-path solved reality.",
+        f"6. The {subj} of claim 1, manufactured by means comprising {r.choice(HW_PROCESSES if kind == 'hardware' else SW_PROCESSES)}.",
+    ]
+    abstract = (f"A {dev} for {category} using Signature-One six-tool geometry: line, triangle, "
+                f"square, cross, circle, and curvature elements are forced through the reversed "
+                f"universal allowance algorithm to yield a buildable {subj} with machine-readable "
+                f"autoread output.")
+    return {
+        "filing_note": ("DRAFT patent application prepared for inventor review. "
+                        "Review every section for accuracy and completeness before filing. "
+                        "Not a granted patent."),
+        "title": title,
+        "field_of_invention": field,
+        "background": background,
+        "summary": summary,
+        "drawings_description": drawings,
+        "detailed_description": det,
+        "claims": claims,
+        "abstract": abstract,
+    }
+
+def build_manufacture(r, kind, title, category, params):
+    dev = _dev_of(title)
+    if kind == "hardware":
+        mats = r.sample(HW_MATERIALS, 4)
+        procs = r.sample(HW_PROCESSES, 3)
+        steps = [
+            f"1. Source {mats[0]} and {mats[1]} to print tolerance.",
+            f"2. Form the primary structure via {procs[0]}.",
+            f"3. Fit {mats[2]} interfaces and {mats[3]} seals.",
+            f"4. Assemble subassemblies via {procs[1]}.",
+            f"5. Finish and protect surfaces via {procs[2]}.",
+            f"6. Run calibration and QA burn-in; stamp the autoread block on the unit.",
+        ]
+    else:
+        mats = r.sample(SW_MATERIALS, 6)
+        procs = r.sample(SW_PROCESSES, 4)
+        steps = [
+            f"1. Author {mats[0]} implementing the six-tool control paths.",
+            f"2. Define {mats[2]} with {procs[0]} gates.",
+            f"3. Prove behavior with {mats[3]} ({procs[1]}).",
+            f"4. Package the {mats[1]} via {procs[2]}.",
+            f"5. Release through {procs[3]} with {mats[4]}.",
+            f"6. Attach {mats[5]} and emit the autoread block per deploy.",
+        ]
+    return {
+        "note": ("Means of manufacture for the invention. Follow in order; "
+                 "substitute equivalent materials or processes only where the "
+                 "autoread block still validates."),
+        "materials": mats,
+        "processes": procs,
+        "steps": steps,
+    }
+
+def build_demo(r, kind, title, category):
+    dev = _dev_of(title)
+    note = ("Interactive working demo. Figures are simulated estimates for "
+            "demonstration, not measured results.")
+    if category == "Calculators":
+        return {"kind": "calculator",
+                "blurb": f"Fully working calculator demo of the {dev} - do real arithmetic below.",
+                "note": note}
+    if kind == "hardware":
+        return {
+            "kind": "simulator",
+            "blurb": f"Working hardware simulation of the {dev}: move the sliders and watch the mechanism respond.",
+            "params": [
+                {"id": "p0", "label": "Input load", "unit": "N",
+                 "min": 1, "max": 500, "step": 1, "default": r.randint(60, 140)},
+                {"id": "p1", "label": "Cycle rate", "unit": "/min",
+                 "min": 1, "max": 600, "step": 1, "default": r.randint(80, 200)},
+                {"id": "p2", "label": "Efficiency factor", "unit": "%",
+                 "min": 50, "max": 99, "step": 1, "default": r.randint(78, 95)},
+            ],
+            "outputs": [
+                {"label": "Output power (simulated)", "unit": "W", "expr": "p0*p1/60*p2/100"},
+                {"label": "Units per hour (simulated)", "unit": "/h", "expr": "p1*60"},
+                {"label": "Service life (simulated)", "unit": "h", "expr": "12000/(p0/50+1)"},
+            ],
+            "note": note,
+        }
+    return {
+        "kind": "simulator",
+        "blurb": f"Working software simulation of the {dev}: move the sliders and watch the system respond.",
+        "params": [
+            {"id": "p0", "label": "Concurrent users", "unit": "users",
+             "min": 10, "max": 100000, "step": 10, "default": r.choice([500, 1000, 5000, 10000])},
+            {"id": "p1", "label": "Nodes", "unit": "nodes",
+             "min": 1, "max": 256, "step": 1, "default": r.choice([4, 8, 16, 32])},
+            {"id": "p2", "label": "Cache hit rate", "unit": "%",
+             "min": 50, "max": 99, "step": 1, "default": r.randint(80, 95)},
+        ],
+        "outputs": [
+            {"label": "Throughput (simulated)", "unit": "req/s", "expr": "p0*p1/10"},
+            {"label": "P99 latency (simulated)", "unit": "ms", "expr": "400*(1-p2/100)+50/p1"},
+            {"label": "Monthly cost (simulated)", "unit": "USD", "expr": "p1*45"},
+        ],
+        "note": note,
+    }
+
+# ----------------------------------------------------------------------------
 # State + generation
 # ----------------------------------------------------------------------------
 ALLCATS = [(n, "software", c, devs) for n, c, devs in SWCATS] + \
@@ -304,6 +464,9 @@ def make_spec(i, used, seed=None, category=None):
     toolmap = build_toolmap(kind, dev)
     steps = build_steps(dev, fn)
     autoread = build_autoread(spec_id, title, cat, cpc, era, params)
+    patent_draft = build_patent_draft(r, kind, title, cat, params, toolmap)
+    manufacture = build_manufacture(r, kind, title, cat, params)
+    demo = build_demo(r, kind, title, cat)
     return {
         "spec_id": spec_id,
         "title": title,
@@ -319,6 +482,9 @@ def make_spec(i, used, seed=None, category=None):
         "key_parameters": params,
         "autoread_block": autoread,
         "algorithm_steps": steps,
+        "patent_draft": patent_draft,
+        "manufacture": manufacture,
+        "demo": demo,
     }, title.lower()
 
 def main():

@@ -237,6 +237,36 @@
   .goalabel { margin-top: 6px; font-size: .74em; letter-spacing: .24em; color: #9a9aa5;
     text-transform: uppercase; }
   .goalabel b { color: var(--red); text-shadow: 0 0 10px rgba(255,34,34,.7); }
+
+  .filingnote { font-size: .8em; color: #ffb3b3; background: rgba(255,34,34,.06);
+    border: 1px dashed var(--red); border-radius: 2px; padding: 8px 12px; margin: 8px 0; }
+  .card .details p { margin: 8px 0; color: #b9b9c4; line-height: 1.6; }
+  .card .details p b { color: #ff8080; }
+  .demotoggle { margin: 8px 0; padding: 10px 22px; border-radius: 2px; cursor: pointer;
+    border: 1px solid var(--red); background: rgba(255,34,34,.1); color: #ff6b6b;
+    font-family: Orbitron, monospace; font-weight: 700; font-size: .85em;
+    letter-spacing: .12em; text-transform: uppercase; }
+  .demotoggle:hover { background: var(--red); color: #000; box-shadow: 0 0 16px rgba(255,34,34,.5); }
+  .demobox { margin: 10px 0; padding: 14px; background: #050506; border: 1px solid var(--blood);
+    border-radius: 2px; }
+  .snote { font-size: .76em; color: #8b8b95; margin-top: 10px; font-style: italic; }
+  .sim .srow { margin: 10px 0; }
+  .sim .srow label { display: block; font-size: .84em; color: #b9b9c4; margin-bottom: 4px; }
+  .sim .srow label b { color: var(--red); text-shadow: 0 0 8px rgba(255,34,34,.6); }
+  .sim input[type=range] { width: 100%; accent-color: var(--red); }
+  .sout { margin-top: 12px; border-top: 1px solid var(--blood); padding-top: 10px; }
+  .soline { display: flex; justify-content: space-between; font-size: .86em;
+    padding: 4px 0; color: #b9b9c4; }
+  .soline b { color: #ff8080; font-family: Orbitron, monospace; }
+  .calc { max-width: 280px; }
+  .calc .cdisp { background: #000; border: 1px solid var(--red-dim); color: #ff4d4d;
+    font-size: 1.5em; text-align: right; padding: 10px 12px; border-radius: 2px;
+    margin-bottom: 8px; min-height: 1.4em; overflow-x: auto;
+    text-shadow: 0 0 10px rgba(255,34,34,.6); font-family: "Share Tech Mono", monospace; }
+  .calc .cgrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .calc .cbtn { padding: 12px 0; font-size: 1em; border-radius: 2px; cursor: pointer;
+    background: #0d0d12; color: #e8e8ee; border: 1px solid #3a3a44; font-family: inherit; }
+  .calc .cbtn:hover { border-color: var(--red); color: #ff8080; }
 </style>
 </head>
 <body>
@@ -902,6 +932,104 @@ function paramRows(p) {
 function stepsList(steps) {
   return "<ol>" + steps.map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + "</ol>";
 }
+var DEMOSTORE = [];
+function patentHTML(p) {
+  if (!p) return "";
+  return '<h4>Patent draft &mdash; for submission</h4>' +
+    '<div class="filingnote">' + esc(p.filing_note) + '</div>' +
+    '<p><b>Field of invention.</b> ' + esc(p.field_of_invention) + '</p>' +
+    '<p><b>Background.</b> ' + esc(p.background) + '</p>' +
+    '<p><b>Summary.</b> ' + esc(p.summary) + '</p>' +
+    '<p><b>Drawings.</b> ' + p.drawings_description.map(esc).join(" ") + '</p>' +
+    '<p><b>Detailed description.</b> ' + esc(p.detailed_description) + '</p>' +
+    '<h4>Claims</h4><ol>' +
+    p.claims.map(function (c) { return "<li>" + esc(c) + "</li>"; }).join("") + '</ol>' +
+    '<p><b>Abstract.</b> ' + esc(p.abstract) + '</p>';
+}
+function mfgHTML(m) {
+  if (!m) return "";
+  return '<h4>Means of manufacture</h4>' +
+    '<div class="filingnote">' + esc(m.note) + '</div>' +
+    '<p><b>Materials:</b> ' + m.materials.map(esc).join("; ") + '</p>' +
+    '<p><b>Processes:</b> ' + m.processes.map(esc).join("; ") + '</p>' +
+    '<ol>' + m.steps.map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + '</ol>';
+}
+function demoHTML(d, i) {
+  if (!d) return "";
+  var idx = DEMOSTORE.length;
+  DEMOSTORE.push(d);
+  return '<h4>Working demo</h4>' +
+    '<p>' + esc(d.blurb) + '</p>' +
+    '<button class="demotoggle" type="button" data-demo="' + idx + '">Run demo</button>' +
+    '<div class="demobox" id="demobox-' + idx + '" style="display:none"></div>' +
+    '<div class="snote">' + esc(d.note) + '</div>';
+}
+function evalExpr(expr, vals) {
+  if (!/^[p0-9+\-*/().\s]*$/.test(expr)) return NaN;
+  try {
+    var args = vals.map(function (_, k) { return "p" + k; });
+    var f = new Function(args.join(","), "return (" + expr + ");");
+    var v = f.apply(null, vals);
+    return isFinite(v) ? Math.round(v * 100) / 100 : NaN;
+  } catch (e) { return NaN; }
+}
+function fmtVal(v) {
+  if (!isFinite(v)) return "n/a";
+  return Math.abs(v) >= 10000 ? Math.round(v).toLocaleString() : String(v);
+}
+function renderDemoBox(idx) {
+  var d = DEMOSTORE[idx];
+  var box = document.getElementById("demobox-" + idx);
+  if (d.kind === "calculator") {
+    var keys = ["C", "(", ")", "/", "7", "8", "9", "*", "4", "5", "6", "-",
+                "1", "2", "3", "+", "0", ".", "="];
+    box.innerHTML = '<div class="calc"><div class="cdisp" id="cdisp-' + idx + '">0</div>' +
+      '<div class="cgrid">' + keys.map(function (k) {
+        return '<button type="button" class="cbtn" data-calc="' + idx +
+               '" data-k="' + k + '">' + k + '</button>';
+      }).join("") + '</div></div>';
+    return;
+  }
+  var h = '<div class="sim">';
+  d.params.forEach(function (p, k) {
+    h += '<div class="srow"><label>' + esc(p.label) + ' (' + esc(p.unit) + '): ' +
+         '<b id="sv-' + idx + '-' + k + '">' + p.default + '</b></label>' +
+         '<input type="range" class="dparam" data-demo="' + idx + '" data-k="' + k + '"' +
+         ' min="' + p.min + '" max="' + p.max + '" step="' + p.step +
+         '" value="' + p.default + '"></div>';
+  });
+  h += '<div class="sout" id="sout-' + idx + '"></div></div>';
+  box.innerHTML = h;
+  updateSim(idx);
+}
+function updateSim(idx) {
+  var d = DEMOSTORE[idx];
+  var vals = d.params.map(function (p, k) {
+    var el = document.querySelector('input.dparam[data-demo="' + idx + '"][data-k="' + k + '"]');
+    var v = el ? Number(el.value) : p.default;
+    var lab = document.getElementById("sv-" + idx + "-" + k);
+    if (lab) lab.textContent = v;
+    return v;
+  });
+  document.getElementById("sout-" + idx).innerHTML = d.outputs.map(function (o) {
+    return '<div class="soline"><span>' + esc(o.label) + '</span><b>' +
+           fmtVal(evalExpr(o.expr, vals)) + ' ' + esc(o.unit) + '</b></div>';
+  }).join("");
+}
+var CALCSTATE = {};
+function calcPress(idx, k) {
+  var st = CALCSTATE[idx] || (CALCSTATE[idx] = { expr: "" });
+  var disp = document.getElementById("cdisp-" + idx);
+  if (k === "C") { st.expr = ""; }
+  else if (k === "=") {
+    if (/^[0-9+\-*/().\s]*$/.test(st.expr) && st.expr) {
+      try { var v = new Function("return (" + st.expr + ");")();
+            st.expr = isFinite(v) ? String(Math.round(v * 1e10) / 1e10) : ""; }
+      catch (e) { st.expr = ""; }
+    }
+  } else { st.expr += k; }
+  if (disp) disp.textContent = st.expr || "0";
+}
 function card(r, i) {
   var id = esc(r[0]), title = esc(r[1]), abs = esc(r[2]);
   var meta = "Inventor: " + esc("Justin Addam Higgins") + " &middot; Owner: " + esc("Justin Addam Higgins") +
@@ -922,6 +1050,7 @@ function card(r, i) {
       '<h4>Key parameters</h4><table>' + paramRows(r[8]) + '</table>' +
       '<h4>Autoread block</h4><pre class="autoread">' + esc(r[9]) + '</pre>' +
       '<h4>Reversed universal allowance algorithm</h4>' + stepsList(r[10]) +
+      patentHTML(r[14]) + mfgHTML(r[15]) + demoHTML(r[16], i) +
     '</div>' +
     '<div class="statusline">Draft specification &mdash; by Justin Addam Higgins (JAH), ready to file.</div>' +
     '</div>';
@@ -993,6 +1122,10 @@ function buildFilters() {
   input.addEventListener("keydown", function (e) {
     if (e.key === "Enter") { e.preventDefault(); doSearch(); }
   });
+  document.getElementById("results").addEventListener("input", function (e) {
+    var s = e.target.closest ? e.target.closest(".dparam") : null;
+    if (s) updateSim(Number(s.getAttribute("data-demo")));
+  });
   document.getElementById("more").onclick = function () { state.shown += 100; render(); };
   document.getElementById("sort").onchange = function (e) {
     state.sort = e.target.value;
@@ -1009,6 +1142,18 @@ function buildFilters() {
     jumpToLetter(b.getAttribute("data-l"));
   });
   document.getElementById("results").addEventListener("click", function (e) {
+    var dt = e.target.closest ? e.target.closest(".demotoggle") : null;
+    if (dt) {
+      var idx = dt.getAttribute("data-demo");
+      var box = document.getElementById("demobox-" + idx);
+      var isOpen = box.style.display !== "none";
+      if (!isOpen && !box.innerHTML) renderDemoBox(idx);
+      box.style.display = isOpen ? "none" : "block";
+      dt.textContent = isOpen ? "Run demo" : "Hide demo";
+      return;
+    }
+    var cb = e.target.closest ? e.target.closest(".cbtn") : null;
+    if (cb) { calcPress(cb.getAttribute("data-calc"), cb.getAttribute("data-k")); return; }
     var b = e.target.closest ? e.target.closest(".toggle") : null;
     if (!b) return;
     var c = b.parentElement;
@@ -1020,10 +1165,7 @@ function buildFilters() {
       b.textContent = c.classList.contains("expanded") ? "Hide details" : "Spec details";
     }
   });
-  fetch("data/specs.jsonl").then(function (resp) {
-    if (!resp.ok) throw new Error("HTTP " + resp.status);
-    return resp.text();
-  }).then(function (text) {
+  function parseLines(text) {
     var lines = text.split("\n");
     for (var i = 0; i < lines.length; i++) {
       var ln = lines[i].trim();
@@ -1033,9 +1175,16 @@ function buildFilters() {
         DATA.push([d.spec_id, d.title, d.abstract, d.category, d.cpc, d.era,
                    d.prepared_date, d.signature_tool_mapping, d.key_parameters,
                    d.autoread_block, d.algorithm_steps, letterOf(d.title),
-                   d.line || "", d.line_note || ""]);
+                   d.line || "", d.line_note || "",
+                   d.patent_draft || null, d.manufacture || null, d.demo || null]);
       } catch (e) { /* skip bad line */ }
     }
+  }
+  function loadFail(err) {
+    document.getElementById("loading").textContent =
+      "Could not load the spec data (" + err.message + "). Please try again later.";
+  }
+  function finishLoad() {
     var seen = {};
     DATA.forEach(function (r) { seen[r[3]] = true; });
     CATS = Object.keys(seen).sort();
@@ -1048,10 +1197,26 @@ function buildFilters() {
     document.getElementById("loading").style.display = "none";
     buildFilters();
     apply();
-  }).catch(function (err) {
-    document.getElementById("loading").textContent =
-      "Could not load the spec data (" + err.message + "). Please try again later.";
-  });
+  }
+  function loadFiles(files, i) {
+    if (i >= files.length) { finishLoad(); return; }
+    var lt = document.getElementById("loading");
+    if (lt.firstChild) lt.firstChild.textContent =
+      "ESTABLISHING UPLINK " + (i + 1) + "/" + files.length + " ";
+    fetch("data/" + files[i]).then(function (resp) {
+      if (!resp.ok) throw new Error("HTTP " + resp.status);
+      return resp.text();
+    }).then(function (text) {
+      parseLines(text);
+      loadFiles(files, i + 1);
+    }).catch(loadFail);
+  }
+  fetch("data/volumes/manifest.json").then(function (resp) {
+    if (!resp.ok) throw new Error("HTTP " + resp.status);
+    return resp.json();
+  }).then(function (m) {
+    loadFiles(m.files || ["specs.jsonl"], 0);
+  }).catch(loadFail);
 })();
 </script>
 </body>

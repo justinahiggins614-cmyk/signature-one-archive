@@ -148,7 +148,9 @@ def main():
                 title = f"{base} (Rev {rev})"
                 rev += 1
             spec["title"] = title
-            spec["line"] = "Signature"
+            cat_kind = {n: k for n, k, _, _ in g.ALLCATS}.get(spec["category"],
+                                                             "hardware")
+            spec["line"] = g.line_for_category(spec["category"], cat_kind)
             spec["signature_line_of"] = {
                 "publication_number": pub,
                 "title": str(p.get("title") or "")[:200],

@@ -419,6 +419,28 @@ ALLCATS = [(n, "software", c, devs) for n, c, devs in SWCATS] + \
           [(n, "hardware", c, devs) for n, c, devs in HWCATS] + \
           [(n, "hardware", c, devs) for n, c, devs in NEWCATS]
 
+# Signature product lines (2026-09-28): named lines for Manon's verticals --
+# Signature AI, Signature Software, Signature Code, Signature Gaming,
+# Signature Hardware. Used by the signature-line pipeline so each original
+# JAH version lands under the right line name.
+AI_CATS = {"Artificial Intelligence", "Machine Learning",
+           "Natural Language Processing", "Computer Vision",
+           "Recommender Systems", "Anomaly Detection"}
+CODE_CATS = {"Developer Tools", "Compilers", "APIs", "Software Testing",
+             "Container Orchestration", "Data Pipelines", "Firmware"}
+GAME_CATS = {"Gaming", "Toys & Games", "Virtual Reality", "Augmented Reality"}
+
+def line_for_category(cat_name, kind):
+    if cat_name in AI_CATS:
+        return "Signature AI"
+    if cat_name in CODE_CATS:
+        return "Signature Code"
+    if cat_name in GAME_CATS:
+        return "Signature Gaming"
+    if kind == "software":
+        return "Signature Software"
+    return "Signature Hardware"
+
 # Coverage (2026-09-28): Manon wants ALL products covered uniformly - no priority
 # lines. Every category gets equal weight; the drip fills every field evenly.
 PRIORITY_WEIGHTS = {}

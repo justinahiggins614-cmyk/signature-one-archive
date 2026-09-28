@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Spec Catalog — Draft Patent Specifications by Justin Addam Higgins (JAH)</title>
+<meta name="description" content="The Spec Catalog: draft patent specifications authored by Justin Addam Higgins (JAH) — every software and hardware field, past, current, and future. Ready to review and file.">
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+         margin: 0; background: #eef2f6; color: #1f2a37; }
+  header { padding: 30px 20px 22px; text-align: center; color: #fff;
+           background: linear-gradient(160deg, #16337a, #0d2149);
+           border-bottom: 4px solid #c9a227; }
+  .seal { width: 74px; height: 74px; margin: 0 auto 12px; border-radius: 50%;
+          border: 3px double #c9a227; display: flex; align-items: center;
+          justify-content: center; font-family: Georgia, serif; font-size: 2em;
+          color: #e8c766; background: rgba(255,255,255,.05); }
+  .eyebrow { margin: 0 0 8px; font-size: .72em; letter-spacing: .35em;
+             color: #d9b84a; font-weight: 700; }
+  header h1 { margin: 0 0 8px; font-size: 1.9em; font-family: Georgia, "Times New Roman", serif;
+              letter-spacing: .01em; }
+  header p.sub { margin: 0 auto; max-width: 680px; color: #c3cfe6; font-size: .98em;
+                 line-height: 1.5; }
+  .backlink { display: inline-block; margin-top: 12px; color: #e8c766; font-size: .9em;
+              text-decoration: none; border: 1px solid rgba(232,199,102,.5);
+              padding: 6px 14px; border-radius: 999px; }
+  .backlink:hover { background: rgba(232,199,102,.15); }
+  .stats { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+           margin-top: 16px; }
+  .stats .chip { background: rgba(255,255,255,.09); border: 1px solid rgba(255,255,255,.22);
+                 padding: 8px 16px; border-radius: 999px; font-size: .9em; color: #e6ecf7; }
+  .stats .chip b { color: #fff; }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 0 16px; }
+  .infobox { background: #fffdf4; border: 1px solid #e3cf8a; border-left: 4px solid #c9a227;
+             border-radius: 8px; padding: 16px 18px; margin: 22px auto 0; max-width: 900px;
+             font-size: .94em; line-height: 1.6; color: #3d3020; }
+  .infobox h2 { margin: 0 0 8px; font-size: 1.05em; color: #16337a; }
+  .infobox p { margin: 6px 0; }
+  .examples { max-width: 900px; margin: 22px auto 0; padding: 0 16px; }
+  .examples h2.sect { text-align: center; color: #16337a; font-family: Georgia, serif;
+                      margin: 0 0 14px; font-size: 1.4em; }
+  .example { background: #fff; border: 1px solid #d3dce6; border-top: 4px solid #16337a;
+             border-radius: 8px; padding: 20px; margin: 0 0 18px;
+             box-shadow: 0 1px 3px rgba(20,40,80,.06); }
+  .example .ex-eyebrow { display: inline-block; background: #16337a; color: #e8c766;
+             font-size: .72em; letter-spacing: .28em; text-transform: uppercase;
+             padding: 5px 12px; border-radius: 2px; margin-bottom: 10px; }
+  .example h3 { margin: 0 0 4px; color: #14213a; font-size: 1.2em; line-height: 1.35; }
+  .example .ex-sub { color: #8a6d1f; font-weight: 700; font-size: .85em;
+             letter-spacing: .08em; text-transform: uppercase; margin-bottom: 12px; }
+  .example figure { margin: 14px 0; text-align: center; }
+  .example figure img { max-width: 100%; height: auto; border: 1px solid #d3dce6;
+             border-radius: 6px; }
+  .example figcaption { font-size: .82em; color: #5b6b7f; margin-top: 6px; }
+  .exgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+             gap: 10px; margin: 12px 0; }
+  .example h4 { color: #16337a; font-size: .95em; margin: 16px 0 6px;
+             border-bottom: 1px solid #e3e9f2; padding-bottom: 4px; }
+  .example ul, .example ol { margin: 6px 0 6px 1.3em; font-size: .92em; line-height: 1.55; }
+  .example li { margin: 4px 0; }
+  pre.autoread { background: #0d2149; color: #d9e6ff; font-size: .78em; line-height: 1.5;
+             padding: 12px 14px; border-radius: 6px; overflow-x: auto; white-space: pre-wrap;
+             word-break: break-word; }
+  .pending { font-size: .85em; color: #8a6d1f; background: #fff8e1; border: 1px dashed #c9a227;
+             border-radius: 6px; padding: 8px 12px; margin-top: 12px; }
+  .searchwrap { max-width: 900px; margin: 24px auto 0; padding: 0 16px; }
+  .searchrow { display: flex; gap: 8px; }
+  #q { flex: 1; min-width: 0; padding: 13px 16px; font-size: 1.05em; border-radius: 8px;
+       border: 1px solid #b9c6d6; background: #fff; color: #1f2a37; }
+  #q::placeholder { color: #8a97a8; }
+  #go { padding: 0 24px; border-radius: 8px; border: none; background: #16337a;
+        color: #fff; font-size: 1.05em; font-weight: 700; cursor: pointer; }
+  #go:active { background: #0d2149; }
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+             margin: 14px 0 4px; max-height: 148px; overflow-y: auto; }
+  .filters button { padding: 8px 14px; border-radius: 999px; border: 1px solid #9fb0c6;
+                    background: #fff; color: #33507e; cursor: pointer; font-size: .85em; }
+  .filters button.active { background: #16337a; border-color: #16337a; color: #fff; }
+  .sortrow { display: flex; align-items: center; justify-content: center; gap: 8px;
+             margin: 14px 0 0; color: #5b6b7f; font-size: .9em; }
+  .sortrow select { background: #fff; color: #1f2a37; border: 1px solid #b9c6d6;
+                   border-radius: 8px; padding: 8px 10px; font-size: .95em; }
+  #totop { position: fixed; right: 16px; bottom: 16px; z-index: 30; width: 48px; height: 48px;
+           border-radius: 50%; border: none; background: #16337a; color: #fff;
+           font-size: 1.4em; cursor: pointer; display: none;
+           box-shadow: 0 4px 14px rgba(0,0,0,.3); }
+  .tag { display: inline-block; background: #dbe4f5; color: #1e3a8a; font-size: .75em;
+         font-weight: 700; padding: 3px 10px; border-radius: 999px; margin: 8px 6px 0 0; }
+  .era { display: inline-block; font-size: .75em; font-weight: 700; padding: 3px 10px;
+         border-radius: 999px; margin: 8px 6px 0 0; }
+  .era.Past { background: #e8e0cf; color: #6b5a2e; }
+  .era.Current { background: #d7f0dd; color: #1d6b34; }
+  .era.Future { background: #e3dcf7; color: #4b2e9e; }
+  .statusline { font-size: .82em; color: #8a6d1f; font-weight: 700; margin-top: 10px; }
+  #letters { position: sticky; top: 0; z-index: 20; background: #ffffff;
+             border-top: 1px solid #d3dce6; border-bottom: 1px solid #d3dce6;
+             box-shadow: 0 2px 6px rgba(20,40,80,.08);
+             display: flex; gap: 4px; overflow-x: auto; padding: 8px 10px;
+             margin-top: 14px; -webkit-overflow-scrolling: touch; }
+  #letters button { flex: 0 0 auto; min-width: 34px; padding: 8px 0; border-radius: 8px;
+                    border: 1px solid #c4d0e0; background: #f4f7fb; color: #33507e;
+                    font-size: .95em; font-weight: 700; cursor: pointer; }
+  #letters button:disabled { opacity: .25; cursor: default; }
+  #letters button.top { background: #dbe4f5; }
+  #count { text-align: center; color: #5b6b7f; margin: 12px 0 0; font-size: .92em;
+           padding: 0 16px; }
+  #results { max-width: 900px; margin: 0 auto; padding: 12px 16px 60px; }
+  .card { background: #fff; border: 1px solid #d3dce6; border-left: 4px solid #c9a227;
+          border-radius: 8px; padding: 14px 16px; margin: 10px 0;
+          scroll-margin-top: 64px; box-shadow: 0 1px 3px rgba(20,40,80,.06); }
+  .card .num { font-size: .78em; color: #16337a; font-weight: 700; letter-spacing: .05em; }
+  .card h3 { margin: 6px 0 8px; font-size: 1.05em; line-height: 1.35; color: #14213a; }
+  .card .meta { font-size: .85em; color: #5b6b7f; }
+  .card .abs { font-size: .9em; color: #33415c; margin-top: 8px; display: none;
+               line-height: 1.55; }
+  .card.open .abs { display: block; }
+  .card .toggle { margin-top: 8px; margin-right: 12px; font-size: .85em; color: #1d4ed8;
+                  cursor: pointer; background: none; border: none; padding: 0; font-weight: 600; }
+  .card .details { display: none; margin-top: 10px; border-top: 1px solid #e3e9f2;
+                   padding-top: 10px; font-size: .88em; }
+  .card.expanded .details { display: block; }
+  .card .details h4 { margin: 10px 0 4px; color: #16337a; font-size: .92em; }
+  .card .details table { width: 100%; border-collapse: collapse; font-size: .85em; }
+  .card .details td { border: 1px solid #e3e9f2; padding: 4px 8px; vertical-align: top; }
+  .card .details td.k { font-weight: 700; color: #16337a; white-space: nowrap; width: 110px; }
+  .card .details ol { margin: 4px 0 4px 1.3em; line-height: 1.5; }
+  .card .details li { margin: 3px 0; }
+  #more { display: block; margin: 18px auto 0; padding: 11px 26px; border-radius: 8px;
+          border: none; background: #16337a; color: #fff; font-size: 1em; font-weight: 600;
+          cursor: pointer; }
+  #loading { text-align: center; color: #5b6b7f; padding: 40px 16px; font-size: 1em; }
+  .noscript { max-width: 900px; margin: 20px auto; padding: 16px; background: #7f1d1d;
+              color: #fff; border-radius: 8px; text-align: center; }
+  footer { background: #0d2149; color: #a9b8d4; font-size: .8em; padding: 26px 20px 34px;
+           text-align: center; line-height: 1.6; }
+  footer .fname { font-family: Georgia, serif; color: #e8c766; font-size: 1.05em; }
+  footer a { color: #e8c766; }
+</style>
+</head>
+<body>
+<body>
+<header>
+  <div class="seal">&#167;</div>
+  <p class="eyebrow">Draft Specification Catalog</p>
+  <h1>The Spec Catalog &mdash; Draft Patent Specifications by Justin Addam Higgins (JAH)</h1>
+  <p class="sub">Every entry below is a draft invention specification authored by Justin Addam Higgins (JAH) &mdash;
+  software and hardware, past, current, and future &mdash; each in the forced Signature-One spec format, ready to review and file.</p>
+  <div><a class="backlink" href="index.html">&#8592; Back to The Signature-One Archive</a></div>
+  <div class="stats">
+    <span class="chip"><b id="statCount">&hellip;</b> draft specs</span>
+    <span class="chip"><b id="statFields">&hellip;</b> fields covered</span>
+    <span class="chip">Updated <b>2026-09-28</b></span>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="infobox">
+    <h2>How to use these specs</h2>
+    <p>Each entry is a <b>draft invention specification</b> by Justin Addam Higgins (JAH), written in the forced Signature-One format:
+    title, abstract, six-tool signature mapping, key parameters, a machine-readable autoread block, and the five reversed-allowance algorithm steps.</p>
+    <p>These are <b>drafts &mdash; ready to review and file</b>. Please review each spec for accuracy and completeness before filing.
+    They are <b>not</b> granted patents and are not affiliated with the USPTO or any government agency.</p>
+  </div>
+</div>
+
+<div class="examples">
+  <h2 class="sect">Example Specs &mdash; the format every spec follows</h2>
+
+  <article class="example" id="example1">
+    <span class="ex-eyebrow">Example Spec 1</span>
+    <h3>Basic Plastic Cup / Signature-1</h3>
+    <div class="ex-sub">Physical Object &middot; Forced-format example</div>
+    <figure>
+      <img src="assets/cup.jpg" alt="Basic Plastic Cup Signature-1 specification diagram: reverse universal dynamic bit collapse and generation, signature-tool mapping, dimensions, and final autoread block">
+      <figcaption>Published diagram: Reverse Universal Dynamic Bit Collapse &amp; Generation &mdash; Basic on Specification &middot; Universal Allowance Engine / Signature-1 Origin</figcaption>
+    </figure>
+    <h4>Key parameters (as published)</h4>
+    <ul>
+      <li>H = 4.00 in &middot; D_RIM = 3.25 in &middot; D_BASE = 2.25 in &middot; WALL = 0.04 in</li>
+      <li>TAPER = 7.5 deg &middot; RIM_ROLL = 0.06 in radius &middot; BASE_FILLET = 0.12 in radius</li>
+      <li>Base thickness 0.08 in &middot; centered injection gate 0.10 in &middot; MATERIAL = PP &middot; RIBS = 12 &middot; RIB_DEPTH = 0.031 in &middot; STACK_DEPTH = 3.60 in</li>
+    </ul>
+    <h4>Signature-tool mapping (as published)</h4>
+    <ul>
+      <li><b>LINE</b> &mdash; wall thickness, height</li>
+      <li><b>TRIANGLE</b> &mdash; 7.5&deg; taper</li>
+      <li><b>SQUARE</b> &mdash; bounding box 3.25 &times; 4.00 &times; 3.25 in</li>
+      <li><b>CROSS</b> &mdash; ribbing decision, transparency, rim roll</li>
+      <li><b>CIRCLE</b> &mdash; rim and base diameter</li>
+      <li><b>CURVATURE</b> &mdash; rim roll, base fillet radius</li>
+    </ul>
+    <h4>Final autoread block (as published)</h4>
+    <pre class="autoread">OBJECT: BASIC PLASTIC CUP | H=4.00in | D_RIM=3.25in | D_BASE=2.25in | WALL=0.04in | TAPER=7.5deg | RIM_ROLL=0.06in | BASE_FILLET=0.12in | MATERIAL=PP | RIBS=12 | RIB_DEPTH=0.031in | STACK_DEPTH=3.60in | INJECTION_GATE=0.10in CENTER | BOUNDING_BOX=3.5in 4.5x10.0in (10 units) | STATUS=SIGNATURE-1 VALID</pre>
+    <div class="pending">The full written sections (0.0&ndash;7.0) will be added here verbatim.</div>
+  </article>
+
+  <article class="example" id="example2">
+    <span class="ex-eyebrow">Example Spec 2</span>
+    <h3>A Test Run of Forced Logic 2: Signature Reverse Solve of Universal Bit to Cross-Hair Zero-In on a Specification</h3>
+    <div class="ex-sub">Specification: Semiconductor Replacements &middot; Signature-One Semiconductor Replacement by Forced Universal Reduction Algo</div>
+    <figure>
+      <img src="assets/semi-overview.jpg" alt="Forced Logic 2 overview diagram: signature-tool mapping, signature-grid correspondence, allowance algorithm output, and final autoread block for the semiconductor replacement">
+      <figcaption>Published overview: cross-hair logic grid aligned to center &middot; universal bit collapse engine</figcaption>
+    </figure>
+    <h4>1.0 Signature-tool mapping (as published)</h4>
+    <ul>
+      <li><b>1.1 LINE</b> &mdash; data pathways, signal traces, power rails</li>
+      <li><b>1.2 TRIANGLE</b> &mdash; logic hierarchy, voltage level pyramid, load distribution</li>
+      <li><b>1.3 SQUARE</b> &mdash; memory blocks, finite address grids, boundary-locked storage</li>
+      <li><b>1.4 CROSS</b> &mdash; decision junctions, Boolean gate clusters, AI branching logic</li>
+      <li><b>1.5 CIRCLE</b> &mdash; capacitor nodes, anchor points, signal hubs</li>
+      <li><b>1.6 CURVATURE</b> &mdash; waveform modulation, adaptive frequency flow, dynamic signal shaping</li>
+    </ul>
+    <h4>3.0 Signature-grid correspondence (as published)</h4>
+    <ul>
+      <li>Solvable origin &middot; black-hole type collapse / all shapes into one &middot; vortex expands outward, inward</li>
+    </ul>
+    <h4>4.0 Reversed universal allowance algorithm output (as published)</h4>
+    <ol>
+      <li><b>Universal-Bit Starter</b> &mdash; device becomes Signature-1 object</li>
+      <li><b>Reverse-Target</b> &mdash; semiconductor replacement</li>
+      <li><b>Combinatorial Mix</b> &mdash; lines solve pathways, triangles solve logic, squares solve memory, etc.</li>
+      <li><b>Human Variance</b> &mdash; thermal drift, signal noise, voltage tolerance</li>
+      <li><b>Multi-Path Solved Reality</b> &mdash; final geometric and logical definition</li>
+    </ol>
+    <h4>5.0 Final autoread block (as published)</h4>
+    <pre class="autoread">L=2.50in, W=0.75in, T=0.35in, PORT=USB-C, CORE=RaspberryPi_AI, POWER=5VDC_3A, TOOLS=LINE_3A, TOOLS=LINE_TRIANGLE_SQUARE_CROSS_CIRCLE_CURVATURE, FUNCTION=Universal_Mapper_Speck_Maker, STATUS=SIGNATURE-1_VALID</pre>
+    <div class="exgrid">
+      <figure>
+        <img src="assets/semi-chip.jpg" alt="Semiconductor replacement chip layout diagram">
+        <figcaption>Chip layout</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/semi-usb.jpg" alt="USB drive blueprints for the semiconductor replacement">
+        <figcaption>USB drive blueprints</figcaption>
+      </figure>
+    </div>
+    <figure>
+      <img src="assets/semi-module.jpg" alt="Reference component drawing of a compute module board used as a component in the invention">
+      <figcaption>Reference component drawing for the compute-module element of the invention &mdash; third-party product shown for reference only; no ownership claimed.</figcaption>
+    </figure>
+    <div class="pending">The full written sections (0.0&ndash;7.0) will be added here verbatim.</div>
+  </article>
+</div>
+
+<div class="searchwrap">
+  <div class="searchrow">
+    <input id="q" type="search" placeholder="Search by title, keyword, spec ID, inventor, or category&hellip;" autocomplete="off">
+    <button id="go" type="button">Search</button>
+  </div>
+  <div class="filters" id="filters"></div>
+  <div class="sortrow">Sort:
+    <select id="sort">
+      <option value="az">A to Z</option>
+      <option value="new">Newest first</option>
+      <option value="old">Oldest first</option>
+    </select>
+  </div>
+</div>
+<nav id="letters" aria-label="Jump by letter"></nav>
+<noscript><div class="noscript">This catalog needs JavaScript turned on to search and list specs.</div></noscript>
+<p id="count"></p>
+<div id="loading">Loading draft specs&hellip;</div>
+<div id="results"></div>
+<button id="more" type="button" style="display:none">Show more</button>
+<button id="totop" type="button" title="Back to top">&#8593;</button>
+<footer>
+  <div class="fname">The Spec Catalog</div>
+  <p>Draft invention specifications authored by Justin Addam Higgins (JAH), in the forced Signature-One format.<br>
+  Drafts &mdash; ready to review and file. Not granted patents. Not affiliated with the USPTO or any government agency.<br>
+  Published by Manon &nbsp;&middot;&nbsp; 2026 &nbsp;&middot;&nbsp; <a href="index.html">The Signature-One Archive</a></p>
+</footer>
+<script>
+var DATA = [];
+var CATS = [];
+var LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#".split("");
+var state = { q: "", cat: "", sort: "az", shown: 100 };
+var filtered = [];
+
+function letterOf(title) {
+  var t = String(title || "").trim().toUpperCase();
+  for (var i = 0; i < t.length; i++) {
+    var ch = t[i];
+    if (ch >= "A" && ch <= "Z") return ch;
+    if ((ch >= "0" && ch <= "9")) return "#";
+  }
+  return "#";
+}
+function esc(s) {
+  return String(s == null ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+function hay(r) {
+  return (r[0] + " " + r[1] + " " + r[2] + " " + r[3] + " " + r[4]).toLowerCase();
+}
+function apply() {
+  var q = state.q.toLowerCase().trim();
+  filtered = DATA.filter(function (r) {
+    if (state.cat && r[3] !== state.cat) return false;
+    if (q && hay(r).indexOf(q) < 0) return false;
+    return true;
+  });
+  if (state.sort === "az") {
+    filtered.sort(function (a, b) {
+      return a[1].toLowerCase() < b[1].toLowerCase() ? -1 : 1;
+    });
+  } else {
+    filtered.sort(function (a, b) {
+      var da = a[6] || "", db = b[6] || "";
+      if (da === db) return a[1].toLowerCase() < b[1].toLowerCase() ? -1 : 1;
+      if (state.sort === "new") return db < da ? -1 : 1;
+      return da < db ? -1 : 1;
+    });
+  }
+  state.shown = 100;
+  render();
+}
+function toolRows(tm) {
+  var order = ["LINE", "TRIANGLE", "SQUARE", "CROSS", "CIRCLE", "CURVATURE"];
+  return order.map(function (k) {
+    return "<tr><td class=\"k\">" + k + "</td><td>" + esc(tm[k] || "") + "</td></tr>";
+  }).join("");
+}
+function paramRows(p) {
+  return Object.keys(p).map(function (k) {
+    return "<tr><td class=\"k\">" + esc(k) + "</td><td>" + esc(p[k]) + "</td></tr>";
+  }).join("");
+}
+function stepsList(steps) {
+  return "<ol>" + steps.map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + "</ol>";
+}
+function card(r, i) {
+  var id = esc(r[0]), title = esc(r[1]), abs = esc(r[2]);
+  var meta = "Inventor: " + esc("Justin Addam Higgins") + " &middot; Owner: " + esc("Justin Addam Higgins") +
+             "<br>Prepared: " + esc(r[6]) + " &middot; CPC: " + esc(r[4]);
+  var h = '<div class="spec-card card" id="s' + i + '" data-letter="' + r[11] + '">' +
+    '<div class="num">' + id + '</div><h3>' + title + '</h3>' +
+    '<div class="meta">' + meta + '</div>' +
+    '<div><span class="tag">' + esc(r[3]) + '</span>' +
+    '<span class="era ' + esc(r[5]) + '">' + esc(r[5]) + '</span></div>' +
+    '<div class="abs">' + abs + '</div>' +
+    '<button class="toggle" type="button" data-t="abs">Show abstract</button>' +
+    '<button class="toggle" type="button" data-t="det">Spec details</button>' +
+    '<div class="details">' +
+      '<h4>Signature-tool mapping</h4><table>' + toolRows(r[7]) + '</table>' +
+      '<h4>Key parameters</h4><table>' + paramRows(r[8]) + '</table>' +
+      '<h4>Autoread block</h4><pre class="autoread">' + esc(r[9]) + '</pre>' +
+      '<h4>Reversed universal allowance algorithm</h4>' + stepsList(r[10]) +
+    '</div>' +
+    '<div class="statusline">Draft specification &mdash; by Justin Addam Higgins (JAH), ready to file.</div>' +
+    '</div>';
+  return h;
+}
+function renderLetters() {
+  var nav = document.getElementById("letters");
+  var present = {};
+  filtered.forEach(function (r) { present[r[11]] = true; });
+  var h = '<button type="button" class="top" data-l="^" title="Back to top">&#8593;</button>';
+  h += LETTERS.map(function (L) {
+    return '<button type="button" data-l="' + L + '"' +
+      (present[L] ? "" : " disabled") + ">" + L + "</button>";
+  }).join("");
+  nav.innerHTML = h;
+}
+function render() {
+  renderLetters();
+  var box = document.getElementById("results");
+  var slice = filtered.slice(0, state.shown);
+  box.innerHTML = slice.map(card).join("");
+  var label = filtered.length.toLocaleString() + " of " + DATA.length.toLocaleString() + " draft specs";
+  if (state.q.trim()) label += ' &mdash; results for &ldquo;' + esc(state.q.trim()) + "&rdquo;";
+  document.getElementById("count").innerHTML = label;
+  document.getElementById("more").style.display =
+    state.shown < filtered.length ? "block" : "none";
+}
+function jumpToLetter(L) {
+  if (L === "^") { window.scrollTo(0, 0); return; }
+  var idx = -1;
+  for (var i = 0; i < filtered.length; i++) {
+    if (filtered[i][11] === L) { idx = i; break; }
+  }
+  if (idx < 0) return;
+  if (idx >= state.shown) { state.shown = idx + 1; render(); }
+  var el = document.getElementById("s" + idx);
+  if (el && el.scrollIntoView) el.scrollIntoView(true);
+  if (el) {
+    el.style.borderColor = "#2563eb";
+    setTimeout(function () { el.style.borderColor = ""; }, 1600);
+  }
+}
+function buildFilters() {
+  var f = document.getElementById("filters");
+  var btns = [{ c: "", n: "All fields" }].concat(
+    CATS.map(function (c) { return { c: c, n: c }; }));
+  btns.forEach(function (b) {
+    var el = document.createElement("button");
+    el.type = "button";
+    el.textContent = b.n;
+    if (!b.c) el.classList.add("active");
+    el.onclick = function () {
+      state.cat = b.c;
+      for (var k = 0; k < f.children.length; k++) f.children[k].classList.remove("active");
+      el.classList.add("active");
+      apply();
+    };
+    f.appendChild(el);
+  });
+}
+(function init() {
+  var input = document.getElementById("q"), t;
+  function doSearch() { state.q = input.value; apply(); }
+  document.getElementById("go").onclick = doSearch;
+  input.addEventListener("input", function () {
+    clearTimeout(t);
+    t = setTimeout(doSearch, 200);
+  });
+  input.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") { e.preventDefault(); doSearch(); }
+  });
+  document.getElementById("more").onclick = function () { state.shown += 100; render(); };
+  document.getElementById("sort").onchange = function (e) {
+    state.sort = e.target.value;
+    apply();
+  };
+  var totop = document.getElementById("totop");
+  totop.onclick = function () { window.scrollTo(0, 0); };
+  window.addEventListener("scroll", function () {
+    totop.style.display = window.scrollY > 600 ? "block" : "none";
+  });
+  document.getElementById("letters").addEventListener("click", function (e) {
+    var b = e.target.closest ? e.target.closest("button[data-l]") : null;
+    if (!b || b.disabled) return;
+    jumpToLetter(b.getAttribute("data-l"));
+  });
+  document.getElementById("results").addEventListener("click", function (e) {
+    var b = e.target.closest ? e.target.closest(".toggle") : null;
+    if (!b) return;
+    var c = b.parentElement;
+    if (b.getAttribute("data-t") === "abs") {
+      c.classList.toggle("open");
+      b.textContent = c.classList.contains("open") ? "Hide abstract" : "Show abstract";
+    } else {
+      c.classList.toggle("expanded");
+      b.textContent = c.classList.contains("expanded") ? "Hide details" : "Spec details";
+    }
+  });
+  fetch("data/specs.jsonl").then(function (resp) {
+    if (!resp.ok) throw new Error("HTTP " + resp.status);
+    return resp.text();
+  }).then(function (text) {
+    var lines = text.split("\n");
+    for (var i = 0; i < lines.length; i++) {
+      var ln = lines[i].trim();
+      if (!ln) continue;
+      try {
+        var d = JSON.parse(ln);
+        DATA.push([d.spec_id, d.title, d.abstract, d.category, d.cpc, d.era,
+                   d.prepared_date, d.signature_tool_mapping, d.key_parameters,
+                   d.autoread_block, d.algorithm_steps, letterOf(d.title)]);
+      } catch (e) { /* skip bad line */ }
+    }
+    var seen = {};
+    DATA.forEach(function (r) { seen[r[3]] = true; });
+    CATS = Object.keys(seen).sort();
+    document.getElementById("statCount").textContent = DATA.length.toLocaleString();
+    document.getElementById("statFields").textContent = CATS.length.toLocaleString();
+    document.getElementById("loading").style.display = "none";
+    buildFilters();
+    apply();
+  }).catch(function (err) {
+    document.getElementById("loading").textContent =
+      "Could not load the spec data (" + err.message + "). Please try again later.";
+  });
+})();
+</script>
+</body>
+</html>

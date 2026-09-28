@@ -419,6 +419,86 @@ def build_demo(r, kind, title, category):
         "note": note,
     }
 
+HW_MEASUREMENTS = [
+    ("Overall length", "mm", 0.1), ("Overall width", "mm", 0.1),
+    ("Overall height", "mm", 0.1), ("Mass", "g", 2.0),
+    ("Operating voltage", "V", 0.5), ("Power draw", "W", 0.2),
+    ("Rated torque", "N·m", 0.05), ("Cycle life", "cycles", 0),
+    ("Operating temperature", "°C", 1.0), ("Ingress rating", "IP", 0),
+    ("Bearing bore", "mm", 0.02), ("Fastener size", "M", 0),
+]
+SW_MEASUREMENTS = [
+    ("Max throughput", "req/s", 0), ("P99 latency", "ms", 0),
+    ("Concurrent sessions", "sessions", 0), ("Data retention", "days", 0),
+    ("Availability", "%", 0.01), ("Model size", "GB", 0.1),
+    ("Max payload", "KB", 1.0), ("Recovery time", "s", 0.5),
+    ("API rate limit", "req/min", 0), ("Log retention", "days", 0),
+    ("Deploy size", "MB", 1.0), ("Cold start", "ms", 5),
+]
+
+def build_measurements(r, kind, title, category):
+    pool = HW_MEASUREMENTS if kind == "hardware" else SW_MEASUREMENTS
+    picks = r.sample(pool, 6)
+    out = []
+    for name, unit, tol in picks:
+        if unit == "IP":
+            val = r.choice(["54", "55", "65", "67"]); t = ""
+        elif unit == "M":
+            val = r.choice(["3", "4", "5", "6", "8"]); t = ""
+        elif unit in ("cycles", "sessions", "days", "req/s", "req/min"):
+            val = f"{r.choice([1, 5, 10, 50, 100, 500]) * 1000:,}".replace(",", " ")
+            t = ""
+        elif unit == "%":
+            val = f"{r.uniform(90, 99.99):.2f}"; t = f"±{tol}" if tol else ""
+        elif unit in ("mm", "g", "V", "W", "N·m", "°C", "GB", "KB", "MB", "ms", "s"):
+            base = {"mm": (8, 400), "g": (20, 2500), "V": (3, 48), "W": (1, 500),
+                    "N·m": (0.5, 60), "°C": (20, 85), "GB": (0.5, 64),
+                    "KB": (4, 1024), "MB": (10, 900), "ms": (1, 400), "s": (1, 120)}[unit]
+            val = f"{r.uniform(*base):.1f}"; t = f"±{tol}" if tol else ""
+        else:
+            val = f"{r.randint(1, 999)}"; t = ""
+        out.append({"name": name, "value": val, "unit": unit, "tolerance": t})
+    return out
+
+def build_ai_explainer(r, kind, title, category, params, toolmap, steps):
+    dev = _dev_of(title)
+    pk = list(params.items())
+    ptxt = f"{pk[0][0].lower().replace('_', ' ')} of {pk[0][1]}" if pk else "tuned performance"
+    if kind == "hardware":
+        what = (f"This is {article(dev)}: a physical product in {category}. In plain terms, it is "
+                f"built to deliver {ptxt}, and every curve, joint, and dimension is decided by a "
+                f"six-shape design system instead of guesswork.")
+        how = [
+            f"Start with one controlled origin point - the 'binary-1' anchor - so the whole {dev} grows from a single known-good spot.",
+            f"Aim at the job it must do and work backwards, which locks the {ptxt} target before any material is cut.",
+            f"Run the design through six shapes: lines for {toolmap['LINE']}, triangles for {toolmap['TRIANGLE']}, squares for {toolmap['SQUARE']}, crosses for {toolmap['CROSS']}, circles for {toolmap['CIRCLE']}, and curves for {toolmap['CURVATURE']}.",
+            f"Allow human-style slack - perspective, chance, tolerance - so the {dev} works in the real world, not just on paper.",
+            f"Output the finished {dev} as one valid build, with a machine-readable autoread block stamped on it for verification.",
+        ]
+        who = (f"Builders, manufacturers, and product teams who want {article(dev)} with documented "
+               f"measurements and a repeatable way to make it.")
+    else:
+        what = (f"This is {article(dev)}: software in {category}. In plain terms, it is a program "
+                f"built to deliver {ptxt}, and its data flow, decisions, and limits are all decided "
+                f"by a six-shape design system instead of guesswork.")
+        how = [
+            f"Start with one controlled origin point - the 'binary-1' anchor - so the whole {dev} grows from a single known-good state.",
+            f"Aim at the job it must do and work backwards, which locks the {ptxt} target before any code is written.",
+            f"Run the design through six shapes: lines for {toolmap['LINE']}, triangles for {toolmap['TRIANGLE']}, squares for {toolmap['SQUARE']}, crosses for {toolmap['CROSS']}, circles for {toolmap['CIRCLE']}, and curves for {toolmap['CURVATURE']}.",
+            f"Allow human-style slack - perspective, chance, tolerance - so the {dev} behaves sanely under real load.",
+            f"Ship the finished {dev} as one valid build, with a machine-readable autoread block emitted on every deploy.",
+        ]
+        who = (f"Developers, teams, and operators who want {article(dev)} with documented behavior "
+               f"and a repeatable way to build and run it.")
+    return {
+        "headline": f"AI explainer: {dev}",
+        "what": what,
+        "how_it_works": how,
+        "who_its_for": who,
+        "bottom_line": (f"If you remember one thing: this {dev} is a {kind} invention whose every "
+                        f"decision traces back to six shapes and five reversed steps - nothing is arbitrary."),
+    }
+
 # ----------------------------------------------------------------------------
 # State + generation
 # ----------------------------------------------------------------------------
@@ -467,6 +547,8 @@ def make_spec(i, used, seed=None, category=None):
     patent_draft = build_patent_draft(r, kind, title, cat, params, toolmap)
     manufacture = build_manufacture(r, kind, title, cat, params)
     demo = build_demo(r, kind, title, cat)
+    measurements = build_measurements(r, kind, title, cat)
+    ai_explainer = build_ai_explainer(r, kind, title, cat, params, toolmap, steps)
     return {
         "spec_id": spec_id,
         "title": title,
@@ -485,6 +567,8 @@ def make_spec(i, used, seed=None, category=None):
         "patent_draft": patent_draft,
         "manufacture": manufacture,
         "demo": demo,
+        "measurements": measurements,
+        "ai_explainer": ai_explainer,
     }, title.lower()
 
 def main():

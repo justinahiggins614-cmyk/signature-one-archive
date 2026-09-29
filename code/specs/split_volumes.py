@@ -61,7 +61,15 @@ def main():
     chunks = [f for f in files if f.startswith("volumes/specs-c")]
     # Pick up legacy big volumes too (pre-chunk era); they stay as-is.
     legacy = [f for f in files if f.startswith("volumes/") and f not in chunks]
-    n_chunk = len(chunks)
+    # Number new chunks from the highest existing chunk number, not the count:
+    # chunks may have been moved out to a shard repo, and names must stay
+    # globally unique across all shards.
+    def chunk_num(f):
+        try:
+            return int(f.rsplit("specs-c", 1)[1].split(".")[0])
+        except (ValueError, IndexError):
+            return 0
+    n_chunk = max([chunk_num(f) for f in chunks] or [0])
 
     if not os.path.exists(HOT):
         open(HOT, "a").close()

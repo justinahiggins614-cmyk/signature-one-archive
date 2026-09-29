@@ -79,8 +79,20 @@ def main():
                     ]
                     out.write((json.dumps(row, ensure_ascii=False) + "\n").encode("utf-8"))
                     n += 1
+    # Preserve any extra shard entries (shard repos) already registered;
+    # the local entry always comes first.
+    extra = []
+    if os.path.exists(SHARDSPATH):
+        try:
+            with open(SHARDSPATH, encoding="utf-8") as fh:
+                for s in json.load(fh).get("shards", []):
+                    if isinstance(s, dict) and s.get("base"):
+                        extra.append({"base": s["base"],
+                                      "index": s.get("index", "data/index/specs.idx.json.gz")})
+        except Exception:
+            pass
     with open(SHARDSPATH, "w", encoding="utf-8") as fh:
-        json.dump({"shards": [{"base": "", "index": "data/index/specs.idx.json.gz"}]}, fh)
+        json.dump({"shards": [{"base": "", "index": "data/index/specs.idx.json.gz"}] + extra}, fh)
     size_mb = os.path.getsize(INDEXPATH) / 1048576
     print(f"index_lines={n} index_size={size_mb:.1f}MB gz")
 

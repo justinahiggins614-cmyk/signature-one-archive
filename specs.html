@@ -1018,6 +1018,7 @@ STATUS=SIGNATURE-1_VALID</pre>
 <div class="wrap" id="leaks" style="margin-top:34px">
   <h2 class="sect">JAH-N Wiki Leaks</h2>
   <p class="sectsub">Declassified-style dossiers &mdash; every spec also ships a <b>top-secret-file briefing</b>: overview, science proof, math proof, simulated experts, officer conclusion. Search the files:</p>
+  <p class="sectsub">&#9654; <a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/" target="_blank" rel="noopener" style="color:#e8d98a">Open the full JAH-N Wiki Leaks archive</a> &mdash; every spec, patent, and bizarre-subject file as a classified dossier, each with its own personal AI, read-aloud, and downloadable AI disc / thumbdrive copies.</p>
   <div class="wikisearch"><input id="leakq" type="search" placeholder="Search leaked files by title, ID, or category&hellip;" autocomplete="off"></div>
   <div class="wikiresults" id="leakresults"></div>
 </div>
@@ -2028,6 +2029,8 @@ function wikiHTML(r) {
     ((r[14] || {}).claims || []).length + ' claims. See the Patent filing lens for the complete document.</p>';
   h += '<h4>References</h4><p>Autoread block: <code>' + esc(r[9]) + '</code></p>';
   h += '<p style="font-size:.78em;color:#8b8b95">Draft specification by Justin Addam Higgins (JAH) &mdash; ready to review and file. Not a granted patent.</p>';
+  h += '<p style="margin-top:12px;padding:10px;border:1px solid #5a4a15;background:#141003">' +
+    '<a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/?dossier=' + encodeURIComponent(r[0]) + '" target="_blank" rel="noopener" style="color:#e8d98a;font-weight:bold;letter-spacing:1px">&#9654; CLASSIFIED DOSSIER &mdash; open the full JAH-N Wiki Leaks file for ' + esc(r[0]) + ' (personal AI, read-aloud, AI disc download)</a></p>';
   h += '</div>';
   return h;
 }
@@ -2047,6 +2050,7 @@ function leaksHTML(r) {
   h += '<h4>5. Simulated experts</h4><ol>' +
     (a.how_it_works || []).map(function (s) { return '<li>' + esc(s) + '</li>'; }).join("") + '</ol>';
   h += '<h4>6. Officer conclusion</h4><p>' + esc(a.bottom_line || "") + '</p>';
+  h += '<p style="margin:10px 0"><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/?dossier=' + encodeURIComponent(r[0]) + '" target="_blank" rel="noopener" style="color:#ff6b6b;font-weight:bold;letter-spacing:1px">&#9654; OPEN THE FULL CLASSIFIED DOSSIER ON JAH-N WIKI LEAKS</a></p>';
   h += '<div class="leakfoot">File concerns a DRAFT invention specification by Justin Addam Higgins (JAH) &mdash; ready to review and file. Not a granted patent. Stylized dossier; the engineering data above is the spec\u2019s own.</div>';
   h += '</div>';
   return h;

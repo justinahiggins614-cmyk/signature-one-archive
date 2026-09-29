@@ -291,6 +291,7 @@
   .lenspane { animation: fadein .25s ease-out; }
   @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
   .lensbtn.readbtn { border-style: dashed; color: #ffb3b3; }
+  .lensbtn.dlallbtn { border-color: var(--red); color: #ff9a9a; font-weight: bold; }
   #aubar { position: fixed; left: 50%; transform: translateX(-50%); bottom: 14px; z-index: 9999;
     background: #0d0d12; border: 1px solid var(--red); border-radius: 6px;
     padding: 10px 14px; display: flex; gap: 10px; align-items: center;
@@ -1831,13 +1832,16 @@ function aiAnswer(r, q) {
   }
   return "Good question. I can answer from this spec about " + aiTopics() + ". Try asking <b>what is it</b> or <b>how does it work</b>.";
 }
-function lensBar() {
+function lensBar(r) {
   var lenses = [["patent", "Patent filing"], ["overview", "Overview"], ["make", "Manufacture"],
                 ["ai", "AI explains"], ["code", "Code"], ["demo", "Demo"],
                 ["wiki", "Wiki"], ["leaks", "Leaks"]];
+  var idx = ALLSTORE.length;
+  ALLSTORE.push(r);
   return '<div class="lensbar">' + lenses.map(function (l, k) {
     return '<button type="button" class="lensbtn' + (k === 0 ? " active" : "") + '" data-lens="' + l[0] + '">' + l[1] + '</button>';
-  }).join("") + '<button type="button" class="lensbtn readbtn" data-read="1" title="Read this section aloud">&#128266; Read aloud</button></div>';
+  }).join("") + '<button type="button" class="lensbtn readbtn" data-read="1" title="Read this section aloud">&#128266; Read aloud</button>' +
+  '<button type="button" class="lensbtn dlallbtn zipdl" data-dl="' + idx + '" title="Download the full filing package as a zip">&#8681; Download all</button></div>';
 }
 /* ---- Read-aloud: every lens (patent, overview, manufacture, AI, code, demo, wiki, leaks) ---- */
 var AU = { q: [], i: 0, active: false, paused: false, rate: 1, label: "" };
@@ -2274,7 +2278,7 @@ function card(r, i) {
     '<button class="toggle" type="button" data-t="abs">Show abstract</button>' +
     '<button class="toggle" type="button" data-t="det">Spec details</button>' +
     '<div class="details">' +
-      lensBar() +
+      lensBar(r) +
       '<div class="lenspane" data-pane="patent">' + patentFrontPage(r) + patentHTML(r[14]) + figsHTML(r) + dlAllHTML(r) + '</div>' +
       '<div class="lenspane" data-pane="overview" style="display:none">' +
         '<h4>Abstract</h4><p>' + abs + '</p>' +
@@ -2481,7 +2485,7 @@ function bindWikiSearch(inputId, resId, lens) {
   document.getElementById("results").addEventListener("click", function (e) {
     var rd = e.target.closest ? e.target.closest("[data-read]") : null;
     if (rd) { var d0 = rd.closest(".details"); if (d0) auReadCard(d0); return; }
-    var lb = e.target.closest ? e.target.closest(".lensbtn") : null;
+    var lb = e.target.closest ? e.target.closest('.lensbtn[data-lens]') : null;
     if (lb) {
       auStop();
       var det = lb.closest(".details");

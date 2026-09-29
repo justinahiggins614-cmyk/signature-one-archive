@@ -290,6 +290,19 @@
     box-shadow: 0 0 10px rgba(255,34,34,.35); }
   .lenspane { animation: fadein .25s ease-out; }
   @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+  .lensbtn.readbtn { border-style: dashed; color: #ffb3b3; }
+  #aubar { position: fixed; left: 50%; transform: translateX(-50%); bottom: 14px; z-index: 9999;
+    background: #0d0d12; border: 1px solid var(--red); border-radius: 6px;
+    padding: 10px 14px; display: flex; gap: 10px; align-items: center;
+    box-shadow: 0 0 18px rgba(255,30,30,.45); color: #ffd7d7; font-size: 14px;
+    max-width: 94vw; flex-wrap: wrap; }
+  #aubar button { background: #1a0505; color: #ff8080; border: 1px solid var(--red);
+    border-radius: 3px; padding: 6px 12px; cursor: pointer; font-family: inherit; font-size: 14px; }
+  #aubar button:hover { background: #2a0a0a; }
+  #aubar select { background: #0d0d12; color: #ff8080; border: 1px solid var(--red);
+    border-radius: 3px; padding: 5px; font-family: inherit; }
+  #aubar label { display: flex; gap: 6px; align-items: center; }
+  #aulabel { max-width: 46vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .aichat { margin-top: 14px; border: 1px solid var(--red-dim); border-radius: 2px;
     background: #070708; padding: 12px; }
   .aichat h5 { margin: 0 0 8px; color: #ff8080; font-family: Orbitron, monospace;
@@ -1824,7 +1837,92 @@ function lensBar() {
                 ["wiki", "Wiki"], ["leaks", "Leaks"]];
   return '<div class="lensbar">' + lenses.map(function (l, k) {
     return '<button type="button" class="lensbtn' + (k === 0 ? " active" : "") + '" data-lens="' + l[0] + '">' + l[1] + '</button>';
-  }).join("") + '</div>';
+  }).join("") + '<button type="button" class="lensbtn readbtn" data-read="1" title="Read this section aloud">&#128266; Read aloud</button></div>';
+}
+/* ---- Read-aloud: every lens (patent, overview, manufacture, AI, code, demo, wiki, leaks) ---- */
+var AU = { q: [], i: 0, active: false, paused: false, rate: 1, label: "" };
+function auVoice() {
+  try {
+    var vs = window.speechSynthesis.getVoices().filter(function (v) {
+      return v.lang && v.lang.toLowerCase().indexOf("en") === 0;
+    });
+    var g = vs.filter(function (v) { return v.name.toLowerCase().indexOf("google") >= 0; })[0];
+    return g || vs[0] || null;
+  } catch (e) { return null; }
+}
+function auChunks(text) {
+  var out = [], cur = "";
+  var parts = text.split(/([.!?]["']?(?:\s+|$))/);
+  for (var i = 0; i < parts.length; i += 2) {
+    var sent = ((parts[i] || "") + (parts[i + 1] || "")).replace(/\s+/g, " ").trim();
+    if (!sent) continue;
+    if (cur && (cur + " " + sent).length > 220) { out.push(cur.trim()); cur = sent; }
+    else cur = cur ? cur + " " + sent : sent;
+  }
+  if (cur.trim()) out.push(cur.trim());
+  return out;
+}
+function auPaneText(det) {
+  var panes = det.querySelectorAll(".lenspane"), pane = panes[0];
+  for (var i = 0; i < panes.length; i++) {
+    if (panes[i].style.display !== "none") { pane = panes[i]; break; }
+  }
+  var lens = pane.getAttribute("data-pane");
+  var clone = pane.cloneNode(true);
+  var kill = clone.querySelectorAll("pre, code, script, style, button, input, textarea, select, svg, img");
+  for (var k = kill.length - 1; k >= 0; k--) kill[k].parentNode.removeChild(kill[k]);
+  var t = (clone.textContent || "").replace(/[ \t\u00a0]+/g, " ").replace(/\n\s*\n\s*\n+/g, "\n\n").trim();
+  return { lens: lens, text: t };
+}
+function auShowBar(show) {
+  var bar = document.getElementById("aubar");
+  if (bar) bar.style.display = show ? "flex" : "none";
+}
+function auPaintBtn() {
+  var p = document.getElementById("aupause");
+  if (p) p.innerHTML = AU.paused ? "&#9654; Resume" : "&#10074;&#10074; Pause";
+  var l = document.getElementById("aulabel");
+  if (l) l.textContent = "Reading: " + AU.label;
+}
+function auSpeakNext() {
+  if (AU.i >= AU.q.length || !AU.active) { auStop(); return; }
+  auShowBar(true); auPaintBtn();
+  var u = new SpeechSynthesisUtterance(AU.q[AU.i]);
+  u.rate = AU.rate; u.lang = "en-US";
+  var v = auVoice(); if (v) u.voice = v;
+  u.onend = function () { if (!AU.active) return; AU.i++; auSpeakNext(); };
+  u.onerror = function () { if (!AU.active) return; AU.i++; auSpeakNext(); };
+  window.speechSynthesis.speak(u);
+}
+function auReadCard(det) {
+  if (!("speechSynthesis" in window)) {
+    alert("Audio read-aloud is not supported in this browser. Try Chrome or Edge.");
+    return;
+  }
+  try { window.speechSynthesis.cancel(); } catch (e) {}
+  var pt = auPaneText(det);
+  if (!pt.text) { alert("Nothing to read in this section yet."); return; }
+  var card = det.closest(".spec-card"), title = "";
+  if (card) { var h3 = card.querySelector("h3"); if (h3) title = h3.textContent.trim(); }
+  var names = { patent: "Patent filing", overview: "Overview", make: "Manufacture",
+                ai: "AI explains", code: "Code", demo: "Demo", wiki: "Wiki", leaks: "Leaks" };
+  var label = names[pt.lens] || pt.lens;
+  AU.label = (title ? title + " — " : "") + label;
+  AU.q = auChunks(AU.label + ". " + pt.text);
+  AU.i = 0; AU.active = true; AU.paused = false;
+  auSpeakNext();
+}
+function auPauseToggle() {
+  if (!AU.active) return;
+  try {
+    if (AU.paused) window.speechSynthesis.resume(); else window.speechSynthesis.pause();
+  } catch (e) {}
+  AU.paused = !AU.paused; auPaintBtn();
+}
+function auStop() {
+  AU.active = false; AU.paused = false; AU.q = []; AU.i = 0;
+  try { window.speechSynthesis.cancel(); } catch (e) {}
+  auShowBar(false);
 }
 function variantText(r) {
   if (!r[19]) return "";
@@ -2381,8 +2479,11 @@ function bindWikiSearch(inputId, resId, lens) {
     jumpToLetter(b.getAttribute("data-l"));
   });
   document.getElementById("results").addEventListener("click", function (e) {
+    var rd = e.target.closest ? e.target.closest("[data-read]") : null;
+    if (rd) { var d0 = rd.closest(".details"); if (d0) auReadCard(d0); return; }
     var lb = e.target.closest ? e.target.closest(".lensbtn") : null;
     if (lb) {
+      auStop();
       var det = lb.closest(".details");
       var btns = det.querySelectorAll(".lensbtn");
       for (var bi = 0; bi < btns.length; bi++) btns[bi].classList.remove("active");
@@ -2453,6 +2554,7 @@ function bindWikiSearch(inputId, resId, lens) {
     } else {
       c.classList.toggle("expanded");
       b.textContent = c.classList.contains("expanded") ? "Hide details" : "Spec details";
+      if (!c.classList.contains("expanded")) auStop();
     }
   });
   document.getElementById("results").addEventListener("keydown", function (e) {
@@ -2563,6 +2665,28 @@ function bindWikiSearch(inputId, resId, lens) {
   }).then(function (m) {
     loadFiles(m.files || ["specs.jsonl"], 0);
   }).catch(loadFail);
+})();
+</script>
+<div id="aubar" style="display:none">
+  <span id="aulabel">Reading&hellip;</span>
+  <button id="aupause" type="button">&#10074;&#10074; Pause</button>
+  <button id="austop" type="button">&#9632; Stop</button>
+  <label>Speed <select id="aurate">
+    <option value="0.8">0.8&times;</option>
+    <option value="1" selected>1&times;</option>
+    <option value="1.25">1.25&times;</option>
+    <option value="1.5">1.5&times;</option>
+    <option value="2">2&times;</option>
+  </select></label>
+</div>
+<script>
+(function () {
+  var p = document.getElementById("aupause"), s = document.getElementById("austop"),
+      r = document.getElementById("aurate");
+  if (p) p.addEventListener("click", function () { auPauseToggle(); });
+  if (s) s.addEventListener("click", function () { auStop(); });
+  if (r) r.addEventListener("change", function () { AU.rate = parseFloat(r.value) || 1; });
+  window.addEventListener("pagehide", function () { auStop(); });
 })();
 </script>
 </body>

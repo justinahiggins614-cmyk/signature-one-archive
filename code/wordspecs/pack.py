@@ -2,8 +2,8 @@
 """Pack staged JAH-WORD records into data/volumes/words-cNNNNN.jsonl.gz
 (150 records per chunk) and update the word indexes.
 
-- data/index/words.idx.jsonl    -> cumulative [word_lower, spec_id, chunkFile, lineIdx]
-- data/index/words.search.jsonl -> cumulative 21-element search rows (specs.idx shape)
+- data/index/words.idx.json.gz    -> cumulative [word_lower, spec_id, chunkFile, lineIdx]
+- data/index/words.search.json.gz -> cumulative 21-element search rows (specs.idx shape)
 Both are re-gzipped after each pack run (multi-run safe: rebuild from jsonl).
 
 Usage: python3 pack.py
@@ -43,6 +43,9 @@ def main():
             line = line.strip()
             if line:
                 staged.append(json.loads(line))
+    if not staged:
+        print("nothing staged")
+        return
     st = json.load(open(STATE)) if os.path.exists(STATE) else {"next_index": 0, "next_id": 1, "chunks": 0}
     os.makedirs(VOLDIR, exist_ok=True)
     os.makedirs(IDXDIR, exist_ok=True)
@@ -55,8 +58,15 @@ def main():
             except ValueError:
                 pass
     cn = max(nums) if nums else 0
-    idx_jsonl = os.path.join(IDXDIR, "words.idx.jsonl")
-    sch_jsonl = os.path.join(IDXDIR, "words.search.jsonl")
+    idx_jsonl = os.path.join(IDXDIR, "words.idx.jsonl")       # working file (removed after gzip)
+    sch_jsonl = os.path.join(IDXDIR, "words.search.jsonl")    # working file (removed after gzip)
+    idx_gz = os.path.join(IDXDIR, "words.idx.json.gz")        # served to the site
+    sch_gz = os.path.join(IDXDIR, "words.search.json.gz")     # served to the site
+    # restore cumulative working files from the served .gz (they are not stored)
+    for wj, gz in ((idx_jsonl, idx_gz), (sch_jsonl, sch_gz)):
+        if not os.path.exists(wj) and os.path.exists(gz):
+            with gzip.open(gz, "rb") as f_in, open(wj, "wb") as f_out:
+                f_out.write(f_in.read())
     n_new_chunks = 0
     with open(idx_jsonl, "a", encoding="utf-8") as fi, open(sch_jsonl, "a", encoding="utf-8") as fs:
         buf = []
@@ -82,10 +92,11 @@ def main():
         flush()
     st["chunks"] = cn
     json.dump(st, open(STATE, "w"), indent=1)
-    # re-gzip the cumulative indexes
-    for src in (idx_jsonl, sch_jsonl):
-        with open(src, "rb") as f_in, gzip.open(src + ".gz", "wb") as f_out:
+    # re-gzip the cumulative indexes to their served names; drop working files
+    for src, gz in ((idx_jsonl, idx_gz), (sch_jsonl, sch_gz)):
+        with open(src, "rb") as f_in, gzip.open(gz, "wb") as f_out:
             f_out.write(f_in.read())
+        os.remove(src)
     open(STAGE, "w").close()  # clear staging
     # verify chunk integrity
     total = 0

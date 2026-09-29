@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
-"""Split the hot specs file into sealed volumes so no single data file
-approaches GitHub's 100MB cap. Idempotent and incremental.
+"""Seal the hot specs file into small chunks so the page can lazy-load.
 
 Layout:
     data/specs.jsonl                  hot file the generators append to
-    data/volumes/specs-v001.jsonl ... sealed volumes, each <= VOL_MAX_BYTES
+    data/volumes/specs-cNNNNN.jsonl.gz  sealed chunks, CHUNK_N specs each
     data/volumes/manifest.json        {"files": [...]} in load order
 
-The page loads the manifest, then each file in order.
+Chunks are ~150 specs (~1MB gz): the page fetches exactly one chunk when a
+visitor opens a spec, instead of downloading the whole catalog. Idempotent
+and incremental: tops up the last chunk if it has room, else writes new ones.
 """
 import gzip
 import json
@@ -18,7 +19,7 @@ DATA = os.path.join(HERE, "..", "..", "data")
 HOT = os.path.join(DATA, "specs.jsonl")
 VOLDIR = os.path.join(DATA, "volumes")
 MANIFEST = os.path.join(VOLDIR, "manifest.json")
-VOL_MAX_BYTES = 45 * 1024 * 1024  # raw bytes per volume, well under GitHub's 100MB file cap
+CHUNK_N = 150
 
 
 def load_manifest():
@@ -34,20 +35,21 @@ def save_manifest(files):
         json.dump({"files": files}, fh)
 
 
-def vol_path(n):
-    return os.path.join(VOLDIR, f"specs-v{n:03d}.jsonl.gz")
+def chunk_path(n):
+    return os.path.join(VOLDIR, f"specs-c{n:05d}.jsonl.gz")
 
 
-def vol_name(n):
-    return f"volumes/specs-v{n:03d}.jsonl.gz"
+def chunk_name(n):
+    return f"volumes/specs-c{n:05d}.jsonl.gz"
 
 
-def read_vol_gz(path):
+def read_chunk_gz(path):
     with gzip.open(path, "rt", encoding="utf-8") as fh:
-        return fh.readlines()
+        return [ln if ln.endswith("\n") else ln + "\n"
+                for ln in fh if ln.strip()]
 
 
-def write_vol_gz(path, lines):
+def write_chunk_gz(path, lines):
     with gzip.open(path, "wb", compresslevel=6) as fh:
         for ln in lines:
             fh.write(ln.encode("utf-8"))
@@ -56,63 +58,41 @@ def write_vol_gz(path, lines):
 def main():
     os.makedirs(VOLDIR, exist_ok=True)
     files = load_manifest()
-    vols = [f for f in files if f.startswith("volumes/")]
-    n_vol = len(vols)
+    chunks = [f for f in files if f.startswith("volumes/specs-c")]
+    # Pick up legacy big volumes too (pre-chunk era); they stay as-is.
+    legacy = [f for f in files if f.startswith("volumes/") and f not in chunks]
+    n_chunk = len(chunks)
 
     if not os.path.exists(HOT):
         open(HOT, "a").close()
-    hot_size = os.path.getsize(HOT)
-    if hot_size <= VOL_MAX_BYTES and n_vol == 0:
-        # Nothing sealed yet and hot is small: single-file mode.
-        save_manifest(["specs.jsonl"])
-        print(f"single-file mode, hot={hot_size / 1048576:.1f}MB")
-        return
-
-    # Move hot lines into volumes (volumes are gzip-compressed).
     with open(HOT, encoding="utf-8") as fh:
-        lines = fh.readlines()
+        lines = [ln if ln.endswith("\n") else ln + "\n"
+                 for ln in fh if ln.strip()]
 
-    # Top up the last volume first if it has room (decompress, append, recompress).
     idx = 0
-    if vols:
-        last = os.path.join(DATA, vols[-1])
-        if last.endswith(".gz") and os.path.exists(last):
-            existing = read_vol_gz(last)
-            used = sum(len(ln.encode("utf-8")) for ln in existing)
-            room = VOL_MAX_BYTES - used
+    # Top up the last chunk first if it has room.
+    if chunks and lines:
+        last = os.path.join(DATA, chunks[-1])
+        if os.path.exists(last):
+            existing = read_chunk_gz(last)
+            room = CHUNK_N - len(existing)
             if room > 0:
-                while idx < len(lines):
-                    b = len(lines[idx].encode("utf-8"))
-                    if b > room:
-                        break
-                    existing.append(lines[idx])
-                    room -= b
-                    idx += 1
-                write_vol_gz(last, existing)
+                take = lines[:room]
+                write_chunk_gz(last, existing + take)
+                idx = len(take)
 
-    # Seal remaining lines into new volumes.
+    # Seal remaining lines into new chunks.
     while idx < len(lines):
-        n_vol += 1
-        vp = vol_path(n_vol)
-        chunk = []
-        used = 0
-        while idx < len(lines):
-            b = len(lines[idx].encode("utf-8"))
-            if used + b > VOL_MAX_BYTES and used > 0:
-                break
-            chunk.append(lines[idx])
-            used += b
-            idx += 1
-        write_vol_gz(vp, chunk)
-        vols.append(vol_name(n_vol))
+        n_chunk += 1
+        take = lines[idx:idx + CHUNK_N]
+        write_chunk_gz(chunk_path(n_chunk), take)
+        chunks.append(chunk_name(n_chunk))
+        idx += len(take)
 
     # Hot file is now drained (generators keep appending to it).
     open(HOT, "w").close()
-    save_manifest(vols + ["specs.jsonl"])
-    print(f"volumes={len(vols)} hot=drained")
-    for v in vols:
-        p = os.path.join(DATA, v)
-        print(f"  {v}: {os.path.getsize(p) / 1048576:.1f}MB gz")
+    save_manifest(legacy + chunks)
+    print(f"chunks={len(chunks)} legacy={len(legacy)} hot=drained")
 
 
 if __name__ == "__main__":

@@ -43,7 +43,7 @@ def save_json(path, obj):
 def scan_all_ids():
     """{spec_id: [category, line, title]} for every spec in sealed volumes."""
     ids = {}
-    for f in sorted(glob.glob(os.path.join(DATA, "volumes", "specs-v*.jsonl*"))):
+    for f in sorted(glob.glob(os.path.join(DATA, "volumes", "specs-*.jsonl*"))):
         opener = gzip.open if f.endswith(".gz") else open
         with opener(f, "rt", encoding="utf-8") as fh:
             for ln in fh:

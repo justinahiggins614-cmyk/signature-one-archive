@@ -40,7 +40,7 @@ def read_lines(path):
 
 
 def main():
-    files = sorted(glob.glob(os.path.join(VOLDIR, "specs-v*.jsonl*")))
+    files = sorted(glob.glob(os.path.join(VOLDIR, "specs-*.jsonl*")))
     if os.path.exists(HOT) and os.path.getsize(HOT):
         files.append(HOT)
     print(f"reading {len(files)} files...", flush=True)

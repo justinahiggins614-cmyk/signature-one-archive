@@ -276,6 +276,27 @@
     box-shadow: 0 0 10px rgba(255,34,34,.35); }
   .lenspane { animation: fadein .25s ease-out; }
   @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+  .aichat { margin-top: 14px; border: 1px solid var(--red-dim); border-radius: 2px;
+    background: #070708; padding: 12px; }
+  .aichat h5 { margin: 0 0 8px; color: #ff8080; font-family: Orbitron, monospace;
+    font-size: .8em; letter-spacing: .1em; text-transform: uppercase; }
+  .aimsgs { max-height: 260px; overflow-y: auto; margin-bottom: 10px; }
+  .aimsg { margin: 6px 0; padding: 8px 10px; border-radius: 2px; font-size: .86em;
+    line-height: 1.5; }
+  .aimsg.you { background: rgba(255,34,34,.08); border: 1px solid var(--blood);
+    color: #e8e8ee; text-align: right; }
+  .aimsg.ai { background: #0d0d12; border: 1px solid #3a3a44; color: #b9b9c4; }
+  .aimsg.ai b { color: #ff8080; }
+  .airow { display: flex; gap: 8px; }
+  .aiinput { flex: 1; background: #000; border: 1px solid var(--red-dim); color: #e8e8ee;
+    padding: 10px 12px; border-radius: 2px; font-family: inherit; font-size: .86em; }
+  .aiinput:focus { outline: none; border-color: var(--red); }
+  .aisend { padding: 10px 18px; border-radius: 2px; cursor: pointer;
+    border: 1px solid var(--red); background: rgba(255,34,34,.1); color: #ff6b6b;
+    font-family: Orbitron, monospace; font-weight: 700; font-size: .78em;
+    letter-spacing: .1em; text-transform: uppercase; }
+  .aisend:hover { background: var(--red); color: #000; }
+  .dlrow { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0; }
   .patentfront { border: 1px solid var(--red-dim); padding: 16px; margin: 10px 0;
     background: rgba(255,34,34,.03); border-radius: 2px; }
   .patentfront .pftitle { text-align: center; font-family: Orbitron, monospace;
@@ -1154,6 +1175,217 @@ function figsHTML(r) {
   });
   return h + '</div>';
 }
+function mfgText(m) {
+  if (!m) return "";
+  var L = ["MEANS OF MANUFACTURE", "", m.note || "", "", "Materials:"];
+  (m.materials || []).forEach(function (x) { L.push("  - " + x); });
+  L.push("", "Processes:");
+  (m.processes || []).forEach(function (x) { L.push("  - " + x); });
+  L.push("", "Steps:");
+  (m.steps || []).forEach(function (s, i) { L.push("  " + (i + 1) + ". " + String(s).replace(/^[0-9]+\.\s*/, "")); });
+  return L.join(NL) + NL;
+}
+function explainerText(a) {
+  if (!a) return "";
+  var L = [a.headline || "", "", "WHAT IT IS", a.what || "", "", "HOW IT WORKS"];
+  (a.how_it_works || []).forEach(function (s, i) { L.push("  " + (i + 1) + ". " + s); });
+  L.push("", "WHO IT IS FOR", a.who_its_for || "", "", "BOTTOM LINE", a.bottom_line || "");
+  return L.join(NL) + NL;
+}
+function draftText(r) {
+  var p = r[14] || {};
+  var L = [];
+  L.push("PATENT APPLICATION - DRAFT");
+  L.push(r[1] || "");
+  L.push("Inventor: Justin Addam Higgins (JAH)");
+  L.push("Prepared: " + (r[6] || "") + " | Category: " + (r[3] || "") + " | CPC: " + (r[4] || ""));
+  L.push("Spec ID: " + (r[0] || ""));
+  L.push("");
+  L.push(p.filing_note || "");
+  L.push("");
+  L.push("ABSTRACT");
+  L.push(p.abstract || "");
+  L.push("");
+  L.push("FIELD OF THE INVENTION");
+  L.push(p.field_of_invention || "");
+  L.push("");
+  L.push("BACKGROUND OF THE INVENTION");
+  L.push(p.background || "");
+  L.push("");
+  L.push("SUMMARY OF THE INVENTION");
+  L.push(p.summary || "");
+  L.push("");
+  L.push("BRIEF DESCRIPTION OF THE DRAWINGS");
+  (p.drawings_description || []).forEach(function (s) { L.push(s); });
+  L.push("");
+  L.push("DETAILED DESCRIPTION");
+  L.push(p.detailed_description || "");
+  L.push("");
+  L.push("CLAIMS");
+  (p.claims || []).forEach(function (c) { L.push(c); });
+  return L.join(NL) + NL;
+}
+function specSheetText(r) {
+  var L = [];
+  L.push("SPEC SHEET - " + (r[0] || ""));
+  L.push(r[1] || "");
+  L.push("Inventor / Owner: Justin Addam Higgins (JAH)");
+  L.push("Prepared: " + (r[6] || "") + " | Category: " + (r[3] || "") + " | CPC: " + (r[4] || "") + " | Era: " + (r[5] || ""));
+  if (r[12]) L.push("Signature line: " + r[12]);
+  if (r[19]) L.push("Mixed from: " + r[19][0] + " x " + r[19][1]);
+  L.push("Status: Draft specification - ready to file. Not a granted patent.");
+  L.push("");
+  L.push("ABSTRACT"); L.push(r[2] || ""); L.push("");
+  L.push("MEASUREMENTS");
+  (r[17] || []).forEach(function (x) { L.push("  " + x.name + ": " + x.value + " " + x.unit + " (tolerance " + (x.tolerance || "--") + ")"); });
+  L.push("");
+  L.push("SIGNATURE-TOOL MAPPING");
+  var tm = r[7] || {};
+  for (var k in tm) L.push("  " + k + ": " + tm[k]);
+  L.push("");
+  L.push("KEY PARAMETERS");
+  var pr = r[8] || {};
+  for (var k2 in pr) L.push("  " + k2 + " = " + pr[k2]);
+  L.push("");
+  L.push("AUTOREAD BLOCK"); L.push(r[9] || ""); L.push("");
+  L.push("REVERSED UNIVERSAL ALLOWANCE ALGORITHM");
+  (r[10] || []).forEach(function (s, i) { L.push("  " + (i + 1) + ". " + String(s).replace(/^[0-9]+\.\s*/, "")); });
+  L.push("");
+  L.push("MANUFACTURE"); L.push(mfgText(r[15]));
+  L.push("AI EXPLAINER"); L.push(explainerText(r[18]));
+  L.push("CODE");
+  L.push("  Working program: " + r[0] + ".py (Code lens)");
+  if (demoKind(r[16]) === "hardware") L.push("  Arduino version: " + r[0] + ".ino (Code lens)");
+  L.push("");
+  L.push("PATENT DRAFT: see the Patent filing lens, or draft/patent-draft.txt in the Download-all package.");
+  return L.join(NL) + NL;
+}
+function zipReadme(r) {
+  return ["Filing package for " + r[0], r[1] || "",
+    "by Justin Addam Higgins (JAH) - Signature-One.", "",
+    "draft/            the full patent draft (for submission)",
+    "figures/          FIG. 1-3 patent figures (SVG)",
+    "code/             the working program (.py, plus .ino for hardware)",
+    "manufacture/      means of manufacture",
+    "spec-sheet.txt    the full specification sheet",
+    "ai-explainer.txt  plain-English explainer",
+    "autoread.txt      the machine-readable autoread block", "",
+    "DRAFT - review every section for accuracy and completeness before filing.",
+    "Not a granted patent."].join(NL) + NL;
+}
+var CRC_T = null;
+function crc32bytes(bytes) {
+  if (!CRC_T) {
+    CRC_T = new Uint32Array(256);
+    for (var n = 0; n < 256; n++) {
+      var c = n;
+      for (var k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+      CRC_T[n] = c >>> 0;
+    }
+  }
+  var crc = 0xFFFFFFFF;
+  for (var i = 0; i < bytes.length; i++) crc = CRC_T[(crc ^ bytes[i]) & 0xFF] ^ (crc >>> 8);
+  return (crc ^ 0xFFFFFFFF) >>> 0;
+}
+function zipFiles(files) {
+  var enc = new TextEncoder();
+  var parts = [], central = [], offset = 0, i;
+  for (i = 0; i < files.length; i++) {
+    var data = enc.encode(files[i].data), name = enc.encode(files[i].name);
+    var crc = crc32bytes(data);
+    var lh = new DataView(new ArrayBuffer(30));
+    lh.setUint32(0, 0x04034b50, true);
+    lh.setUint16(4, 20, true);
+    lh.setUint16(6, 0x0800, true);
+    lh.setUint16(8, 0, true);
+    lh.setUint32(14, crc, true);
+    lh.setUint32(18, data.length, true);
+    lh.setUint32(22, data.length, true);
+    lh.setUint16(26, name.length, true);
+    parts.push(lh.buffer, name.buffer, data.buffer);
+    central.push({name: name, crc: crc, size: data.length, offset: offset});
+    offset += 30 + name.length + data.length;
+  }
+  var cdStart = offset, cdSize = 0;
+  for (i = 0; i < central.length; i++) {
+    var c = central[i];
+    var ch = new DataView(new ArrayBuffer(46));
+    ch.setUint32(0, 0x02014b50, true);
+    ch.setUint16(4, 20, true);
+    ch.setUint16(6, 20, true);
+    ch.setUint16(8, 0x0800, true);
+    ch.setUint32(16, c.crc, true);
+    ch.setUint32(20, c.size, true);
+    ch.setUint32(24, c.size, true);
+    ch.setUint16(28, c.name.length, true);
+    ch.setUint32(42, c.offset, true);
+    parts.push(ch.buffer, c.name.buffer);
+    cdSize += 46 + c.name.length;
+  }
+  var end = new DataView(new ArrayBuffer(22));
+  end.setUint32(0, 0x06054b50, true);
+  end.setUint16(8, central.length, true);
+  end.setUint16(10, central.length, true);
+  end.setUint32(12, cdSize, true);
+  end.setUint32(16, cdStart, true);
+  parts.push(end.buffer);
+  return new Blob(parts, {type: "application/zip"});
+}
+function buildPatentZip(r) {
+  var id = r[0], base = id + "/";
+  var files = [
+    {name: base + "draft/patent-draft.txt", data: draftText(r)},
+    {name: base + "figures/" + id + "-FIG1.svg", data: fig1(r)},
+    {name: base + "figures/" + id + "-FIG2.svg", data: fig2(r)},
+    {name: base + "figures/" + id + "-FIG3.svg", data: fig3(r)},
+    {name: base + "code/" + id + ".py", data: pythonCode(r)},
+    {name: base + "spec-sheet.txt", data: specSheetText(r)},
+    {name: base + "manufacture/manufacture.txt", data: mfgText(r[15])},
+    {name: base + "ai-explainer.txt", data: explainerText(r[18])},
+    {name: base + "autoread.txt", data: (r[9] || "") + NL},
+    {name: base + "README.txt", data: zipReadme(r)}
+  ];
+  if (demoKind(r[16]) === "hardware") {
+    files.splice(5, 0, {name: base + "code/" + id + ".ino", data: arduinoCode(r)});
+  }
+  return zipFiles(files);
+}
+var ALLSTORE = [];
+function dlAllHTML(r) {
+  var idx = ALLSTORE.length;
+  ALLSTORE.push(r);
+  return '<h4>Filing package</h4>' +
+    '<div class="dlrow">' +
+    '<button class="demotoggle sheetdl" type="button" data-dl="' + idx + '">Download spec sheet (.txt)</button>' +
+    '<button class="demotoggle zipdl" type="button" data-dl="' + idx + '">Download all (.zip)</button>' +
+    '</div>' +
+    '<div class="snote">Download all collects the whole filing package — patent draft, FIG. 1–3, working code, spec sheet, manufacture, AI explainer, autoread — organized in folders, in one zip.</div>';
+}
+function saveBlob(blob, filename) {
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 800);
+}
+function aiSend(idx) {
+  var input = document.getElementById("aiinput-" + idx);
+  var box = document.getElementById("aimsgs-" + idx);
+  if (!input || !box) return;
+  var q = input.value.trim();
+  if (!q) return;
+  var d = document.createElement("div");
+  d.className = "aimsg you";
+  d.textContent = q;
+  box.appendChild(d);
+  var a = document.createElement("div");
+  a.className = "aimsg ai";
+  a.innerHTML = aiAnswer(AISTORE[idx], q);
+  box.appendChild(a);
+  input.value = "";
+  box.scrollTop = box.scrollHeight;
+}
 function patentFrontPage(r) {
   var h = '<div class="patentfront">' +
     '<div class="pftitle">PATENT APPLICATION — DRAFT</div>' +
@@ -1176,14 +1408,80 @@ function measurementsHTML(m) {
              '</td><td>' + esc(x.tolerance || "—") + '</td></tr>';
     }).join("") + '</table>';
 }
-function aiHTML(a) {
+var AISTORE = [];
+function aiHTML(r) {
+  var a = r[18];
   if (!a) return "";
+  var idx = AISTORE.length;
+  AISTORE.push(r);
   return '<h4>' + esc(a.headline) + '</h4>' +
     '<p><b>What it is.</b> ' + esc(a.what) + '</p>' +
     '<p><b>How it works.</b></p><ol>' +
     a.how_it_works.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join("") + '</ol>' +
     '<p><b>Who it is for.</b> ' + esc(a.who_its_for) + '</p>' +
-    '<p><b>Bottom line.</b> ' + esc(a.bottom_line) + '</p>';
+    '<p><b>Bottom line.</b> ' + esc(a.bottom_line) + '</p>' +
+    '<div class="aichat"><h5>Personal AI — your ' + esc(r[0]) + ' assistant</h5>' +
+    '<div class="aimsgs" id="aimsgs-' + idx + '">' +
+    '<div class="aimsg ai">I am the AI version of this product. Ask me what it is, how it works, its parameters, how to build it, or anything about this spec — I work as your personal AI for it.</div>' +
+    '</div><div class="airow">' +
+    '<input class="aiinput" id="aiinput-' + idx + '" data-ai="' + idx + '" type="text" maxlength="300" placeholder="Ask about this product...">' +
+    '<button class="aisend" type="button" data-ai="' + idx + '">Ask</button>' +
+    '</div></div>';
+}
+function aiTopics() {
+  return "things like: what is it, how does it work, parameters, measurements, how to build it, the algorithm, who it is for, or the patent claims";
+}
+function aiAnswer(r, q) {
+  var t = String(q || "").toLowerCase();
+  var a = r[18] || {}, m = r[15] || {}, p = r[14] || {};
+  function has() {
+    for (var i = 0; i < arguments.length; i++) if (t.indexOf(arguments[i]) >= 0) return true;
+    return false;
+  }
+  if (has("what is", "what's", "whats", "describe", "about", "product is")) {
+    return "<b>What it is:</b> " + esc(a.what || r[2] || "");
+  }
+  if (has("how does", "how do", "how it works", "work")) {
+    var steps = (a.how_it_works || []).map(function (s, i) { return (i + 1) + ". " + s; }).join(" ");
+    return "<b>How it works:</b> " + esc(steps);
+  }
+  if (has("param", "spec", "setting", "tune", "rating", "rated")) {
+    var rows = [];
+    for (var k in (r[8] || {})) rows.push(k + " = " + r[8][k]);
+    return "<b>Key parameters:</b> " + esc(rows.join("; ") || "see the Overview lens");
+  }
+  if (has("measur", "tolerance", "dimension", "size")) {
+    var ms = (r[17] || []).map(function (x) { return x.name + ": " + x.value + " " + x.unit + " (±" + (x.tolerance || "?") + ")"; });
+    return "<b>Measurements:</b> " + esc(ms.join("; ") || "see the Overview lens");
+  }
+  if (has("build", "make", "manufactur", "construct", "material")) {
+    var st = (m.steps || []).map(function (s, i) { return (i + 1) + ". " + s.replace(/^[0-9]+\.\s*/, ""); }).join(" ");
+    return "<b>How to build it:</b> " + esc(st);
+  }
+  if (has("algorithm", "steps", "process", "method")) {
+    var al = (r[10] || []).join(" ");
+    return "<b>The algorithm:</b> " + esc(al);
+  }
+  if (has("who", "for whom", "user")) {
+    return "<b>Who it is for:</b> " + esc(a.who_its_for || "");
+  }
+  if (has("claim", "patent", "file", "filing", "ip")) {
+    var c = p.claims || [];
+    return "<b>Patent:</b> this spec ships a full draft filing with " + c.length + " claims. Claim 1: " + esc(c[0] || "") + " Open the Patent filing lens for the complete document, figures, and the Download-all package.";
+  }
+  if (has("code", "program", "python", "arduino", "download")) {
+    return "<b>Code:</b> the Code lens has your runnable program for this spec — Python for every spec, plus an Arduino IDE sketch (.ino) for hardware. The Patent filing lens has a Download-all button that collects everything into one organized zip.";
+  }
+  if (has("demo", "simulat", "try", "test")) {
+    return "<b>Demo:</b> open the Demo lens and press Run demo — it is a working simulation of this exact spec. For calculators it is a real working calculator.";
+  }
+  if (has("cost", "price", "much", "buy", "sell")) {
+    return "I do not price builds — this is a draft invention spec, not a store listing. The manufacture lens lists what it takes to build one.";
+  }
+  if (has("hello", "hi", "hey", "thanks", "thank")) {
+    return "Hello. I am the personal AI for <b>" + esc(r[1]) + "</b> (" + esc(r[0]) + "). Ask me " + aiTopics() + ".";
+  }
+  return "Good question. I can answer from this spec about " + aiTopics() + ". Try asking <b>what is it</b> or <b>how does it work</b>.";
 }
 function lensBar() {
   var lenses = [["patent", "Patent filing"], ["overview", "Overview"], ["make", "Manufacture"],
@@ -1364,16 +1662,95 @@ function pythonCode(r) {
   L.push("    main()");
   return L.join(NL) + NL;
 }
+function cStr(s) { return '"' + String(s).replace(/\\/g, "\\\\").replace(/"/g, '\\"') + '"'; }
+function cId(s, i) { return "v" + i; }
+function arduinoCode(r) {
+  var id = r[0], title = r[1], cat = r[3], cpc = r[4];
+  var d = r[16];
+  var L = [];
+  L.push("// " + title + " (" + id + ")");
+  L.push("// Draft invention by Justin Addam Higgins (JAH) - Signature-One.");
+  L.push("// " + cat + " | " + cpc);
+  L.push("//");
+  L.push("// Working C version of this hardware for Arduino IDE:");
+  L.push("// a runnable simulation of the mechanism. Upload to any board,");
+  L.push("// open Serial Monitor at 9600 baud, and watch it run.");
+  L.push("");
+  var params = (d && d.params) || [];
+  var i, p;
+  for (i = 0; i < params.length; i++) {
+    p = params[i];
+    L.push("// " + p.label + " (" + p.unit + "), range " + p.min + ".." + p.max);
+    L.push("const float V" + i + "_DEF = " + p.default + ";");
+    L.push("const float V" + i + "_MIN = " + p.min + ";");
+    L.push("const float V" + i + "_MAX = " + p.max + ";");
+  }
+  if (!params.length) L.push("const float V0_DEF = 1.0;");
+  L.push("");
+  L.push("void setup() {");
+  L.push('  Serial.begin(9600);');
+  L.push('  while (!Serial) { ; }');
+  L.push("  Serial.println(F(" + cStr("== " + id + " ==") + "));");
+  L.push("  Serial.println(F(" + cStr(title) + "));");
+  L.push("  Serial.println(F(" + cStr("STATUS=SIGNATURE-1 VALID") + "));");
+  for (i = 0; i < params.length; i++) {
+    p = params[i];
+    L.push("  Serial.print(F(" + cStr("  " + p.label + ": ") + "));");
+    L.push("  Serial.print(V" + i + "_DEF, 2);");
+    L.push("  Serial.println(F(" + cStr(" " + p.unit) + "));");
+  }
+  L.push("}");
+  L.push("");
+  L.push("void loop() {");
+  L.push("  // Live simulated inputs: gentle sweep around each rated default.");
+  L.push("  float t = millis() / 3000.0;");
+  for (i = 0; i < params.length; i++) {
+    L.push("  float v" + i + " = V" + i + "_DEF + (V" + i + "_MAX - V" + i + "_MIN) * 0.05 * sin(t + " + i + ");");
+  }
+  if (!params.length) L.push("  float v0 = V0_DEF;");
+  var outs = (d && d.outputs) || [];
+  if (outs.length) {
+    L.push("  // Mechanism outputs, from this spec's own formulas:");
+    for (i = 0; i < outs.length; i++) {
+      var expr = String(outs[i].expr).replace(/p([0-9]+)/g, "v$1");
+      L.push("  float o" + i + " = " + expr + ";  // " + outs[i].label + " (" + outs[i].unit + ")");
+    }
+    for (i = 0; i < outs.length; i++) {
+      L.push("  Serial.print(F(" + cStr("  " + outs[i].label + ": ") + "));");
+      L.push("  Serial.print(o" + i + ", 2);");
+      L.push("  Serial.println(F(" + cStr(" " + outs[i].unit) + "));");
+    }
+  } else {
+    L.push("  // Operating cycle simulation for this hardware:");
+    L.push('  Serial.println(F("  cycle: running"));');
+    for (i = 0; i < params.length; i++) {
+      L.push("  Serial.print(F(" + cStr("  " + params[i].label + " = ") + "));");
+      L.push("  Serial.print(v" + i + ", 2);");
+      L.push("  Serial.println(F(" + cStr(" " + params[i].unit) + "));");
+    }
+  }
+  L.push('  Serial.println(F("  ---"));');
+  L.push("  delay(2000);");
+  L.push("}");
+  return L.join(NL) + NL;
+}
 function codeHTML(r) {
   var idx = CODESTORE.length;
   CODESTORE.push(r);
   var code = pythonCode(r);
   var preview = code.split(NL).slice(0, 34).join(NL);
-  return '<h4>Working program — ' + esc(r[0]) + '.py</h4>' +
+  var kind = demoKind(r[16]);
+  var h = '<h4>Working program — ' + esc(r[0]) + '.py</h4>' +
     '<p>Your own runnable Python program for this spec: the working simulation, the how-to-use walkthrough, and the manufacture steps. Download it and run it anywhere Python 3 lives.</p>' +
     '<button class="demotoggle dlbtn" type="button" data-dl="' + idx + '">Download ' + esc(r[0]) + '.py</button>' +
     '<pre class="codeprev">' + esc(preview) + NL + '...</pre>' +
     '<div class="snote">At this scale a compiled .exe per spec is not practical; this Python program is the full working version.</div>';
+  if (kind === "hardware") {
+    h += '<h4>Arduino version — ' + esc(r[0]) + '.ino</h4>' +
+      '<p>The working C version of this hardware for Arduino IDE: upload it to any board and watch the mechanism simulate live over the serial monitor.</p>' +
+      '<button class="demotoggle inodl" type="button" data-dl="' + idx + '">Download ' + esc(r[0]) + '.ino</button>';
+  }
+  return h;
 }
 function card(r, i) {
   var id = esc(r[0]), title = esc(r[1]), abs = esc(r[2]);
@@ -1393,7 +1770,7 @@ function card(r, i) {
     '<button class="toggle" type="button" data-t="det">Spec details</button>' +
     '<div class="details">' +
       lensBar() +
-      '<div class="lenspane" data-pane="patent">' + patentFrontPage(r) + patentHTML(r[14]) + figsHTML(r) + '</div>' +
+      '<div class="lenspane" data-pane="patent">' + patentFrontPage(r) + patentHTML(r[14]) + figsHTML(r) + dlAllHTML(r) + '</div>' +
       '<div class="lenspane" data-pane="overview" style="display:none">' +
         '<h4>Abstract</h4><p>' + abs + '</p>' +
         measurementsHTML(r[17]) +
@@ -1404,7 +1781,7 @@ function card(r, i) {
         '<h4>Reversed universal allowance algorithm</h4>' + stepsList(r[10]) +
       '</div>' +
       '<div class="lenspane" data-pane="make" style="display:none">' + mfgHTML(r[15]) + '</div>' +
-      '<div class="lenspane" data-pane="ai" style="display:none">' + aiHTML(r[18]) + '</div>' +
+      '<div class="lenspane" data-pane="ai" style="display:none">' + aiHTML(r) + '</div>' +
       '<div class="lenspane" data-pane="code" style="display:none">' + codeHTML(r) + '</div>' +
       '<div class="lenspane" data-pane="demo" style="display:none">' + demoHTML(r[16], i) + '</div>' +
     '</div>' +
@@ -1428,6 +1805,8 @@ function render() {
   DEMOSTORE.length = 0;
   FIGSTORE.length = 0;
   CODESTORE.length = 0;
+  AISTORE.length = 0;
+  ALLSTORE.length = 0;
   var box = document.getElementById("results");
   var slice = filtered.slice(0, state.shown);
   box.innerHTML = slice.map(card).join("");
@@ -1529,15 +1908,29 @@ function buildFilters() {
     var fd = e.target.closest ? e.target.closest(".figdl") : null;
     if (fd) {
       var f = FIGSTORE[Number(fd.getAttribute("data-fig"))];
-      var blob2 = new Blob([f.svg], {type: "image/svg+xml"});
-      var a2 = document.createElement("a");
-      a2.href = URL.createObjectURL(blob2);
-      a2.download = f.id + "-FIG" + f.n + ".svg";
-      document.body.appendChild(a2);
-      a2.click();
-      setTimeout(function () { URL.revokeObjectURL(a2.href); a2.remove(); }, 800);
+      saveBlob(new Blob([f.svg], {type: "image/svg+xml"}), f.id + "-FIG" + f.n + ".svg");
       return;
     }
+    var sh = e.target.closest ? e.target.closest(".sheetdl") : null;
+    if (sh) {
+      var rs = ALLSTORE[Number(sh.getAttribute("data-dl"))];
+      saveBlob(new Blob([specSheetText(rs)], {type: "text/plain"}), rs[0] + "-spec-sheet.txt");
+      return;
+    }
+    var zp = e.target.closest ? e.target.closest(".zipdl") : null;
+    if (zp) {
+      var rz = ALLSTORE[Number(zp.getAttribute("data-dl"))];
+      saveBlob(buildPatentZip(rz), rz[0] + "-patent-package.zip");
+      return;
+    }
+    var io = e.target.closest ? e.target.closest(".inodl") : null;
+    if (io) {
+      var ri = CODESTORE[Number(io.getAttribute("data-dl"))];
+      saveBlob(new Blob([arduinoCode(ri)], {type: "text/x-c"}), ri[0] + ".ino");
+      return;
+    }
+    var as = e.target.closest ? e.target.closest(".aisend") : null;
+    if (as) { aiSend(Number(as.getAttribute("data-ai"))); return; }
     var dt = e.target.closest ? e.target.closest(".demotoggle") : null;
     if (dt) {
       var idx = dt.getAttribute("data-demo");
@@ -1559,6 +1952,12 @@ function buildFilters() {
     } else {
       c.classList.toggle("expanded");
       b.textContent = c.classList.contains("expanded") ? "Hide details" : "Spec details";
+    }
+  });
+  document.getElementById("results").addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      var inp = e.target.closest ? e.target.closest(".aiinput") : null;
+      if (inp) aiSend(Number(inp.getAttribute("data-ai")));
     }
   });
   function parseLines(text) {

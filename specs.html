@@ -250,6 +250,10 @@
 
   .filingnote { font-size: .8em; color: #ffb3b3; background: rgba(255,34,34,.06);
     border: 1px dashed var(--red); border-radius: 2px; padding: 8px 12px; margin: 8px 0; }
+  .flag { display: inline-block; margin: 2px 6px 2px 0; padding: 3px 10px; border: 1px solid var(--red);
+    border-radius: 3px; font-size: 11px; color: #ff8080; font-family: monospace; }
+  .flag.on { background: var(--red); color: #0a0000; font-weight: 700; }
+  .flag.off { opacity: .5; }
   .card .details p { margin: 8px 0; color: #b9b9c4; line-height: 1.6; }
   .card .details p b { color: #ff8080; }
   .demotoggle { margin: 8px 0; padding: 10px 22px; border-radius: 2px; cursor: pointer;
@@ -1101,19 +1105,153 @@ function stepsList(steps) {
   return "<ol>" + steps.map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("") + "</ol>";
 }
 var DEMOSTORE = [];
+function kvTable(pairs) {
+  var h = "<table>";
+  (pairs || []).forEach(function (pr) {
+    if (pr[1] === undefined || pr[1] === null || pr[1] === "") return;
+    h += '<tr><td class="k">' + esc(pr[0]) + "</td><td>" + esc(String(pr[1])) + "</td></tr>";
+  });
+  return h + "</table>";
+}
+function strList(arr) {
+  arr = arr || [];
+  return "<ol>" + arr.map(function (x) { return "<li>" + esc(String(x)) + "</li>"; }).join("") + "</ol>";
+}
 function patentHTML(p) {
   if (!p) return "";
-  return '<h4>Patent draft &mdash; for submission</h4>' +
-    '<div class="filingnote">' + esc(p.filing_note) + '</div>' +
-    '<p><b>Field of invention.</b> ' + esc(p.field_of_invention) + '</p>' +
-    '<p><b>Background.</b> ' + esc(p.background) + '</p>' +
-    '<p><b>Summary.</b> ' + esc(p.summary) + '</p>' +
-    '<p><b>Drawings.</b> ' + p.drawings_description.map(esc).join(" ") + '</p>' +
-    '<p><b>Detailed description.</b> ' + esc(p.detailed_description) + '</p>' +
-    '<h4>Claims</h4><ol>' +
-    p.claims.map(function (c) { return "<li>" + esc(c) + "</li>"; }).join("") + '</ol>' +
-    '<p><b>Abstract.</b> ' + esc(p.abstract) + '</p>';
+  var O = p.objects || {}, t = O.technical || {}, F = O.filing || {}, W = O.workfile || {};
+  var h = "<h4>Master patent specification &mdash; " + esc(p.schema_version || "JAH-MASTER") + "</h4>" +
+    '<div class="filingnote">' + esc(p.filing_note || "") + "</div>";
+
+  /* OBJECT 1 - TECHNICAL SPECIFICATION */
+  h += "<h4>Object 1 &mdash; Technical specification</h4>";
+  var idn = t.identity || {};
+  h += kvTable([["Invention ID", idn.invention_id], ["Version", (idn.version || "") + " rev " + (idn.revision || 0)],
+    ["Created", idn.created], ["Inventor", idn.inventor], ["Applicant", idn.applicant],
+    ["Title", idn.title], ["Technical field", idn.field], ["CPC", idn.cpc], ["Patent type", idn.patent_type],
+    ["Signature line", idn.signature_line], ["Parent", idn.parent], ["Related", (idn.related || []).join(", ")]]);
+  var ov = t.overview || {};
+  h += "<p><b>Overview.</b> " + esc(ov.one_sentence || "") + "</p><p>" + esc(ov.plain_english || "") + "</p>" +
+    "<p><b>Problem.</b> " + esc(ov.problem || "") + " <b>Purpose.</b> " + esc(ov.purpose || "") + "</p>" +
+    "<p><b>Primary function.</b> " + esc(ov.primary_function || "") + " <b>Users.</b> " + esc(ov.intended_users || "") + "</p>" +
+    "<p><b>Advantages.</b> " + esc(ov.advantages || "") + " <b>Scalability.</b> " + esc(ov.scalability || "") +
+    " <b>Best mode.</b> " + esc(ov.best_mode || "") + "</p>";
+  var bg = t.background || {};
+  h += "<p><b>Background.</b> " + esc(bg.text || "") + '</p><div class="filingnote">' + esc(bg.prior_art_note || "") + "</div>";
+  var sm = t.summary || {};
+  h += "<p><b>Summary.</b> " + esc(sm.text || "") + "</p>" +
+    "<p><b>Core.</b> " + esc(sm.core || "") + "</p>" +
+    "<p><b>Inputs:</b> " + esc((sm.inputs || []).join("; ")) + " <b>Outputs:</b> " + esc((sm.outputs || []).join("; ")) + "</p>" +
+    "<p><b>Embodiments covered:</b> " + esc((sm.embodiments || []).join("; ")) + "</p>";
+  var df = t.definitions || {};
+  h += "<h4>Definitions</h4><p>" + Object.keys(df).map(function (k) {
+    return "<b>" + esc(k) + ".</b> " + esc(df[k]);
+  }).join(" ") + "</p>";
+  var ar = t.architecture || {};
+  h += "<h4>Architecture</h4><p>" + esc(ar.overall || "") + "</p>" +
+    "<p><b>Hierarchy.</b> " + esc(ar.hierarchy || "") + " <b>Control.</b> " + esc(ar.control || "") + "</p>" +
+    "<p><b>Required:</b> " + esc((ar.required || []).join("; ")) + " <b>Optional:</b> " + esc((ar.optional || []).join("; ")) + "</p>";
+  h += "<h4>Components</h4><table><tr><td class=\"k\">No.</td><td class=\"k\">Component</td><td class=\"k\">Role</td><td class=\"k\">Tolerance</td></tr>" +
+    (t.components || []).map(function (c) {
+      return "<tr><td>" + esc(String(c.n)) + "</td><td>" + esc(c.name) + "</td><td>" + esc(c.role) + "</td><td>" + esc(c.tol) + "</td></tr>";
+    }).join("") + "</table>";
+  var md = t.method || {};
+  h += "<h4>Method &mdash; " + esc(md.name || "") + "</h4>" + strList(md.steps) +
+    "<p><b>Branches.</b> " + esc(md.branches || "") + " <b>Error handling.</b> " + esc(md.error_handling || "") +
+    " <b>Output.</b> " + esc((md.output || []).join("; ")) + "</p>";
+  if (t.software) {
+    var sw = t.software;
+    h += "<h4>Software embodiment</h4>" +
+      "<p><b>Environment.</b> " + esc(sw.environment || "") + " <b>Medium.</b> " + esc(sw.medium || "") + "</p>" +
+      "<p><b>Modules:</b> " + esc((sw.modules || []).join("; ")) + "</p>" +
+      "<p><b>Deployment:</b> " + esc((sw.deployment || []).join("; ")) + "</p>";
+  }
+  var dt = t.data || {};
+  h += "<h4>Data</h4>" + kvTable([["Inputs", (dt.inputs || []).join("; ")], ["Outputs", (dt.outputs || []).join("; ")],
+    ["Identifiers", (dt.identifiers || []).join(", ")], ["Integrity", dt.integrity]]);
+  var mt = t.math || {};
+  h += "<h4>Math</h4>" + kvTable([["Origin", mt.origin], ["Units", (mt.units || []).join(", ")],
+    ["Formula", mt.formula], ["Tolerances", mt.tolerances], ["Recreation", mt.recreation]]);
+  var dw = t.drawings || {};
+  h += "<h4>Drawings</h4>" + strList(dw.figures) +
+    "<p>" + (dw.descriptions || []).map(esc).join(" ") + "</p>" +
+    "<p>" + Object.keys(dw.numerals || {}).map(function (k) {
+      return "<b>" + esc(k) + "</b> " + esc(dw.numerals[k]);
+    }).join("; ") + "</p>";
+  h += "<h4>Embodiments</h4>" + strList(t.embodiments);
+  h += "<h4>Examples</h4>" + strList((t.examples || []).map(function (e) { return e.scenario; })) +
+    '<div class="filingnote">' + esc(t.examples_note || "") + "</div>";
+  var pf = t.performance || {};
+  h += "<h4>Performance</h4><table><tr><td class=\"k\">Measurement</td><td class=\"k\">Value</td><td class=\"k\">Tolerance</td></tr>" +
+    (pf.measured || []).map(function (m) {
+      return "<tr><td>" + esc(m.name) + "</td><td>" + esc(String(m.value) + " " + (m.unit || "")) + "</td><td>" + esc(m.tolerance || "--") + "</td></tr>";
+    }).join("") + "</table>" + '<div class="filingnote">' + esc(pf.unmeasured || "") + "</div>";
+  var mf = t.manufacturing || {};
+  h += "<h4>Manufacture</h4>" + kvTable([["Quality", mf.quality], ["Sourcing", mf.sourcing],
+    ["Materials", (mf.materials || []).join("; ")]]) + strList(mf.steps);
+  var op = t.operation || {};
+  h += "<h4>Operation</h4>" + kvTable([["Startup", op.startup], ["Normal", op.normal], ["Monitoring", op.monitoring], ["Faults", op.faults]]);
+  var sc = t.security || {};
+  h += "<h4>Security</h4>" + kvTable([["Integrity", sc.integrity], ["Audit", sc.audit], ["Encryption", sc.encryption]]);
+  var io = t.interoperability || {};
+  h += "<h4>Interoperability</h4>" + kvTable([["Format", io.format], ["Protocols", io.protocols], ["Compatibility", io.compatibility]]);
+  var cl = t.claims || {};
+  h += "<h4>Claims</h4><p><b>Strategy.</b> " + esc(cl.strategy || "") + " <b>Independent:</b> " + esc((cl.independent || []).join(", ")) +
+    " <b>Dependencies:</b> " + esc(cl.dependencies || "") + "</p><p><b>Support.</b> " + esc(cl.support || "") +
+    " <b>Checks.</b> " + esc(cl.checks || "") + "</p>" + strList(p.claims);
+  var ab = t.abstract || {};
+  h += "<h4>Abstract &mdash; USPTO (" + esc(String(ab.uspto_words || "")) + " words, " + esc(ab.uspto_figure || "") + ")</h4>" +
+    "<p>" + esc(p.abstract_uspto || "") + "</p>" +
+    "<h4>Abstract &mdash; detailed</h4><p>" + esc(ab.detailed || "") + "</p>";
+  h += "<p><b>Field of the invention.</b> " + esc(t.field_statement || "") + "</p>";
+  h += "<p><b>Detailed description.</b> " + esc(t.description_numbered || "") + "</p>";
+
+  /* OBJECT 2 - FILING PACKAGE */
+  h += "<h4>Object 2 &mdash; Filing package</h4>";
+  var ad = F.application_data || {};
+  h += kvTable([["Applicant", ad.applicant], ["Inventor", ad.inventor], ["Correspondence", ad.correspondence],
+    ["Entity status", ad.entity_status], ["Priority claims", (ad.priority_claims || []).join(", ") || "none"],
+    ["Attorney/Agent", ad.attorney_agent]]);
+  var dc = F.declaration || {};
+  h += "<h4>Declaration</h4><p><b>Form.</b> " + esc(dc.form || "") + "</p>" + strList(dc.statements) +
+    '<div class="filingnote">' + esc(dc.signed ? "Signed." : (dc.signature || "")) + "</div>";
+  h += "<h4>Package contents</h4>" + strList(F.package_contents);
+  h += "<h4>Format check</h4>" + kvTable(Object.keys(F.format_check || {}).map(function (k) { return [k, F.format_check[k]]; }));
+  h += '<div class="filingnote">' + esc(F.fees_note || "") + "</div>";
+
+  /* OBJECT 3 - PRIVATE WORKFILE */
+  h += "<h4>Object 3 &mdash; Private patentability workfile (never filed)</h4>" +
+    '<div class="filingnote">' + esc(W.private_notice || "") + "</div>";
+  var pa = W.prior_art || {};
+  h += "<h4>Prior art</h4>" + kvTable([["Search status", pa.search_status],
+    ["Search terms", (pa.terms || []).join("; ")], ["References", (pa.references || []).length + " verified"]]) +
+    '<div class="filingnote">' + esc(pa.note || "") + "</div>";
+  var dh = W.disclosure_history || {};
+  h += "<h4>Disclosure history</h4>" + kvTable([["Draft prepared", dh.draft_prepared], ["Conception", dh.conception],
+    ["Prototype", dh.prototype], ["Public disclosure", dh.public_disclosure], ["Prior applications", (dh.prior_applications || []).join(", ") || "none"]]);
+  h += "<p><b>Consistency.</b> " + esc(W.consistency || "") + "</p>";
+  var sl = W.signature_layer || {};
+  h += "<h4>Signature layer</h4>" + kvTable([["Family", sl.family], ["Identity", sl.identity],
+    ["Lineage", (sl.lineage || []).join(", ") || "none"], ["Record", sl.record]]) +
+    '<div class="filingnote">' + esc(sl.note || "") + "</div>";
+  var mr = W.machine_record || {};
+  h += "<h4>Machine record</h4>" + kvTable([["Spec ID", mr.spec_id], ["Title", mr.title], ["Category", mr.category],
+    ["CPC", mr.cpc], ["Inventor", mr.inventor], ["Version", mr.version], ["Components", (mr.components || []).join(", ")],
+    ["Claims", mr.claims_count], ["Figures", (mr.figures || []).join(", ")], ["Source", mr.source], ["Checksum", mr.checksum]]);
+
+  /* AD - VALIDATION */
+  h += "<h4>Validation answers</h4>" + kvTable(Object.keys(p.validation || {}).map(function (k) {
+    return [k, p.validation[k]];
+  }));
+
+  /* AE - STATUS FLAGS */
+  h += "<h4>Status flags</h4><p>" + Object.keys(p.status_flags || {}).map(function (k) {
+    var on = !!p.status_flags[k];
+    return '<span class="flag ' + (on ? "on" : "off") + '">' + esc(k) + "</span>";
+  }).join("") + "</p>";
+  return h;
 }
+
 function mfgHTML(m) {
   if (!m) return "";
   return '<h4>Means of manufacture</h4>' +
@@ -1311,8 +1449,9 @@ function explainerText(a) {
 }
 function draftText(r) {
   var p = r[14] || {};
+  var O = p.objects || {}, t = O.technical || {}, F = O.filing || {}, W = O.workfile || {};
   var L = [];
-  L.push("PATENT APPLICATION - DRAFT");
+  L.push("PATENT APPLICATION - DRAFT (" + (p.schema_version || "JAH-MASTER") + ")");
   L.push(r[1] || "");
   L.push("Inventor: Justin Addam Higgins (JAH)");
   L.push("Prepared: " + (r[6] || "") + " | Category: " + (r[3] || "") + " | CPC: " + (r[4] || ""));
@@ -1320,28 +1459,102 @@ function draftText(r) {
   L.push("");
   L.push(p.filing_note || "");
   L.push("");
-  L.push("ABSTRACT");
-  L.push(p.abstract || "");
+  L.push("==================== OBJECT 1 - TECHNICAL SPECIFICATION ====================");
+  var idn = t.identity || {};
+  ["invention_id", "version", "created", "inventor", "title", "field", "cpc", "patent_type", "signature_line"].forEach(function (k) {
+    if (idn[k] !== undefined && idn[k] !== "") L.push(k + ": " + idn[k]);
+  });
   L.push("");
-  L.push("FIELD OF THE INVENTION");
-  L.push(p.field_of_invention || "");
+  var ov = t.overview || {};
+  L.push("OVERVIEW"); L.push(ov.one_sentence || ""); L.push(ov.plain_english || "");
+  L.push("Problem: " + (ov.problem || "")); L.push("Purpose: " + (ov.purpose || ""));
+  L.push("Primary function: " + (ov.primary_function || ""));
+  L.push("Advantages: " + (ov.advantages || "")); L.push("Best mode: " + (ov.best_mode || ""));
   L.push("");
-  L.push("BACKGROUND OF THE INVENTION");
-  L.push(p.background || "");
+  L.push("BACKGROUND"); L.push((t.background || {}).text || ""); L.push((t.background || {}).prior_art_note || "");
   L.push("");
-  L.push("SUMMARY OF THE INVENTION");
-  L.push(p.summary || "");
+  var sm = t.summary || {};
+  L.push("SUMMARY"); L.push(sm.text || ""); L.push("Core: " + (sm.core || ""));
   L.push("");
-  L.push("BRIEF DESCRIPTION OF THE DRAWINGS");
-  (p.drawings_description || []).forEach(function (s) { L.push(s); });
+  L.push("DEFINITIONS");
+  var df = t.definitions || {};
+  Object.keys(df).forEach(function (k) { L.push(k + ": " + df[k]); });
   L.push("");
-  L.push("DETAILED DESCRIPTION");
-  L.push(p.detailed_description || "");
+  var ar = t.architecture || {};
+  L.push("ARCHITECTURE"); L.push(ar.overall || ""); L.push(ar.hierarchy || ""); L.push(ar.control || "");
   L.push("");
-  L.push("CLAIMS");
+  L.push("COMPONENTS");
+  (t.components || []).forEach(function (c) { L.push("[" + c.n + "] " + c.name + " - " + c.role + " (tol: " + c.tol + ")"); });
+  L.push("");
+  var md = t.method || {};
+  L.push("METHOD - " + (md.name || ""));
+  (md.steps || []).forEach(function (s, i) { L.push("  " + (i + 1) + ". " + s); });
+  L.push("Branches: " + (md.branches || "")); L.push("Error handling: " + (md.error_handling || ""));
+  L.push("");
+  if (t.software) {
+    L.push("SOFTWARE EMBODIMENT");
+    L.push("Environment: " + (t.software.environment || ""));
+    L.push("Modules: " + ((t.software.modules || []).join("; ")));
+    L.push("");
+  }
+  var dw = t.drawings || {};
+  L.push("DRAWINGS");
+  ((dw.figures || [])).forEach(function (f) { L.push("  " + f); });
+  (dw.descriptions || []).forEach(function (d) { L.push(d); });
+  L.push("");
+  L.push("EMBODIMENTS");
+  (t.embodiments || []).forEach(function (e) { L.push("  - " + e); });
+  L.push("");
+  L.push("EXAMPLES (illustrative, not test data)");
+  (t.examples || []).forEach(function (e) { L.push("  " + e.n + ". " + e.scenario); });
+  L.push(t.examples_note || "");
+  L.push("");
+  var pf = t.performance || {};
+  L.push("PERFORMANCE");
+  (pf.measured || []).forEach(function (m) { L.push("  " + m.name + ": " + m.value + " " + (m.unit || "") + " (tolerance " + (m.tolerance || "--") + ")"); });
+  L.push(pf.unmeasured || "");
+  L.push("");
+  L.push("MANUFACTURE"); L.push("Quality: " + ((t.manufacturing || {}).quality || ""));
+  L.push("");
+  L.push("ABSTRACT (USPTO, " + ((t.abstract || {}).uspto_words || "") + " words)");
+  L.push(p.abstract_uspto || "");
+  L.push("");
+  L.push("ABSTRACT (detailed)"); L.push(((t.abstract || {}).detailed) || "");
+  L.push("");
+  L.push("FIELD OF THE INVENTION"); L.push(t.field_statement || "");
+  L.push("");
+  L.push("DETAILED DESCRIPTION"); L.push(t.description_numbered || "");
+  L.push("");
+  var cl = t.claims || {};
+  L.push("CLAIMS"); L.push("Strategy: " + (cl.strategy || "")); L.push("Dependencies: " + (cl.dependencies || ""));
   (p.claims || []).forEach(function (c) { L.push(c); });
+  L.push("");
+  L.push("==================== OBJECT 2 - FILING PACKAGE ====================");
+  var ad2 = F.application_data || {};
+  ["applicant", "inventor", "correspondence", "entity_status"].forEach(function (k) {
+    if (ad2[k]) L.push(k + ": " + ad2[k]);
+  });
+  L.push("Declaration: " + ((F.declaration || {}).form || "") + " - " + (((F.declaration || {}).signature) || ""));
+  L.push("Package contents:");
+  (F.package_contents || []).forEach(function (c) { L.push("  - " + c); });
+  L.push(F.fees_note || "");
+  L.push("");
+  L.push("==================== OBJECT 3 - PRIVATE WORKFILE (NEVER FILED) ====================");
+  L.push((W.private_notice || ""));
+  L.push("Prior art search status: " + ((W.prior_art || {}).search_status || ""));
+  L.push((W.prior_art || {}).note || "");
+  L.push("Consistency: " + (W.consistency || ""));
+  L.push("");
+  L.push("VALIDATION");
+  var va = p.validation || {};
+  Object.keys(va).forEach(function (k) { L.push(k + ": " + va[k]); });
+  L.push("");
+  L.push("STATUS FLAGS");
+  var sf = p.status_flags || {};
+  Object.keys(sf).forEach(function (k) { L.push(k + ": " + (sf[k] ? "TRUE" : "FALSE")); });
   return L.join(NL) + NL;
 }
+
 function specSheetText(r) {
   var L = [];
   L.push("SPEC SHEET - " + (r[0] || ""));
@@ -1375,6 +1588,9 @@ function specSheetText(r) {
   if (demoKind(r[16]) === "hardware") L.push("  Arduino version: " + r[0] + ".ino (Code lens)");
   L.push("");
   L.push("PATENT DRAFT: see the Patent filing lens, or draft/patent-draft.txt in the Download-all package.");
+  var pd = r[14] || {};
+  L.push("MASTER SPEC: " + (pd.schema_version || "JAH-MASTER") + " - 3 linked objects (technical specification, filing package, private workfile) + validation answers + status flags.");
+  L.push("  Full machine-readable record: master-spec.json in the Download-all package.");
   return L.join(NL) + NL;
 }
 function zipReadme(r) {
@@ -1386,7 +1602,8 @@ function zipReadme(r) {
     "manufacture/      means of manufacture",
     "spec-sheet.txt    the full specification sheet",
     "ai-explainer.txt  plain-English explainer",
-    "autoread.txt      the machine-readable autoread block", "",
+    "autoread.txt      the machine-readable autoread block",
+    "master-spec.json  the master specification record (3 objects + validation + status)", "",
     "DRAFT - review every section for accuracy and completeness before filing.",
     "Not a granted patent."].join(NL) + NL;
 }
@@ -1460,6 +1677,7 @@ function buildPatentZip(r) {
     {name: base + "manufacture/manufacture.txt", data: mfgText(r[15])},
     {name: base + "ai-explainer.txt", data: explainerText(r[18])},
     {name: base + "autoread.txt", data: (r[9] || "") + NL},
+    {name: base + "master-spec.json", data: JSON.stringify(r[14] || {}, null, 2) + NL},
     {name: base + "README.txt", data: zipReadme(r)}
   ];
   if (demoKind(r[16]) === "hardware") {
@@ -1476,7 +1694,7 @@ function dlAllHTML(r) {
     '<button class="demotoggle sheetdl" type="button" data-dl="' + idx + '">Download spec sheet (.txt)</button>' +
     '<button class="demotoggle zipdl" type="button" data-dl="' + idx + '">Download all (.zip)</button>' +
     '</div>' +
-    '<div class="snote">Download all collects the whole filing package — patent draft, FIG. 1–3, working code, spec sheet, manufacture, AI explainer, autoread — organized in folders, in one zip.</div>';
+    '<div class="snote">Download all collects the whole filing package — patent draft, FIG. 1–3, working code, spec sheet, manufacture, AI explainer, autoread, and the master-spec.json record — organized in folders, in one zip.</div>';
 }
 function saveBlob(blob, filename) {
   var a = document.createElement("a");
@@ -2326,6 +2544,13 @@ function bindWikiSearch(inputId, resId, lens) {
       "ESTABLISHING UPLINK " + (i + 1) + "/" + files.length + " ";
     fetch("data/" + files[i]).then(function (resp) {
       if (!resp.ok) throw new Error("HTTP " + resp.status);
+      if (/\.gz$/.test(files[i])) {
+        if (typeof DecompressionStream === "undefined") throw new Error("GZIP-NOSUPPORT");
+        return resp.arrayBuffer().then(function (buf) {
+          var ds = new DecompressionStream("gzip");
+          return new Response(new Blob([buf]).stream().pipeThrough(ds)).text();
+        });
+      }
       return resp.text();
     }).then(function (text) {
       parseLines(text);

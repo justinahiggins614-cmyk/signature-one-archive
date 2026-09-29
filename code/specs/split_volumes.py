@@ -9,6 +9,7 @@ Layout:
 
 The page loads the manifest, then each file in order.
 """
+import gzip
 import json
 import os
 
@@ -17,7 +18,7 @@ DATA = os.path.join(HERE, "..", "..", "data")
 HOT = os.path.join(DATA, "specs.jsonl")
 VOLDIR = os.path.join(DATA, "volumes")
 MANIFEST = os.path.join(VOLDIR, "manifest.json")
-VOL_MAX_BYTES = 45 * 1024 * 1024  # well under GitHub's 100MB file cap
+VOL_MAX_BYTES = 45 * 1024 * 1024  # raw bytes per volume, well under GitHub's 100MB file cap
 
 
 def load_manifest():
@@ -34,7 +35,22 @@ def save_manifest(files):
 
 
 def vol_path(n):
-    return os.path.join(VOLDIR, f"specs-v{n:03d}.jsonl")
+    return os.path.join(VOLDIR, f"specs-v{n:03d}.jsonl.gz")
+
+
+def vol_name(n):
+    return f"volumes/specs-v{n:03d}.jsonl.gz"
+
+
+def read_vol_gz(path):
+    with gzip.open(path, "rt", encoding="utf-8") as fh:
+        return fh.readlines()
+
+
+def write_vol_gz(path, lines):
+    with gzip.open(path, "wb", compresslevel=6) as fh:
+        for ln in lines:
+            fh.write(ln.encode("utf-8"))
 
 
 def main():
@@ -52,39 +68,43 @@ def main():
         print(f"single-file mode, hot={hot_size / 1048576:.1f}MB")
         return
 
-    # Move hot lines into volumes.
+    # Move hot lines into volumes (volumes are gzip-compressed).
     with open(HOT, encoding="utf-8") as fh:
         lines = fh.readlines()
 
-    # Top up the last volume first if it has room.
+    # Top up the last volume first if it has room (decompress, append, recompress).
     idx = 0
     if vols:
         last = os.path.join(DATA, vols[-1])
-        room = VOL_MAX_BYTES - os.path.getsize(last)
-        if room > 0:
-            with open(last, "a", encoding="utf-8") as out:
+        if last.endswith(".gz") and os.path.exists(last):
+            existing = read_vol_gz(last)
+            used = sum(len(ln.encode("utf-8")) for ln in existing)
+            room = VOL_MAX_BYTES - used
+            if room > 0:
                 while idx < len(lines):
                     b = len(lines[idx].encode("utf-8"))
                     if b > room:
                         break
-                    out.write(lines[idx])
+                    existing.append(lines[idx])
                     room -= b
                     idx += 1
+                write_vol_gz(last, existing)
 
     # Seal remaining lines into new volumes.
     while idx < len(lines):
         n_vol += 1
         vp = vol_path(n_vol)
+        chunk = []
         used = 0
-        with open(vp, "w", encoding="utf-8") as out:
-            while idx < len(lines):
-                b = len(lines[idx].encode("utf-8"))
-                if used + b > VOL_MAX_BYTES and used > 0:
-                    break
-                out.write(lines[idx])
-                used += b
-                idx += 1
-        vols.append(f"volumes/specs-v{n_vol:03d}.jsonl")
+        while idx < len(lines):
+            b = len(lines[idx].encode("utf-8"))
+            if used + b > VOL_MAX_BYTES and used > 0:
+                break
+            chunk.append(lines[idx])
+            used += b
+            idx += 1
+        write_vol_gz(vp, chunk)
+        vols.append(vol_name(n_vol))
 
     # Hot file is now drained (generators keep appending to it).
     open(HOT, "w").close()
@@ -92,7 +112,7 @@ def main():
     print(f"volumes={len(vols)} hot=drained")
     for v in vols:
         p = os.path.join(DATA, v)
-        print(f"  {v}: {os.path.getsize(p) / 1048576:.1f}MB")
+        print(f"  {v}: {os.path.getsize(p) / 1048576:.1f}MB gz")
 
 
 if __name__ == "__main__":

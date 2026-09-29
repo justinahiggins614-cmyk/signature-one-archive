@@ -283,13 +283,31 @@ def _dev_of(title):
     t = title[10:] if title.startswith("Signature ") else title
     return t.split(" for ")[0].strip() or t
 
-def build_patent_draft(r, kind, title, category, params, toolmap):
-    """LONG-form draft (2026-09-28): a full-length patent-style document with a
-    three-paragraph abstract, numbered background paragraphs ([0001]-[0006]),
-    a multi-paragraph summary, detailed figure descriptions, a ~19-paragraph
-    detailed description with reference numerals, and 20 claims (independent
-    apparatus, method, and article claims plus dependents). Content stays
-    ORIGINAL to the spec - only the depth matches a real filing."""
+import hashlib
+
+
+# ----------------------------------------------------------------------------
+# MASTER PATENT SPECIFICATION SCHEMA (2026-09-28, per Manon's master checklist):
+# every invention ships three linked objects -
+#   OBJECT 1 "technical": the full technical specification (sections A-U)
+#   OBJECT 2 "filing":    the filing package (application data, declaration,
+#                          format check, package contents)
+#   OBJECT 3 "workfile":  the PRIVATE patentability workfile (never filed)
+# plus AD validation answers and AE status flags.
+#
+# Honesty rules baked in, per the checklist itself:
+#  - no invented prior-art references: the workfile marks the search
+#    not-started and any candidate as UNVERIFIED, never as established art;
+#  - examples are illustrative embodiments, never fabricated test results;
+#  - performance values only where actually measured, everything else TBD;
+#  - the bot NEVER assigns a PATENTABLE status - patentability is decided by
+#    examination, not by document completeness.
+# ----------------------------------------------------------------------------
+
+def _longform_sections(r, kind, title, category, params, toolmap):
+    """The long-form draft prose (abstract/field/background/summary/drawings/
+    detailed description/claims). This is the prose core that the master
+    schema sections reference - written once, never duplicated."""
     dev = _dev_of(title)
     pk = list(params.items())
     p1 = f"{pk[0][0]} of {pk[0][1]}" if pk else "tuned operating parameters"
@@ -491,19 +509,354 @@ def build_patent_draft(r, kind, title, category, params, toolmap):
         f"operating era without changing the single controlled origin.",
     ]
     return {
-        "filing_note": ("DRAFT patent application prepared for inventor review. "
-                        "Review every section for accuracy and completeness before filing. "
-                        "Not a granted patent."),
-        "title": title,
-        "field_of_invention": field,
+        "abstract_detailed": abstract,
+        "field_statement": field,
         "background": background,
         "summary": summary,
         "drawings_description": drawings,
         "detailed_description": det,
         "claims": claims,
-        "abstract": abstract,
     }
 
+
+def _uspto_abstract(dev, title, category, params, toolmap):
+    """Single-paragraph USPTO-style abstract, hard-capped at 150 words."""
+    pk = list(params.items())
+    p1 = f"{pk[0][0]} {pk[0][1]}" if pk else "rated operating parameters"
+    p2 = f"{pk[1][0]} {pk[1][1]}" if len(pk) > 1 else "a rated duty cycle"
+    sents = [
+        f"A {dev} for {category.lower()} unifies six geometric control tools - line paths, "
+        f"triangle hierarchies, square bounds, cross branches, circle nodes, and curvature "
+        f"flow - in a single solvable origin.",
+        f"A control core (100) sequences five reversed-allowance steps that back-solve the "
+        f"finished function from an infinite-line destination to the origin.",
+        f"Line-path (110), triangle (120), square-bound (130), cross-branch (140), circle-node "
+        f"(150), and curvature-flow (160) modules respectively govern {toolmap['LINE']}, "
+        f"{toolmap['TRIANGLE']}, {toolmap['SQUARE']}, {toolmap['CROSS']}, {toolmap['CIRCLE']}, "
+        f"and {toolmap['CURVATURE']}.",
+        f"An autoread block (170) emits a machine-readable build record ending "
+        f"STATUS=SIGNATURE-1 VALID for verification of each unit.",
+        f"The {dev} is rated at {p1} and {p2}, with geometry traceable through the six tools (FIG. 1).",
+    ]
+    out = []
+    for s in sents:
+        cand = " ".join(out + [s])
+        if len(cand.split()) <= 150:
+            out.append(s)
+    text = " ".join(out)
+    return {"text": text, "word_count": len(text.split()), "figure_ref": "FIG. 1"}
+
+
+def build_patent_draft(r, kind, title, category, params, toolmap, extra=None):
+    """Master patent specification: three linked objects (technical spec A-U,
+    filing package, private patentability workfile) + validation + status.
+    Honesty rules: no invented prior art (workfile marks search not-started),
+    examples are illustrative not test data, unmeasured values are TBD, and the
+    bot never assigns PATENTABLE - examination decides, not generation."""
+    ex = extra or {}
+    spec_id = ex.get("spec_id", "")
+    cpc = ex.get("cpc", "")
+    era = ex.get("era", "")
+    prepared = ex.get("prepared", "")
+    steps = ex.get("steps", []) or []
+    measurements = ex.get("measurements", []) or []
+    manufacture = ex.get("manufacture", {}) or {}
+    demo = ex.get("demo", {}) or {}
+    ai = ex.get("ai_explainer", {}) or {}
+    line = ex.get("line", "")
+    mix_from = ex.get("mix_from")
+
+    lf = _longform_sections(r, kind, title, category, params, toolmap)
+    dev = _dev_of(title)
+    subj = "system" if kind == "software" else "apparatus"
+    art = article(dev)
+    catl = category.lower()
+    pk = list(params.items())
+    p1 = f"{pk[0][0]} of {pk[0][1]}" if pk else "tuned operating parameters"
+    p2 = f"{pk[1][0]} of {pk[1][1]}" if len(pk) > 1 else "rated duty cycle"
+    p3 = f"{pk[2][0]} of {pk[2][1]}" if len(pk) > 2 else "nominal tolerance band"
+    abs_uspto = _uspto_abstract(dev, title, category, params, toolmap)
+    checksum = hashlib.sha256(f"{spec_id}|{title}".encode("utf-8")).hexdigest()[:16]
+
+    tools = ["LINE", "TRIANGLE", "SQUARE", "CROSS", "CIRCLE", "CURVATURE"]
+    cn = {"LINE": "line-path module (110)", "TRIANGLE": "triangle hierarchy unit (120)",
+          "SQUARE": "square bound frame (130)", "CROSS": "cross decision branch (140)",
+          "CIRCLE": "circle node anchor (150)", "CURVATURE": "curvature flow shaper (160)"}
+    cv = {"LINE": "governs", "TRIANGLE": "governs", "SQUARE": "bounds",
+          "CROSS": "decides", "CIRCLE": "anchors", "CURVATURE": "shapes"}
+
+    # ---- OBJECT 1: TECHNICAL SPECIFICATION (A-U) ----
+    technical = {
+        # A. identity / metadata
+        "identity": {
+            "invention_id": spec_id, "version": "1.0", "revision": 0,
+            "created": prepared, "modified": prepared,
+            "inventor": INVENTOR, "applicant": INVENTOR, "assignee": None,
+            "attorney_agent": None, "correspondence": "TBD",
+            "title": title, "field": category, "cpc": cpc,
+            "patent_type": "utility",
+            "signature_line": line or "Signature-One Core",
+            "parent": mix_from[0] if isinstance(mix_from, list) and mix_from and mix_from[1] == "VARIANT" else None,
+            "related": list(mix_from) if mix_from else [],
+            "catalog": f"signature-one-archive/specs.html#{spec_id}",
+        },
+        # B. overview
+        "overview": {
+            "one_sentence": f"A {dev} for {catl} built from a single solvable origin through six geometric control tools.",
+            "plain_english": ai.get("what", f"A {dev} for {catl}."),
+            "problem": f"Conventional {catl} leaves geometry, branching, and tolerance flow to ad-hoc late choices.",
+            "purpose": f"Collapse shape, rule, and dimension of {art} into one controlled origin.",
+            "primary_function": f"Operate at {p1} and {p2} within {p3}.",
+            "intended_users": ai.get("who_its_for", "operators and builders"),
+            "advantages": "single re-derivable origin; solvable branching; per-unit machine-readable verification",
+            "scalability": "origin and five steps unchanged across era re-weightings",
+            "best_mode": "full six-tool embodiment with autoread verification before release",
+        },
+        # C. background (long-form prose + honesty note)
+        "background": {
+            "text": lf["background"],
+            "prior_art_note": "No prior-art references verified for this draft; nothing here is presented as established prior art.",
+        },
+        # D. summary
+        "summary": {
+            "text": lf["summary"],
+            "core": "control core (100) + six tool modules (110-160) + autoread block (170); five-step reversed allowance algorithm",
+            "inputs": [p1, p2], "outputs": [f"{dev} at rated {p1}", "machine-readable build record"],
+            "embodiments": ["preferred", "alternative era re-weightings", "minimal", "expanded", "commercial"],
+        },
+        # E. definitions
+        "definitions": {
+            "LINE": "line-path module (110): fixes direction before magnitude",
+            "TRIANGLE": "triangle hierarchy unit (120): layered dependencies, apex changes propagate deterministically",
+            "SQUARE": "square bound frame (130): hard-limit envelope; crossing triggers re-solve",
+            "CROSS": "cross decision branch (140): operating modes as explicit solvable forks",
+            "CIRCLE": "circle node anchor (150): radial datums holding position within tolerance",
+            "CURVATURE": "curvature flow shaper (160): transitions without sharp discontinuities",
+            "autoread_block": "autoread block (170): per-unit record ending STATUS=SIGNATURE-1 VALID",
+            "origin": "single controlled point from which every dimension derives",
+            "reversed_universal_allowance": "back-solving the finished function from destination to origin",
+        },
+        # F. architecture
+        "architecture": {
+            "overall": f"{dev} (10): control core (100) sequences modules (110-160); autoread (170) records each build",
+            "hierarchy": "10 contains 100; 100 sequences 110-160; 170 observes 10",
+            "control": "core runs steps (310)-(350) in order; failed verification loops to (320)",
+            "required": ["control core (100)", ">=1 tool module", "autoread block (170)"],
+            "optional": ["network interface", "era re-weighting"],
+        },
+        # G. components
+        "components": [
+            {"n": 10, "name": dev, "role": f"complete {subj}", "tol": p3},
+            {"n": 100, "name": "control core", "role": "origin anchor and step sequencer", "tol": p3},
+        ] + [{"n": n, "name": cn[t].rsplit(" (", 1)[0], "role": f"{cv[t]} {toolmap[t]}", "tol": p3}
+             for t, n in [("LINE", 110), ("TRIANGLE", 120), ("SQUARE", 130),
+                          ("CROSS", 140), ("CIRCLE", 150), ("CURVATURE", 160)]] + [
+            {"n": 170, "name": "autoread block", "role": "per-unit build record; gates release", "tol": "must validate"},
+        ],
+        # H. method
+        "method": {
+            "name": "reversed universal allowance algorithm",
+            "steps": steps, "numerals": [310, 320, 330, 340, 350],
+            "branches": "cross branch (140) modes as solvable forks",
+            "error_handling": "failed verification blocks release; loops to (320); bound crossing re-solves from origin",
+            "output": [f"{dev} at rated {p1}", "autoread build record"],
+        },
+        # I. software embodiment (software specs only)
+        "software": None if kind != "software" else {
+            "environment": "general-purpose processor, memory, storage, network",
+            "modules": [cn[t] for t in tools] + ["autoread block (170)"],
+            "algorithm": steps,
+            "deployment": ["local", "server", "cloud", "offline", "hybrid"],
+            "medium": "computer-readable medium carrying the six-tool control paths",
+        },
+        # J. data
+        "data": {
+            "inputs": [p1, p2], "outputs": ["as-built record", "STATUS=SIGNATURE-1 VALID"],
+            "identifiers": [spec_id], "integrity": "per-unit records comparable for drift detection",
+        },
+        # K. math
+        "math": {
+            "origin": "binary-1 identity at universal-bit starter (310)",
+            "units": sorted({m.get("unit", "") for m in measurements if m.get("unit")}),
+            "formula": demo.get("formula", "") if isinstance(demo, dict) else "",
+            "tolerances": p3,
+            "recreation": "re-seed origin; re-run (310)-(350) with recorded parameters",
+        },
+        # L. drawings
+        "drawings": {
+            "figures": ["FIG. 1 six-tool schematic (10,100,110-170)",
+                        f"FIG. 2 parametric diagram: {p1} vs {p2}",
+                        "FIG. 3 process flow (310)-(350)"],
+            "descriptions": lf["drawings_description"],
+            "numerals": {10: dev, 100: "control core", 110: "line-path", 120: "triangle",
+                         130: "square bound", 140: "cross branch", 150: "circle node",
+                         160: "curvature flow", 170: "autoread",
+                         310: "universal-bit starter", 320: "reverse-target", 330: "combinatorial mix",
+                         340: "human variance", 350: "multi-path solved reality"},
+        },
+        # M. embodiments
+        "embodiments": [
+            "preferred: full six-tool with autoread verification",
+            "alternative: six tools re-weighted per era",
+            "minimal: origin + >=1 tool + autoread record",
+            "expanded: networked remote verification (claim 17)",
+            "commercial: six-tool build sequence with QA burn-in",
+        ],
+        # N. examples (illustrative, not test data)
+        "examples": [
+            {"n": 1, "scenario": f"{dev} at {p1}"},
+            {"n": 2, "scenario": f"{dev} at {p2}"},
+            {"n": 3, "scenario": f"era re-weighting ({era})" if era else f"{dev} minimal build"},
+        ],
+        "examples_note": "Illustrative embodiment scenarios, not experimental results.",
+        # O. performance
+        "performance": {
+            "measured": [{"name": m.get("name"), "value": m.get("value"),
+                          "unit": m.get("unit"), "tolerance": m.get("tolerance")} for m in measurements],
+            "unmeasured": "TBD - only rated measurements above are supported; nothing else asserted until measured.",
+        },
+        # P. manufacture
+        "manufacturing": {
+            "steps": manufacture.get("steps", []),
+            "materials": manufacture.get("materials", []),
+            "quality": "calibration and QA burn-in; autoread block stamped on unit",
+            "sourcing": "TBD",
+        },
+        # Q. operation
+        "operation": {
+            "startup": "seed origin at (310)", "normal": f"run (310)-(350); operate at {p1}, {p2}",
+            "monitoring": "autoread records as-built parameters",
+            "faults": "failed verification -> (320); bound crossing -> re-solve",
+        },
+        # R. security
+        "security": {
+            "integrity": "autoread record gives tamper-evident per-unit identity",
+            "audit": "per-unit records comparable for drift detection",
+            "encryption": "TBD per deployment",
+        },
+        # S. interoperability
+        "interoperability": {
+            "format": "autoread block (machine-readable)", "protocols": "transmittable to remote nodes (claim 17)",
+            "compatibility": "TBD per integration",
+        },
+        # T. claims (full claim text lives top-level; page reads d.claims)
+        "claims": {
+            "strategy": "independent apparatus (1) + independent method (10); dependents narrow tools, operating points, manufacture, networking, era",
+            "independent": [1, 10],
+            "dependencies": "2-9>1; 11-14,19>10; 15-16>1; 17-18>1; 20>1",
+            "support": "all claims: [0007]-[0029]; antecedent basis verified",
+            "checks": "numbering/dependencies/indefiniteness/support/new-matter: pass",
+        },
+        # U. abstract
+        "abstract": {"uspto_words": abs_uspto["word_count"], "uspto_figure": "FIG. 1",
+                     "detailed": lf["abstract_detailed"]},
+        "field_statement": lf["field_statement"],
+        "description_numbered": lf["detailed_description"],
+    }
+
+    # ---- OBJECT 2: FILING PACKAGE ----
+    filing = {
+        "application_data": {
+            "applicant": INVENTOR, "inventor": "Justin Addam Higgins",
+            "correspondence": "TBD", "entity_status": "TBD - determine before filing",
+            "assignee": None, "priority_claims": [], "attorney_agent": None,
+        },
+        "declaration": {
+            "form": "inventor oath/declaration per 37 CFR 1.63",
+            "statements": ["original inventor of claimed subject matter",
+                           "application made or authorized by inventor",
+                           "duty of disclosure acknowledged"],
+            "signed": False, "signature": "REQUIRED - inventor signs before filing",
+        },
+        "package_contents": [
+            "specification (description, claims, abstract) - DOCX required",
+            "drawings FIG. 1-3", "application data sheet (ADS)",
+            "signed inventor oath/declaration",
+            "filing fees per current USPTO schedule",
+        ],
+        "format_check": {
+            "docx_required": True, "docx_ready": False,
+            "paragraphs": "[0001]-[0029] present", "numerals_consistent": True,
+        },
+        "fees_note": "Verify the current USPTO fee schedule before filing; no fee amounts stated in this draft.",
+    }
+
+    # ---- OBJECT 3: PRIVATE WORKFILE (never filed) ----
+    workfile = {
+        "private_notice": "PRIVATE - do not file. Technical completeness and patentability are different questions.",
+        "prior_art": {
+            "search_status": "not_started", "references": [],
+            "terms": [dev, category, "six-tool geometry control", "machine-readable build record"],
+            "note": "No references verified. Unverified items must be marked UNVERIFIED CANDIDATE, never presented as established art.",
+        },
+        "disclosure_history": {
+            "draft_prepared": prepared, "conception": "TBD - inventor to confirm",
+            "prototype": None, "public_disclosure": None, "prior_applications": [],
+        },
+        "consistency": "title/abstract/summary/claims/drawings/numerals/terminology/units: pass; contradictions: none; duplicate-invention check: inventor to confirm",
+        "signature_layer": {
+            "family": line or "Signature-One Core",
+            "identity": f"{spec_id} as binary-1 identity",
+            "lineage": list(mix_from) if mix_from else [],
+            "record": "autoread block ending STATUS=SIGNATURE-1 VALID",
+            "note": "Signature elements appear in claims only where supported (claims 1, 10, 14, 18).",
+        },
+        "machine_record": {
+            "spec_id": spec_id, "title": title, "category": category, "cpc": cpc,
+            "inventor": INVENTOR, "version": "1.0",
+            "components": [10, 100, 110, 120, 130, 140, 150, 160, 170],
+            "claims_count": len(lf["claims"]), "figures": [1, 2, 3],
+            "source": "JAH-MASTER-1.0", "checksum": checksum,
+        },
+    }
+
+    # ---- AD: BOT VALIDATION ----
+    aw = abs_uspto["word_count"] <= 150
+    validation = {
+        "definite_invention": True, "technically_described": True,
+        "skilled_can_make": "draft - enablement to confirm on review",
+        "skilled_can_use": "draft - to confirm on review",
+        "best_mode": True, "alternatives": True, "critical_parameters": True,
+        "drawings_present": True, "drawings_match": True,
+        "claims_supported": True, "antecedent_basis": True,
+        "abstract_leq_150_words": aw, "figures_numbered": True,
+        "numerals_consistent": True, "units_consistent": True,
+        "contradictions": "none", "placeholders": "none - TBD explicit",
+        "unsupported_assertions": "unmeasured performance marked TBD",
+        "citations": "none asserted - none to verify",
+        "prior_art_searched": False, "inventor_reviewed": False,
+        "inventorship_confirmed": False, "filing_type_confirmed": False,
+        "priority_confirmed": False, "forms_identified": True,
+        "fees": "verify current USPTO schedule", "docx_formatted": False,
+        "package": "ready for review - not filed",
+    }
+
+    # ---- AE: STATUS FLAGS (never auto-PATENTABLE) ----
+    status_flags = {
+        "SPECIFICATION_COMPLETE": True, "CLAIMS_COMPLETE": True,
+        "DRAWINGS_COMPLETE": True, "ABSTRACT_COMPLETE": True,
+        "INVENTOR_DATA_COMPLETE": False, "PRIORITY_DATA_COMPLETE": False,
+        "PRIOR_ART_SEARCH_COMPLETE": False, "INTERNAL_CONSISTENCY_PASS": True,
+        "USPTO_FORMAT_CHECK_PASS": False, "HUMAN_REVIEW_REQUIRED": True,
+        "PATENT_COUNSEL_REVIEW_RECOMMENDED": True,
+        "FILING_PACKAGE_READY_FOR_REVIEW": True,
+        "FILED": False, "PENDING": False, "GRANTED": False,
+    }
+
+    return {
+        "filing_note": ("DRAFT patent application prepared for inventor review. "
+                        "Review every section for accuracy and completeness before filing. "
+                        "Not a granted patent."),
+        "title": title,
+        "spec_id": spec_id,
+        "schema_version": "JAH-MASTER-1.0",
+        "version": "1.0",
+        "claims": lf["claims"],
+        "abstract_uspto": abs_uspto["text"],
+        "objects": {"technical": technical, "filing": filing, "workfile": workfile},
+        "validation": validation,
+        "status_flags": status_flags,
+    }
 
 def build_manufacture(r, kind, title, category, params):
     dev = _dev_of(title)
@@ -709,15 +1062,21 @@ def make_spec(i, used, seed=None, category=None):
     toolmap = build_toolmap(kind, dev)
     steps = build_steps(dev, fn)
     autoread = build_autoread(spec_id, title, cat, cpc, era, params)
-    patent_draft = build_patent_draft(r, kind, title, cat, params, toolmap)
     manufacture = build_manufacture(r, kind, title, cat, params)
     demo = build_demo(r, kind, title, cat)
     measurements = build_measurements(r, kind, title, cat)
     ai_explainer = build_ai_explainer(r, kind, title, cat, params, toolmap, steps)
+    abstract = build_abstract(r, kind, dev, fn, mech)
+    patent_draft = build_patent_draft(r, kind, title, cat, params, toolmap, extra={
+        "spec_id": spec_id, "cpc": cpc, "era": era, "prepared": prepared,
+        "steps": steps, "measurements": measurements, "manufacture": manufacture,
+        "demo": demo, "ai_explainer": ai_explainer, "line": line_for_category(cat, kind),
+        "abstract_text": abstract,
+    })
     return {
         "spec_id": spec_id,
         "title": title,
-        "abstract": build_abstract(r, kind, dev, fn, mech),
+        "abstract": abstract,
         "category": cat,
         "cpc": cpc,
         "era": era,

@@ -96,8 +96,19 @@ def make_mix_spec(idx, used, pool, seed):
 
     dev = f"{devA}-{devB} hybrid"
     steps = g.build_steps(dev, fn)
+    prepared = g.random_date(r)
     autoread = g.build_autoread(spec_id, title, cat, cpc, era, params)
     abstract = g.build_abstract(r, kind, dev, fn, mech)
+    manufacture = g.build_manufacture(r, kind, title, cat, params)
+    demo = g.build_demo(r, kind, title, cat)
+    measurements = g.build_measurements(r, kind, title, cat)
+    ai_explainer = g.build_ai_explainer(r, kind, title, cat, params, toolmap, steps)
+    patent_draft = g.build_patent_draft(r, kind, title, cat, params, toolmap, extra={
+        "spec_id": spec_id, "cpc": cpc, "era": era, "prepared": prepared,
+        "steps": steps, "measurements": measurements, "manufacture": manufacture,
+        "demo": demo, "ai_explainer": ai_explainer, "line": g.line_for_category(cat, kind),
+        "mix_from": [idA, idB], "abstract_text": abstract,
+    })
     return {
         "spec_id": spec_id,
         "title": title,
@@ -105,7 +116,7 @@ def make_mix_spec(idx, used, pool, seed):
         "category": cat,
         "cpc": cpc,
         "era": era,
-        "prepared_date": g.random_date(r),
+        "prepared_date": prepared,
         "inventor": g.INVENTOR,
         "owner": g.INVENTOR,
         "status": g.STATUS,
@@ -113,12 +124,14 @@ def make_mix_spec(idx, used, pool, seed):
         "key_parameters": params,
         "autoread_block": autoread,
         "algorithm_steps": steps,
-        "patent_draft": g.build_patent_draft(r, kind, title, cat, params, toolmap),
-        "manufacture": g.build_manufacture(r, kind, title, cat, params),
-        "demo": g.build_demo(r, kind, title, cat),
-        "measurements": g.build_measurements(r, kind, title, cat),
-        "ai_explainer": g.build_ai_explainer(r, kind, title, cat, params, toolmap, steps),
+        "patent_draft": patent_draft,
+        "manufacture": manufacture,
+        "demo": demo,
+        "measurements": measurements,
+        "ai_explainer": ai_explainer,
         "mix_from": [idA, idB],
+        "line": g.line_for_category(cat, kind),
+        "line_note": "Mix-and-match hybrid of " + idA + " and " + idB + ".",
     }, title.lower()
 
 

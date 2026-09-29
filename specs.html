@@ -87,6 +87,16 @@
     font-family: Orbitron, monospace; font-weight: 700; letter-spacing: .03em; }
   .example .ex-sub { color: #ff6b6b; font-weight: 700; font-size: .82em;
              letter-spacing: .1em; text-transform: uppercase; margin-bottom: 12px; }
+  .ex-toggle { display: block; width: 100%; text-align: left; background: none; border: none;
+             padding: 0; margin: 0; cursor: pointer; font: inherit; color: inherit; position: relative; }
+  .ex-toggle .ex-plus { position: absolute; top: 2px; right: 2px; color: var(--red);
+             font-family: Orbitron, monospace; font-size: 1.5em; font-weight: 700; line-height: 1;
+             text-shadow: 0 0 10px rgba(255,34,34,.6); }
+  .ex-toggle .ex-plus::after { content: "+"; }
+  .example.open .ex-toggle .ex-plus::after { content: "\2212"; }
+  .ex-toggle:hover h3 { color: #ff8080; }
+  .ex-body { display: none; }
+  .example.open .ex-body { display: block; animation: fadein .25s ease-out; }
   .example figure { margin: 14px 0; text-align: center; }
   .example figure img { max-width: 100%; height: auto; border: 1px solid var(--red-dim);
              border-radius: 2px; box-shadow: 0 0 18px rgba(255,34,34,.18); }
@@ -356,9 +366,13 @@
   <h2 class="sect">Example Specs &mdash; the format every spec follows</h2>
 
   <article class="example" id="example1">
-    <span class="ex-eyebrow">Example Spec 1</span>
-    <h3>Basic Plastic Cup / Signature-1</h3>
-    <div class="ex-sub">Physical Object &middot; Forced-format example</div>
+    <button class="ex-toggle" type="button" aria-expanded="false" aria-controls="exbody-1">
+      <span class="ex-plus"></span>
+      <span class="ex-eyebrow">Example Spec 1</span>
+      <h3>Basic Plastic Cup / Signature-1</h3>
+      <div class="ex-sub">Physical Object &middot; Forced-format example &mdash; click to expand</div>
+    </button>
+    <div class="ex-body" id="exbody-1">
     <figure>
       <img src="assets/cup.jpg" alt="Basic Plastic Cup Signature-1 specification diagram: reverse universal dynamic bit collapse and generation, signature-tool mapping, dimensions, and final autoread block">
       <figcaption>Published diagram: Reverse Universal Dynamic Bit Collapse &amp; Generation &mdash; Basic on Specification &middot; Universal Allowance Engine / Signature-1 Origin</figcaption>
@@ -637,13 +651,18 @@ GATE=0.10in_CENTER
 BOX=3.5x4.5x10.0in
 STATUS=SIGNATURE-1_VALID</pre>
 </div>
+    </div>
 
   </article>
 
   <article class="example" id="example2">
-    <span class="ex-eyebrow">Example Spec 2</span>
-    <h3>A Test Run of Forced Logic 2: Signature Reverse Solve of Universal Bit to Cross-Hair Zero-In on a Specification</h3>
-    <div class="ex-sub">Specification: Semiconductor Replacements &middot; Signature-One Semiconductor Replacement by Forced Universal Reduction Algo</div>
+    <button class="ex-toggle" type="button" aria-expanded="false" aria-controls="exbody-2">
+      <span class="ex-plus"></span>
+      <span class="ex-eyebrow">Example Spec 2</span>
+      <h3>A Test Run of Forced Logic 2: Signature Reverse Solve of Universal Bit to Cross-Hair Zero-In on a Specification</h3>
+      <div class="ex-sub">Specification: Semiconductor Replacements &middot; Signature-One Semiconductor Replacement by Forced Universal Reduction Algo &mdash; click to expand</div>
+    </button>
+    <div class="ex-body" id="exbody-2">
     <figure>
       <img src="assets/semi-overview.jpg" alt="Forced Logic 2 overview diagram: signature-tool mapping, signature-grid correspondence, allowance algorithm output, and final autoread block for the semiconductor replacement">
       <figcaption>Published overview: cross-hair logic grid aligned to center &middot; universal bit collapse engine</figcaption>
@@ -892,6 +911,7 @@ POWER=5VDC_3A
 TOOLS=LINE_TRIANGLE_SQUARE_CROSS_CIRCLE_CURVATURE
 STATUS=SIGNATURE-1_VALID</pre>
 </div>
+    </div>
 
   </article>
 </div>
@@ -1960,6 +1980,14 @@ function buildFilters() {
       if (inp) aiSend(Number(inp.getAttribute("data-ai")));
     }
   });
+  var ext = document.querySelectorAll(".ex-toggle");
+  for (var ei = 0; ei < ext.length; ei++) {
+    ext[ei].addEventListener("click", function () {
+      var art = this.closest(".example");
+      var open = art.classList.toggle("open");
+      this.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+  }
   function parseLines(text) {
     var lines = text.split("\n");
     for (var i = 0; i < lines.length; i++) {

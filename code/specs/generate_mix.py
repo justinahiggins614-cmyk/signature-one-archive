@@ -10,6 +10,7 @@ Usage: python3 code/specs/generate_mix.py <count>
 Appends to data/specs.jsonl and advances code/specs/state.json.
 """
 import json
+import gzip
 import os
 import random
 import sys
@@ -37,7 +38,8 @@ def sample_pool():
         p = os.path.join(DATA, f)
         if not os.path.exists(p):
             continue
-        with open(p, encoding="utf-8") as fh:
+        opener = gzip.open if p.endswith(".gz") else open
+        with opener(p, "rt", encoding="utf-8") as fh:
             for ln in fh:
                 ln = ln.strip()
                 if not ln:

@@ -2069,6 +2069,8 @@ function wikiHTML(r) {
     ((r[14] || {}).claims || []).length + ' claims. See the Patent filing lens for the complete document.</p>';
   h += '<h4>References</h4><p>Autoread block: <code>' + esc(r[9]) + '</code></p>';
   h += '<p style="font-size:.78em;color:#8b8b95">Draft specification by Justin Addam Higgins (JAH) &mdash; ready to review and file. Not a granted patent.</p>';
+  h += '<p style="margin-top:12px;padding:10px;border:1px solid #1e3a6e;background:#0d1b33">' +
+    '<a href="https://justinahiggins614-cmyk.github.io/jah-wiki/?page=' + encodeURIComponent(r[0]) + '" target="_blank" rel="noopener" style="color:#9fc2ff;font-weight:bold;letter-spacing:1px">&#128214; JAH WIKI ARTICLE &mdash; the official encyclopedia entry for ' + esc(r[0]) + ' (definition, history, 11 analysis lenses, patent draft, program, AI persona)</a></p>';
   h += '<p style="margin-top:12px;padding:10px;border:1px solid #5a4a15;background:#141003">' +
     '<a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/?dossier=' + encodeURIComponent(r[0]) + '" target="_blank" rel="noopener" style="color:#e8d98a;font-weight:bold;letter-spacing:1px">&#9654; CLASSIFIED DOSSIER &mdash; open the full JAH-N Wiki Leaks file for ' + esc(r[0]) + ' (personal AI, read-aloud, AI disc download)</a></p>';
   h += '</div>';

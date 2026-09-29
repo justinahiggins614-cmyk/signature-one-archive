@@ -830,9 +830,23 @@ HW_FUNCS = HW_FUNCS + ["heavy lifting", "abrasive cutting", "high-pressure seali
 HW_MECHS = HW_MECHS + ["hardened steel alloys", "hydraulic rams", "roller bearings", "gear reduction", "belt drives", "chain drives", "welded frames", "cast housings", "powder coating", "galvanized finishes"]
 
 # Rebuild the master category list with the expansion.
+EXISTING_NAMES = set(n for n, _, _, _ in
+    [(n, "software", c, devs) for n, c, devs in SWCATS] +
+    [(n, "hardware", c, devs) for n, c, devs in HWCATS] +
+    [(n, "hardware", c, devs) for n, c, devs in NEWCATS])
+try:
+    from catalog_groups import iter_group_cats, group_map
+    GROUPCATS = [(cn, k, cpc, devs) for _, cn, k, cpc, devs in iter_group_cats()
+                 if cn not in EXISTING_NAMES]
+    GROUPMAP = group_map()
+    CATSET = "2026-09-28-v4: catalog groups added (media/software/hardware/products/legal/science/math/utility/business/medical/engineering/creative/defense/transport/environment/specials/solvers/cyber/genome/space/occupations/wiki/academy)"
+except ImportError:
+    GROUPCATS = []
+    GROUPMAP = {}
 ALLCATS = [(n, "software", c, devs) for n, c, devs in SWCATS] + \
           [(n, "hardware", c, devs) for n, c, devs in HWCATS] + \
-          [(n, "hardware", c, devs) for n, c, devs in NEWCATS]
+          [(n, "hardware", c, devs) for n, c, devs in NEWCATS] + \
+          GROUPCATS
 
 # Signature product lines (2026-09-28): named lines for Manon's verticals --
 # Signature AI, Signature Software, Signature Code, Signature Gaming,
@@ -840,10 +854,16 @@ ALLCATS = [(n, "software", c, devs) for n, c, devs in SWCATS] + \
 # JAH version lands under the right line name.
 AI_CATS = {"Artificial Intelligence", "Machine Learning",
            "Natural Language Processing", "Computer Vision",
-           "Recommender Systems", "Anomaly Detection"}
+           "Recommender Systems", "Anomaly Detection",
+           "AI Types", "AI Models", "AI Tools", "AI Agents", "AI Frameworks",
+           "AI Pipelines", "AI Workflows", "AI Intelligence", "AI Ability"}
 CODE_CATS = {"Developer Tools", "Compilers", "APIs", "Software Testing",
-             "Container Orchestration", "Data Pipelines", "Firmware"}
-GAME_CATS = {"Gaming", "Toys & Games", "Virtual Reality", "Augmented Reality"}
+             "Container Orchestration", "Data Pipelines", "Firmware",
+             "Code", "Code File", "All AI Python Tool Library"}
+GAME_CATS = {"Gaming", "Toys & Games", "Virtual Reality", "Augmented Reality",
+            "Video Games", "Games", "Universal Video Game",
+            "Universal Basic Static Game", "Advanced Level Gamer",
+            "Future Level Gaming", "Game Design"}
 
 def line_for_category(cat_name, kind):
     if cat_name in AI_CATS:

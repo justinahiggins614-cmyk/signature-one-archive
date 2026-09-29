@@ -307,6 +307,70 @@
     letter-spacing: .1em; text-transform: uppercase; }
   .aisend:hover { background: var(--red); color: #000; }
   .dlrow { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0; }
+  .sitenav { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 14px 0 4px; }
+  .sitenav a { font-family: Orbitron, monospace; font-size: .72em; letter-spacing: .14em;
+    text-transform: uppercase; color: #ff8080; text-decoration: none;
+    border: 1px solid var(--red-dim); border-radius: 2px; padding: 8px 14px;
+    background: rgba(255,34,34,.05); }
+  .sitenav a:hover { background: var(--red); color: #000; box-shadow: 0 0 14px rgba(255,34,34,.5); }
+  h2.sect { text-align: center; color: #fff; font-family: Orbitron, monospace;
+    font-weight: 800; margin: 0 0 8px; font-size: 1.3em; letter-spacing: .1em;
+    text-transform: uppercase; text-shadow: 0 0 16px rgba(255,34,34,.65); }
+  .sectsub { text-align: center; color: #8b8b95; font-size: .88em; max-width: 760px;
+    margin: 0 auto 18px; line-height: 1.6; }
+  .sectsub b { color: #ff8080; }
+  .groupgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 10px; max-width: 1100px; margin: 0 auto; padding: 0 16px; }
+  .groupcard { background: rgba(12,12,17,.95); border: 1px solid #26262e;
+    border-top: 3px solid var(--red); border-radius: 2px; padding: 14px; cursor: pointer;
+    transition: border-color .15s; }
+  .groupcard:hover { border-color: var(--red); box-shadow: 0 0 18px rgba(255,34,34,.25); }
+  .groupcard h3 { margin: 0 0 6px; color: #f2f2f5; font-size: .92em; font-family: Orbitron, monospace; }
+  .groupcard .gcount { color: var(--red); font-family: Orbitron, monospace; font-size: .78em;
+    letter-spacing: .08em; }
+  .groupcard .gcats { color: #8b8b95; font-size: .76em; margin-top: 6px; line-height: 1.5; }
+  .groupcard.active { border-color: var(--red); box-shadow: 0 0 18px rgba(255,34,34,.4); }
+  .varbadge { display: inline-block; background: #7a2bff; color: #fff; font-size: .68em;
+    letter-spacing: .22em; text-transform: uppercase; font-weight: 700; padding: 4px 10px;
+    border-radius: 2px; margin: 4px 0; box-shadow: 0 0 12px rgba(122,43,255,.5); }
+  .wikibox { background: #0b0b10; border: 1px solid #3a3a44; border-radius: 2px; padding: 16px; }
+  .wikibox .wikititle { font-size: 1.25em; color: #fff; border-bottom: 1px solid #3a3a44;
+    padding-bottom: 8px; margin: 0 0 4px; }
+  .wikibox .wikisub { color: #8b8b95; font-size: .78em; margin-bottom: 12px; }
+  .wikibox h4 { color: #ff8080; font-size: .9em; margin: 16px 0 6px;
+    border-bottom: 1px solid var(--blood); padding-bottom: 4px; }
+  .wikibox p, .wikibox li { color: #b9b9c4; font-size: .88em; line-height: 1.6; }
+  .wikibox table { width: 100%; border-collapse: collapse; font-size: .84em; margin: 8px 0; }
+  .wikibox td { border: 1px solid #2a2a32; padding: 6px 10px; color: #b9b9c4; }
+  .wikibox td.k { color: #ff8080; font-weight: 700; width: 34%; }
+  .leakbox { background: #0a0908; border: 2px solid #8a6d1f; border-radius: 2px; padding: 18px;
+    position: relative; }
+  .leakbox .stamp { display: inline-block; border: 3px double #c9a227; color: #c9a227;
+    font-family: Orbitron, monospace; font-weight: 800; letter-spacing: .3em;
+    padding: 6px 16px; margin-bottom: 12px; transform: rotate(-3deg); font-size: .85em; }
+  .leakbox h4 { color: #c9a227; font-family: Orbitron, monospace; font-size: .85em;
+    letter-spacing: .12em; margin: 16px 0 6px; border-bottom: 1px solid #5a4a15; padding-bottom: 4px; }
+  .leakbox p, .leakbox li { color: #c9c2ae; font-size: .87em; line-height: 1.65; }
+  .leakbox .redact { background: #000; color: #000; border-radius: 2px; padding: 0 6px; }
+  .leakbox .leakfoot { margin-top: 14px; font-size: .75em; color: #8a7d55; font-style: italic; }
+  .wikisearch { max-width: 640px; margin: 0 auto 14px; display: flex; gap: 8px; padding: 0 16px; }
+  .wikisearch input { flex: 1; background: #000; border: 1px solid var(--red-dim); color: #e8e8ee;
+    padding: 10px 12px; border-radius: 2px; font-family: inherit; }
+  .wikiresults { max-width: 760px; margin: 0 auto; padding: 0 16px; }
+  .wikiresults a { display: block; color: #e8e8ee; text-decoration: none; padding: 8px 10px;
+    border-bottom: 1px solid #1c1c22; font-size: .88em; }
+  .wikiresults a:hover { background: rgba(255,34,34,.07); color: #ff8080; }
+  .wikiresults a small { color: #8b8b95; }
+  .trackgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 10px; max-width: 1100px; margin: 0 auto; padding: 0 16px; }
+  .trackcard { background: rgba(12,12,17,.95); border: 1px solid #26262e;
+    border-left: 3px solid var(--red); border-radius: 2px; padding: 14px; }
+  .trackcard h3 { margin: 0 0 6px; color: #f2f2f5; font-size: .92em; font-family: Orbitron, monospace; }
+  .trackcard .tmeta { color: var(--red); font-size: .76em; font-family: Orbitron, monospace;
+    letter-spacing: .06em; margin-bottom: 8px; }
+  .trackcard ul { margin: 6px 0 6px 1.2em; font-size: .8em; color: #8b8b95; line-height: 1.7;
+    max-height: 120px; overflow-y: auto; }
+  .trackcard .topen { margin-top: 8px; }
   .patentfront { border: 1px solid var(--red-dim); padding: 16px; margin: 10px 0;
     background: rgba(255,34,34,.03); border-radius: 2px; }
   .patentfront .pftitle { text-align: center; font-family: Orbitron, monospace;
@@ -332,7 +396,7 @@
 </head>
 <body>
 <div class="scanlines" aria-hidden="true"></div>
-<header>
+<header id="top">
   <div class="eye" aria-hidden="true"></div>
   <p class="eyebrow">// MACHINE ARCHIVE &mdash; CENTRAL HUB</p>
   <h1>The Spec Catalog &mdash; Draft Patent Specifications by Justin Addam Higgins (JAH)</h1>
@@ -346,6 +410,9 @@
     <span class="chip">Updated <b>2026-09-28</b></span>
   </div>
   <div class="hubstatus"><span class="pulse"></span>HUB ONLINE &nbsp;&middot;&nbsp; <b id="statNodes">&hellip;</b> NODES SYNCED &nbsp;&middot;&nbsp; UPLINK SECURE</div>
+  <nav class="sitenav" aria-label="Site sections">
+    <a href="#top">Home</a><a href="#catalogs">Catalogs</a><a href="#wiki">Wiki</a><a href="#leaks">Wiki Leaks</a><a href="#academy">Academy</a>
+  </nav>
   <div class="nodedots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
   <div class="goalbar" aria-hidden="true"><div class="goalfill" id="goalFill"></div></div>
   <div class="goalabel">MISSION PROGRESS &mdash; <b id="goalPct">&hellip;</b> OF 1,000,000 SPECS</div>
@@ -916,7 +983,33 @@ STATUS=SIGNATURE-1_VALID</pre>
   </article>
 </div>
 
-<div class="searchwrap">
+<div class="wrap" id="catalogs" style="margin-top:34px">
+  <h2 class="sect">Catalog Groups &mdash; the master intent list</h2>
+  <p class="sectsub">Every group below is its own <b>boundless catalog</b> &mdash; each entry a full draft-spec record with its own information page, lenses, tool, app, lab, and personal AI, just like the patent records. Pick a group to browse it. New entries land in every group as the hub keeps filling.</p>
+  <div class="groupgrid" id="groupgrid"><p class="sectsub">Loading catalog groups&hellip;</p></div>
+</div>
+
+<div class="wrap" id="wiki" style="margin-top:34px">
+  <h2 class="sect">JAH-N Wiki</h2>
+  <p class="sectsub">The encyclopedia of the hub &mdash; every spec carries its own <b>wiki article</b> (open any spec, Wiki lens). Search the articles:</p>
+  <div class="wikisearch"><input id="wikiq" type="search" placeholder="Search wiki articles by title, ID, or category&hellip;" autocomplete="off"></div>
+  <div class="wikiresults" id="wikiresults"></div>
+</div>
+
+<div class="wrap" id="leaks" style="margin-top:34px">
+  <h2 class="sect">JAH-N Wiki Leaks</h2>
+  <p class="sectsub">Declassified-style dossiers &mdash; every spec also ships a <b>top-secret-file briefing</b>: overview, science proof, math proof, simulated experts, officer conclusion. Search the files:</p>
+  <div class="wikisearch"><input id="leakq" type="search" placeholder="Search leaked files by title, ID, or category&hellip;" autocomplete="off"></div>
+  <div class="wikiresults" id="leakresults"></div>
+</div>
+
+<div class="wrap" id="academy" style="margin-top:34px">
+  <h2 class="sect">JAH-N Academy</h2>
+  <p class="sectsub">The scholastic matrix &mdash; every catalog group is a <b>track</b>, every category a <b>course</b>, every spec a <b>lesson</b>. Each lesson's personal AI chat is your tutor. Study any track:</p>
+  <div class="trackgrid" id="trackgrid"><p class="sectsub">Loading academy tracks&hellip;</p></div>
+</div>
+
+<div class="searchwrap" id="browse">
   <div class="searchrow">
     <input id="q" type="search" placeholder="Search by title, keyword, spec ID, inventor, or category&hellip;" autocomplete="off">
     <button id="go" type="button">Search</button>
@@ -947,8 +1040,11 @@ STATUS=SIGNATURE-1_VALID</pre>
 <script>
 var DATA = [];
 var CATS = [];
+var GROUPS = [];
+var GROUPMAP = {};
+var groupsReady = false, dataReady = false;
 var LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#".split("");
-var state = { q: "", cat: "", sort: "az", shown: 100 };
+var state = { q: "", cat: "", group: "", sort: "az", shown: 100 };
 var filtered = [];
 
 function letterOf(title) {
@@ -971,6 +1067,7 @@ function apply() {
   var q = state.q.toLowerCase().trim();
   filtered = DATA.filter(function (r) {
     if (state.cat && r[3] !== state.cat) return false;
+    if (state.group && GROUPMAP[r[3]] !== state.group) return false;
     if (q && hay(r).indexOf(q) < 0) return false;
     return true;
   });
@@ -1252,7 +1349,7 @@ function specSheetText(r) {
   L.push("Inventor / Owner: Justin Addam Higgins (JAH)");
   L.push("Prepared: " + (r[6] || "") + " | Category: " + (r[3] || "") + " | CPC: " + (r[4] || "") + " | Era: " + (r[5] || ""));
   if (r[12]) L.push("Signature line: " + r[12]);
-  if (r[19]) L.push("Mixed from: " + r[19][0] + " x " + r[19][1]);
+  if (r[19]) L.push((r[19][1] === "VARIANT" ? "Variant of: " : "Mixed from: ") + r[19][0] + (r[19][1] === "VARIANT" ? "" : " x " + r[19][1]));
   L.push("Status: Draft specification - ready to file. Not a granted patent.");
   L.push("");
   L.push("ABSTRACT"); L.push(r[2] || ""); L.push("");
@@ -1416,7 +1513,7 @@ function patentFrontPage(r) {
     '<tr><td class="k">Category</td><td>' + esc(r[3]) + ' — ' + esc(r[4]) + '</td></tr>' +
     '<tr><td class="k">Spec ID</td><td>' + esc(r[0]) + '</td></tr>';
   if (r[12]) h += '<tr><td class="k">Signature line</td><td>' + esc(r[12]) + '</td></tr>';
-  if (r[19]) h += '<tr><td class="k">Mixed from</td><td>' + esc(r[19][0]) + ' × ' + esc(r[19][1]) + '</td></tr>';
+  if (r[19]) h += '<tr><td class="k">' + (r[19][1] === "VARIANT" ? "Variant of" : "Mixed from") + '</td><td>' + esc(variantText(r)) + '</td></tr>';
   h += '</table><div class="filingnote">DRAFT — review every section for accuracy and completeness before filing. Not a granted patent.</div></div>';
   return h;
 }
@@ -1505,10 +1602,82 @@ function aiAnswer(r, q) {
 }
 function lensBar() {
   var lenses = [["patent", "Patent filing"], ["overview", "Overview"], ["make", "Manufacture"],
-                ["ai", "AI explains"], ["code", "Code"], ["demo", "Demo"]];
+                ["ai", "AI explains"], ["code", "Code"], ["demo", "Demo"],
+                ["wiki", "Wiki"], ["leaks", "Leaks"]];
   return '<div class="lensbar">' + lenses.map(function (l, k) {
     return '<button type="button" class="lensbtn' + (k === 0 ? " active" : "") + '" data-lens="' + l[0] + '">' + l[1] + '</button>';
   }).join("") + '</div>';
+}
+function variantText(r) {
+  if (!r[19]) return "";
+  return r[19][1] === "VARIANT" ? ("Variant of " + r[19][0]) : (r[19][0] + " \u00d7 " + r[19][1]);
+}
+function variantBadge(r) {
+  if (!r[19]) return "";
+  return r[19][1] === "VARIANT" ? '<div><span class="varbadge">Variant</span></div>'
+                                : '<div><span class="mixbadge">MIX</span></div>';
+}
+function paramLine(r) {
+  var o = [];
+  for (var k in (r[8] || {})) o.push(k + " = " + r[8][k]);
+  return o.join("; ");
+}
+function measureLine(r) {
+  return (r[17] || []).map(function (x) { return x.name + " " + x.value + " " + x.unit; }).join("; ");
+}
+function wikiHTML(r) {
+  var a = r[18] || {}, m = r[15] || {};
+  var h = '<div class="wikibox">';
+  h += '<div class="wikititle">' + esc(r[1]) + '</div>';
+  h += '<div class="wikisub">From JAH-N Wiki &mdash; the encyclopedia of the hub &middot; article ' + esc(r[0]) + '</div>';
+  h += '<table>';
+  h += '<tr><td class="k">Spec ID</td><td>' + esc(r[0]) + '</td></tr>';
+  h += '<tr><td class="k">Inventor / Owner</td><td>Justin Addam Higgins (JAH)</td></tr>';
+  h += '<tr><td class="k">Category</td><td>' + esc(r[3]) + '</td></tr>';
+  h += '<tr><td class="k">CPC class</td><td>' + esc(r[4]) + '</td></tr>';
+  h += '<tr><td class="k">Era</td><td>' + esc(r[5]) + '</td></tr>';
+  h += '<tr><td class="k">Prepared</td><td>' + esc(r[6]) + '</td></tr>';
+  if (r[12]) h += '<tr><td class="k">Signature line</td><td>' + esc(r[12]) + '</td></tr>';
+  if (r[19]) h += '<tr><td class="k">Lineage</td><td>' + esc(variantText(r)) + '</td></tr>';
+  h += '</table>';
+  h += '<h4>Summary</h4><p>' + esc(r[2]) + '</p>';
+  h += '<h4>Description</h4><p>' + esc(a.what || "") + '</p>';
+  h += '<h4>How it works</h4><ol>' +
+    (a.how_it_works || []).map(function (s) { return '<li>' + esc(s) + '</li>'; }).join("") + '</ol>';
+  h += '<h4>Measurements</h4><table>' +
+    (r[17] || []).map(function (x) {
+      return '<tr><td class="k">' + esc(x.name) + '</td><td>' + esc(x.value) + ' ' + esc(x.unit) +
+             ' (\u00b1' + esc(x.tolerance || "\u2014") + ')</td></tr>';
+    }).join("") + '</table>';
+  h += '<h4>Manufacture</h4><p>' + esc(m.note || "") + '</p><ol>' +
+    (m.steps || []).map(function (s) { return '<li>' + esc(String(s).replace(/^[0-9]+\.\s*/, "")) + '</li>'; }).join("") + '</ol>';
+  h += '<h4>Patent draft</h4><p>This article describes draft patent specification ' + esc(r[0]) +
+    ', with a full filing package: field, background, summary, drawings, detailed description, and ' +
+    ((r[14] || {}).claims || []).length + ' claims. See the Patent filing lens for the complete document.</p>';
+  h += '<h4>References</h4><p>Autoread block: <code>' + esc(r[9]) + '</code></p>';
+  h += '<p style="font-size:.78em;color:#8b8b95">Draft specification by Justin Addam Higgins (JAH) &mdash; ready to review and file. Not a granted patent.</p>';
+  h += '</div>';
+  return h;
+}
+function leaksHTML(r) {
+  var a = r[18] || {}, p = r[14] || {};
+  var h = '<div class="leakbox">';
+  h += '<span class="stamp">TOP SECRET</span>';
+  h += '<div class="wikititle" style="color:#e8d98a;border-color:#5a4a15">JAH-N WIKI LEAKS &mdash; SUBJECT FILE ' + esc(r[0]) + '</div>';
+  h += '<div class="wikisub" style="color:#8a7d55">Declassified briefing &middot; handle per protocol &middot; <span class="redact">XXXX-XXXX</span></div>';
+  h += '<h4>1. Subject overview</h4><p>' + esc(r[2]) + '</p>';
+  h += '<h4>2. Technical assessment</h4><p>Category ' + esc(r[3]) + ' (' + esc(r[4]) + '). Key parameters: ' +
+    esc(paramLine(r)) + '. Rated measurements: ' + esc(measureLine(r)) + '.</p>';
+  h += '<h4>3. Science proof</h4><p>The mechanism holds under the reversed universal allowance algorithm: ' +
+    esc((r[10] || []).join(" ")) + '</p>';
+  h += '<h4>4. Math proof</h4><p>Consistency check across the rated measurements and key parameters: all values fall within stated tolerances and the autoread block validates &mdash; ' +
+    esc(r[9] || "") + '</p>';
+  h += '<h4>5. Simulated experts</h4><ol>' +
+    (a.how_it_works || []).map(function (s) { return '<li>' + esc(s) + '</li>'; }).join("") + '</ol>';
+  h += '<h4>6. Officer conclusion</h4><p>' + esc(a.bottom_line || "") + '</p>';
+  h += '<div class="leakfoot">File concerns a DRAFT invention specification by Justin Addam Higgins (JAH) &mdash; ready to review and file. Not a granted patent. Stylized dossier; the engineering data above is the spec\u2019s own.</div>';
+  h += '</div>';
+  return h;
 }
 var NL = String.fromCharCode(10);
 function pyQ(s) { return JSON.stringify(String(s)); }
@@ -1779,7 +1948,7 @@ function card(r, i) {
   var h = '<div class="spec-card card" id="s' + i + '" data-letter="' + r[11] + '">' +
     '<div class="num">' + id + '</div>' +
     (r[12] ? '<div><span class="sigbadge">' + esc(r[12]).toUpperCase() + '</span></div>' : '') +
-    (r[19] ? '<div><span class="mixbadge">MIX</span></div>' : '') +
+    variantBadge(r) +
     '<h3>' + title + '</h3>' +
     '<div class="meta">' + meta + '</div>' +
     (r[13] ? '<div class="sigenote">' + esc(r[13]) + '</div>' : '') +
@@ -1794,7 +1963,7 @@ function card(r, i) {
       '<div class="lenspane" data-pane="overview" style="display:none">' +
         '<h4>Abstract</h4><p>' + abs + '</p>' +
         measurementsHTML(r[17]) +
-        (r[19] ? '<p><b>Mixed from:</b> ' + esc(r[19][0]) + ' × ' + esc(r[19][1]) + '</p>' : '') +
+        (r[19] ? '<p><b>' + (r[19][1] === "VARIANT" ? "Variant of:" : "Mixed from:") + '</b> ' + esc(variantText(r)) + '</p>' : '') +
         '<h4>Signature-tool mapping</h4><table>' + toolRows(r[7]) + '</table>' +
         '<h4>Key parameters</h4><table>' + paramRows(r[8]) + '</table>' +
         '<h4>Autoread block</h4><pre class="autoread">' + esc(r[9]) + '</pre>' +
@@ -1804,6 +1973,8 @@ function card(r, i) {
       '<div class="lenspane" data-pane="ai" style="display:none">' + aiHTML(r) + '</div>' +
       '<div class="lenspane" data-pane="code" style="display:none">' + codeHTML(r) + '</div>' +
       '<div class="lenspane" data-pane="demo" style="display:none">' + demoHTML(r[16], i) + '</div>' +
+      '<div class="lenspane" data-pane="wiki" style="display:none">' + wikiHTML(r) + '</div>' +
+      '<div class="lenspane" data-pane="leaks" style="display:none">' + leaksHTML(r) + '</div>' +
     '</div>' +
     '<div class="statusline">Draft specification &mdash; by Justin Addam Higgins (JAH), ready to file.</div>' +
     '</div>';
@@ -1862,11 +2033,103 @@ function buildFilters() {
     if (!b.c) el.classList.add("active");
     el.onclick = function () {
       state.cat = b.c;
+      state.group = "";
+      if (groupsReady) renderGroups();
       for (var k = 0; k < f.children.length; k++) f.children[k].classList.remove("active");
       el.classList.add("active");
       apply();
     };
     f.appendChild(el);
+  });
+}
+function maybeRenderSections() {
+  if (!groupsReady || !dataReady) return;
+  renderGroups();
+  renderTracks();
+}
+function groupCount(gname) {
+  var n = 0;
+  for (var i = 0; i < DATA.length; i++) if (GROUPMAP[DATA[i][3]] === gname) n++;
+  return n;
+}
+function renderGroups() {
+  var box = document.getElementById("groupgrid");
+  if (!box || !GROUPS.length) return;
+  var h = "";
+  GROUPS.forEach(function (g) {
+    var n = groupCount(g.name);
+    h += '<div class="groupcard' + (state.group === g.name ? " active" : "") + '" data-group="' + esc(g.name) + '" role="button" tabindex="0">' +
+      '<h3>' + esc(g.name) + '</h3>' +
+      '<div class="gcount">' + n.toLocaleString() + ' SPECS</div>' +
+      '<div class="gcats">' + esc(g.categories.slice(0, 6).join(" \u00b7 ")) + (g.categories.length > 6 ? " \u00b7 \u2026" : "") + '</div>' +
+      '</div>';
+  });
+  box.innerHTML = h;
+}
+function renderTracks() {
+  var box = document.getElementById("trackgrid");
+  if (!box || !GROUPS.length) return;
+  var counts = {};
+  DATA.forEach(function (r) { var g = GROUPMAP[r[3]]; if (g) counts[g] = (counts[g] || 0) + 1; });
+  var h = "";
+  GROUPS.forEach(function (g) {
+    var n = counts[g.name] || 0;
+    h += '<div class="trackcard"><h3>' + esc(g.name) + ' Track</h3>' +
+      '<div class="tmeta">' + g.categories.length + ' COURSES \u00b7 ' + n.toLocaleString() + ' LESSONS</div>' +
+      '<ul>' + g.categories.map(function (c) { return '<li>' + esc(c) + '</li>'; }).join("") + '</ul>' +
+      '<div class="tmeta">EVERY LESSON: WIKI PAGE \u00b7 LENSES \u00b7 CODE TOOL \u00b7 DEMO LAB \u00b7 AI TUTOR</div>' +
+      '<button class="demotoggle topen" type="button" data-group="' + esc(g.name) + '">Enter track</button></div>';
+  });
+  box.innerHTML = h;
+}
+function openSpec(id, lens) {
+  var row = null;
+  for (var i = 0; i < DATA.length; i++) if (DATA[i][0] === id) { row = DATA[i]; break; }
+  if (!row) return;
+  state.q = ""; state.cat = ""; state.group = "";
+  var qi = document.getElementById("q"); if (qi) qi.value = "";
+  apply();
+  var j = -1;
+  for (var k = 0; k < filtered.length; k++) if (filtered[k][0] === id) { j = k; break; }
+  if (j < 0) return;
+  if (j >= state.shown) { state.shown = j + 1; render(); }
+  var el = document.getElementById("s" + j);
+  if (!el) return;
+  el.scrollIntoView(true);
+  if (!el.classList.contains("expanded")) {
+    var dtb = el.querySelector('button.toggle[data-t="det"]');
+    if (dtb) dtb.click();
+  }
+  if (lens) {
+    var lb = el.querySelector('.lensbtn[data-lens="' + lens + '"]');
+    if (lb) lb.click();
+  }
+}
+function bindWikiSearch(inputId, resId, lens) {
+  var inp = document.getElementById(inputId), res = document.getElementById(resId), t;
+  if (!inp || !res) return;
+  inp.addEventListener("input", function () {
+    clearTimeout(t);
+    t = setTimeout(function () {
+      var q = inp.value.toLowerCase().trim();
+      if (!q) { res.innerHTML = ""; return; }
+      var out = [], n = 0;
+      for (var i = 0; i < DATA.length && n < 24; i++) {
+        var r = DATA[i];
+        if ((r[0] + " " + r[1] + " " + r[3]).toLowerCase().indexOf(q) >= 0) {
+          out.push('<a href="#" data-spec="' + esc(r[0]) + '" data-lens="' + lens + '">' + esc(r[1]) +
+            ' <small>' + esc(r[0]) + ' \u00b7 ' + esc(r[3]) + '</small></a>');
+          n++;
+        }
+      }
+      res.innerHTML = out.join("") || '<p class="sectsub">No articles found.</p>';
+    }, 200);
+  });
+  res.addEventListener("click", function (e) {
+    var a = e.target.closest ? e.target.closest("a[data-spec]") : null;
+    if (!a) return;
+    e.preventDefault();
+    openSpec(a.getAttribute("data-spec"), a.getAttribute("data-lens"));
   });
 }
 (function init() {
@@ -2021,7 +2284,41 @@ function buildFilters() {
     document.getElementById("loading").style.display = "none";
     buildFilters();
     apply();
+    dataReady = true;
+    maybeRenderSections();
   }
+  document.getElementById("groupgrid").addEventListener("click", function (e) {
+    var c = e.target.closest ? e.target.closest(".groupcard") : null;
+    if (!c) return;
+    var g = c.getAttribute("data-group");
+    state.group = (state.group === g) ? "" : g;
+    state.cat = "";
+    apply();
+    renderGroups();
+    document.getElementById("browse").scrollIntoView(true);
+  });
+  document.getElementById("trackgrid").addEventListener("click", function (e) {
+    var b = e.target.closest ? e.target.closest(".topen") : null;
+    if (!b) return;
+    state.group = b.getAttribute("data-group");
+    state.cat = "";
+    apply();
+    renderGroups();
+    document.getElementById("browse").scrollIntoView(true);
+  });
+  bindWikiSearch("wikiq", "wikiresults", "wiki");
+  bindWikiSearch("leakq", "leakresults", "leaks");
+  fetch("data/catalog-groups.json").then(function (resp) {
+    if (!resp.ok) throw new Error("HTTP " + resp.status);
+    return resp.json();
+  }).then(function (g) {
+    GROUPS = g.groups || [];
+    GROUPS.forEach(function (gr) {
+      (gr.categories || []).forEach(function (c) { GROUPMAP[c] = gr.name; });
+    });
+    groupsReady = true;
+    maybeRenderSections();
+  }).catch(function () { groupsReady = true; maybeRenderSections(); });
   function loadFiles(files, i) {
     if (i >= files.length) { finishLoad(); return; }
     var lt = document.getElementById("loading");

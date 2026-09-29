@@ -1577,7 +1577,7 @@ function specSheetText(r) {
   L.push("Inventor / Owner: Justin Addam Higgins (JAH)");
   L.push("Prepared: " + (r[6] || "") + " | Category: " + (r[3] || "") + " | CPC: " + (r[4] || "") + " | Era: " + (r[5] || ""));
   if (r[12]) L.push("Signature line: " + r[12]);
-  if (r[19]) L.push((r[19][1] === "VARIANT" ? "Variant of: " : "Mixed from: ") + r[19][0] + (r[19][1] === "VARIANT" ? "" : " x " + r[19][1]));
+  if (r[19]) { var _lt = r[19][1]; L.push(lineageLabel(r) + " " + r[19][0] + ((_lt === "VARIANT" || _lt === "REVISION" || _lt === "PRODUCTLINE") ? "" : " x " + _lt)); }
   L.push("Status: Draft specification - ready to file. Not a granted patent.");
   L.push("");
   L.push("ABSTRACT"); L.push(r[2] || ""); L.push("");
@@ -1746,7 +1746,7 @@ function patentFrontPage(r) {
     '<tr><td class="k">Category</td><td>' + esc(r[3]) + ' — ' + esc(r[4]) + '</td></tr>' +
     '<tr><td class="k">Spec ID</td><td>' + esc(r[0]) + '</td></tr>';
   if (r[12]) h += '<tr><td class="k">Signature line</td><td>' + esc(r[12]) + '</td></tr>';
-  if (r[19]) h += '<tr><td class="k">' + (r[19][1] === "VARIANT" ? "Variant of" : "Mixed from") + '</td><td>' + esc(variantText(r)) + '</td></tr>';
+  if (r[19]) h += '<tr><td class="k">' + lineageLabel(r).replace(/:$/, "") + '</td><td>' + esc(variantText(r)) + '</td></tr>';
   h += '</table><div class="filingnote">DRAFT — review every section for accuracy and completeness before filing. Not a granted patent.</div></div>';
   return h;
 }
@@ -1967,12 +1967,27 @@ function auStop() {
 }
 function variantText(r) {
   if (!r[19]) return "";
-  return r[19][1] === "VARIANT" ? ("Variant of " + r[19][0]) : (r[19][0] + " \u00d7 " + r[19][1]);
+  var t = r[19][1];
+  if (t === "VARIANT") return "Variant of " + r[19][0];
+  if (t === "REVISION") return "Revision of " + r[19][0];
+  if (t === "PRODUCTLINE") return "Product line of " + r[19][0];
+  return r[19][0] + " \u00d7 " + t;
+}
+function lineageLabel(r) {
+  if (!r[19]) return "";
+  var t = r[19][1];
+  if (t === "VARIANT") return "Variant of:";
+  if (t === "REVISION") return "Revision of:";
+  if (t === "PRODUCTLINE") return "Product line of:";
+  return "Mixed from:";
 }
 function variantBadge(r) {
   if (!r[19]) return "";
-  return r[19][1] === "VARIANT" ? '<div><span class="varbadge">Variant</span></div>'
-                                : '<div><span class="mixbadge">MIX</span></div>';
+  var t = r[19][1];
+  if (t === "VARIANT") return '<div><span class="varbadge">Variant</span></div>';
+  if (t === "REVISION") return '<div><span class="varbadge">Rev</span></div>';
+  if (t === "PRODUCTLINE") return '<div><span class="varbadge">Line</span></div>';
+  return '<div><span class="mixbadge">MIX</span></div>';
 }
 function paramLine(r) {
   var o = [];
@@ -2320,7 +2335,7 @@ function card(r, i) {
       '<div class="lenspane" data-pane="overview" style="display:none">' +
         '<h4>Abstract</h4><p>' + abs + '</p>' +
         measurementsHTML(r[17]) +
-        (r[19] ? '<p><b>' + (r[19][1] === "VARIANT" ? "Variant of:" : "Mixed from:") + '</b> ' + esc(variantText(r)) + '</p>' : '') +
+        (r[19] ? '<p><b>' + lineageLabel(r) + '</b> ' + esc(variantText(r)) + '</p>' : '') +
         '<h4>Signature-tool mapping</h4><table>' + toolRows(r[7]) + '</table>' +
         '<h4>Key parameters</h4><table>' + paramRows(r[8]) + '</table>' +
         '<h4>Autoread block</h4><pre class="autoread">' + esc(r[9]) + '</pre>' +

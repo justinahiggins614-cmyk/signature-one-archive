@@ -284,48 +284,212 @@ def _dev_of(title):
     return t.split(" for ")[0].strip() or t
 
 def build_patent_draft(r, kind, title, category, params, toolmap):
+    """LONG-form draft (2026-09-28): a full-length patent-style document with a
+    three-paragraph abstract, numbered background paragraphs ([0001]-[0006]),
+    a multi-paragraph summary, detailed figure descriptions, a ~19-paragraph
+    detailed description with reference numerals, and 20 claims (independent
+    apparatus, method, and article claims plus dependents). Content stays
+    ORIGINAL to the spec - only the depth matches a real filing."""
     dev = _dev_of(title)
     pk = list(params.items())
     p1 = f"{pk[0][0]} of {pk[0][1]}" if pk else "tuned operating parameters"
     p2 = f"{pk[1][0]} of {pk[1][1]}" if len(pk) > 1 else "rated duty cycle"
+    p3 = f"{pk[2][0]} of {pk[2][1]}" if len(pk) > 2 else "nominal tolerance band"
     subj = "system" if kind == "software" else "apparatus"
-    field = (f"This invention relates to {category}, and more particularly to {article(dev)} "
-             f"with Signature-One six-tool geometry control.")
-    background = (f"Conventional {category.lower()} products address only isolated aspects of their task, "
-                  f"leaving geometry, decision branching, and tolerance flow to ad-hoc design. "
-                  f"There remains a need for {article(dev)} that unifies line, triangle, square, cross, "
-                  f"circle, and curvature control in a single solvable origin.")
-    summary = (f"The present invention provides {article(dev)} forced through the universal reverse "
-               f"reduction algorithm: a {subj} comprising six-tool mapped elements, key parameters "
-               f"including {p1} and {p2}, and a machine-readable autoread block ending "
-               f"STATUS=SIGNATURE-1 VALID.")
-    drawings = ["FIG. 1 is a six-tool schematic of the invention.",
-                "FIG. 2 is a parametric diagram of the key operating parameters.",
-                "FIG. 3 is a process flow of the reversed universal allowance algorithm."]
-    det = (f"The {dev} is constructed by collapsing all shape, rule, and dimension into one "
-           f"controlled origin and re-expanding through the six tools. LINE governs {toolmap['LINE']}; "
-           f"TRIANGLE governs {toolmap['TRIANGLE']}; SQUARE bounds {toolmap['SQUARE']}; "
-           f"CROSS decides {toolmap['CROSS']}; CIRCLE anchors {toolmap['CIRCLE']}; "
-           f"CURVATURE shapes {toolmap['CURVATURE']}. In operation the five reversed-allowance steps "
-           f"run in order: universal-bit starter, reverse-target, combinatorial mix, human variance, "
-           f"and multi-path solved reality, yielding the {dev} at {p1} and {p2}.")
-    claims = [
-        f"1. A {subj} for {category}, comprising: six-tool mapped elements wherein LINE, TRIANGLE, "
-        f"SQUARE, CROSS, CIRCLE, and CURVATURE jointly define the {dev}; and an autoread block "
-        f"ending STATUS=SIGNATURE-1 VALID.",
-        f"2. The {subj} of claim 1, wherein the six-tool mapped elements comprise {toolmap['LINE']} "
-        f"under LINE and {toolmap['CIRCLE']} under CIRCLE.",
-        f"3. The {subj} of claim 1, further configured to operate at {p1}.",
-        f"4. The {subj} of claim 1, further configured to operate at {p2}.",
-        f"5. The {subj} of claim 1, produced by the reversed universal allowance algorithm of "
-        f"universal-bit starter, reverse-target, combinatorial mix, human variance, and "
-        f"multi-path solved reality.",
-        f"6. The {subj} of claim 1, manufactured by means comprising {r.choice(HW_PROCESSES if kind == 'hardware' else SW_PROCESSES)}.",
+    art = article(dev)
+    catl = category.lower()
+
+    abstract = (
+        f"A {dev} for {catl} is disclosed. The {dev} unifies six geometric control "
+        f"tools - line paths, triangle hierarchies, square bounds, cross branches, "
+        f"circle nodes, and curvature flow - in a single solvable origin, and forces "
+        f"every build decision through a reversed universal allowance algorithm, so "
+        f"that geometry, decision branching, and tolerance flow are designed together "
+        f"instead of being left to ad-hoc choice. "
+        f"In one embodiment the {dev} (10) comprises a control core (100) coupled to a "
+        f"line-path module (110) governing {toolmap['LINE']}, a triangle hierarchy unit (120) "
+        f"governing {toolmap['TRIANGLE']}, a square bound frame (130) bounding {toolmap['SQUARE']}, "
+        f"a cross decision branch (140) deciding {toolmap['CROSS']}, a circle node anchor (150) "
+        f"anchoring {toolmap['CIRCLE']}, and a curvature flow shaper (160) shaping {toolmap['CURVATURE']}. "
+        f"The control core (100) is further coupled to an autoread block (170) that emits a "
+        f"machine-readable record of the build ending STATUS=SIGNATURE-1 VALID. "
+        f"In operation the {dev} runs five reversed-allowance steps in order - universal-bit "
+        f"starter, reverse-target, combinatorial mix, human variance, and multi-path solved "
+        f"reality - to yield the {dev} at {p1} and {p2}, with the geometry of every step "
+        f"traceable through the six tools."
+    )
+
+    field = (f"[0001] This invention relates to {catl}, and more particularly to {art} "
+             f"with unified six-tool geometry control through a reversed universal allowance algorithm.")
+
+    background = (
+        f"[0001] This invention is in the field of {catl}, as it relates to the use of unified "
+        f"geometric control - line, triangle, square, cross, circle, and curvature elements - "
+        f"for the design and operation of {art}. "
+        f"[0002] Conventional {catl} products address only isolated aspects of their task. A "
+        f"product may optimize one parameter while leaving geometry, decision branching, and "
+        f"tolerance flow to ad-hoc design choices made late in development, when change is most "
+        f"expensive. The result is a {dev} whose parts fit by adjustment rather than by design. "
+        f"[0003] Geometry in conventional practice is handled by general-purpose drafting or "
+        f"modeling tools that record shape without recording intent. When a dimension shifts, "
+        f"there is no single origin to re-solve from, so tolerance stack-ups accumulate silently "
+        f"across interfaces and the {dev} drifts from its rated {p1}. "
+        f"[0004] Decision branching in conventional {catl} products is typically hard-coded: "
+        f"operating modes, configuration paths, and fallback behaviors are fixed at build time. "
+        f"When conditions change, the {dev} cannot re-derive its own behavior because the "
+        f"branching was never expressed as a solvable structure. "
+        f"[0005] Further, conventional builds produce no machine-readable record of what was "
+        f"decided and why. Verification depends on human-readable documents that drift from the "
+        f"built article, so two units built to the same drawing can differ in behavior without "
+        f"any detectable trace. "
+        f"[0006] There remains a need for {art} that collapses shape, rule, and dimension into "
+        f"one controlled origin and re-expands through six defined tools, that expresses branching "
+        f"as solvable geometry, and that emits a machine-readable build record with every unit."
+    )
+
+    summary = (
+        f"SUMMARY OF THE INVENTION [0007] The present invention provides {art} forced through "
+        f"a universal reverse reduction algorithm. The {dev} comprises six-tool mapped elements "
+        f"wherein LINE, TRIANGLE, SQUARE, CROSS, CIRCLE, and CURVATURE jointly define the {dev}, "
+        f"key parameters including {p1} and {p2}, and a machine-readable autoread block ending "
+        f"STATUS=SIGNATURE-1 VALID. "
+        f"[0008] It is an object of the invention to provide: (a) a single solvable origin from "
+        f"which all geometry of the {dev} is re-derivable; (b) line-path control of {toolmap['LINE']}; "
+        f"(c) triangle-hierarchy control of {toolmap['TRIANGLE']}; (d) square-bound control of "
+        f"{toolmap['SQUARE']}; (e) cross-branch decision control of {toolmap['CROSS']}; (f) circle-node "
+        f"anchoring of {toolmap['CIRCLE']}; and (g) curvature-flow shaping of {toolmap['CURVATURE']}. "
+        f"[0009] It is a further object to express every operating decision of the {dev} as a "
+        f"reversed allowance path: seed the Signature-One grid to anchor the {dev} as a binary-1 "
+        f"identity, set the finished function as the destination on the infinite line and back-solve, "
+        f"route the target through the six tools, admit human variance in perspective, chance, and "
+        f"tolerance slop, and emit the {dev} as one valid build among infinite option paths. "
+        f"[0010] In one embodiment the {dev} is configured to operate at {p1} and {p2}, within "
+        f"{p3}, and the autoread block records the as-built parameters with each unit. In "
+        f"alternative embodiments the six tools are re-weighted for past, current, or future "
+        f"operating eras without changing the origin."
+    )
+
+    drawings = [
+        f"FIG. 1 is a six-tool schematic of the {dev} (10), showing the control core (100), "
+        f"the line-path module (110), the triangle hierarchy unit (120), the square bound frame (130), "
+        f"the cross decision branch (140), the circle node anchor (150), the curvature flow shaper (160), "
+        f"and the autoread block (170).",
+        f"FIG. 2 is a parametric diagram of the {dev}, plotting {p1} against {p2} within "
+        f"{p3} and marking the rated operating envelope.",
+        f"FIG. 3 is a process flow of the reversed universal allowance algorithm: universal-bit "
+        f"starter (310), reverse-target (320), combinatorial mix (330), human variance (340), and "
+        f"multi-path solved reality (350).",
     ]
-    abstract = (f"A {dev} for {category} using Signature-One six-tool geometry: line, triangle, "
-                f"square, cross, circle, and curvature elements are forced through the reversed "
-                f"universal allowance algorithm to yield a buildable {subj} with machine-readable "
-                f"autoread output.")
+
+    det = (
+        f"[0011] Referring to FIG. 1, one embodiment of the {dev} (10) is constructed by collapsing "
+        f"all shape, rule, and dimension into one controlled origin and re-expanding through the six "
+        f"tools. A control core (100) anchors the origin and sequences the five reversed-allowance steps. "
+        f"[0012] The control core (100) holds the binary-1 identity seeded at universal-bit starter (310): "
+        f"a single declared origin from which every downstream dimension is derived, so that no geometry "
+        f"exists without a recorded parent decision. "
+        f"[0013] The line-path module (110) governs {toolmap['LINE']}. All linear extents, alignments, "
+        f"and signal or load paths of the {dev} are projected from the origin through the line-path module, "
+        f"which fixes direction before magnitude. "
+        f"[0014] The triangle hierarchy unit (120) governs {toolmap['TRIANGLE']}. Layered dependencies - "
+        f"primary, secondary, and tertiary functions of the {dev} - are stacked as triangle hierarchies so "
+        f"that a change at the apex propagates deterministically to the base. "
+        f"[0015] The square bound frame (130) bounds {toolmap['SQUARE']}. The operating envelope of the "
+        f"{dev} is enclosed in square bounds that define hard limits; nothing in the design may cross a "
+        f"bound without triggering a re-solve from the origin. "
+        f"[0016] The cross decision branch (140) decides {toolmap['CROSS']}. Operating modes and "
+        f"configuration paths are expressed as cross branches - explicit, solvable forks rather than "
+        f"hard-coded switches - so the {dev} re-derives its behavior when conditions change. "
+        f"[0017] The circle node anchor (150) anchors {toolmap['CIRCLE']}. Reference nodes of the {dev} "
+        f"are fixed as circle anchors: radial datums that hold position while surrounding geometry flexes "
+        f"within tolerance. "
+        f"[0018] The curvature flow shaper (160) shapes {toolmap['CURVATURE']}. Transitions between "
+        f"states, surfaces, or phases of the {dev} follow curvature flow, eliminating sharp "
+        f"discontinuities that would otherwise concentrate stress, error, or loss. "
+        f"[0019] Referring to FIG. 2, the {dev} is rated at {p1} and {p2}. The parametric diagram "
+        f"plots the two against each other within {p3}; the shaded envelope marks the region in "
+        f"which all six tools remain inside their square bounds. Operation outside the envelope forces "
+        f"a re-solve rather than a silent drift. "
+        f"[0020] The autoread block (170) emits, for each built unit, a machine-readable record of the "
+        f"as-built parameters, the tool mapping, and the five algorithm steps, terminated by "
+        f"STATUS=SIGNATURE-1 VALID. Two units built to the same origin carry comparable records, so "
+        f"behavioral drift is detectable without human-readable documents. "
+        f"[0021] Referring to FIG. 3, the reversed universal allowance algorithm begins at "
+        f"universal-bit starter (310): the Signature-One grid is seeded to anchor the {dev} as a binary-1 "
+        f"identity, establishing the single origin. "
+        f"[0022] At reverse-target (320), the finished function of the {dev} is set as the destination on "
+        f"the infinite line and the design is back-solved toward the origin, so every intermediate decision "
+        f"is justified by the destination it serves. "
+        f"[0023] At combinatorial mix (330), the target is routed through the six tools - line paths, "
+        f"triangle hierarchies, square bounds, cross branches, circle nodes, curvature flow - and each tool "
+        f"claims the geometry that belongs to it, with conflicts resolved by re-solving from the origin. "
+        f"[0024] At human variance (340), perspective, chance, and tolerance slop are admitted in the "
+        f"execution of the {dev}: the design holds its rated {p1} while tolerating the real-world "
+        f"variation of builders, operators, and environments. "
+        f"[0025] At multi-path solved reality (350), the {dev} is emitted as one valid build among infinite "
+        f"option paths - the path that satisfies the destination, the six tools, and the tolerance band "
+        f"together. "
+        f"[0026] In operation, the control core (100) sequences steps (310)-(350) in order for each build "
+        f"or operating session of the {dev}, then verifies the autoread block (170) before release. A "
+        f"failed verification returns the {dev} to reverse-target (320) rather than shipping a drifted unit. "
+        f"[0027] Means of manufacture follow the six-tool sequence: source materials to print tolerance, "
+        f"form the primary structure, fit interfaces and seals, assemble subassemblies, finish and protect "
+        f"surfaces, and run calibration and QA burn-in with the autoread block stamped on the unit. "
+        f"[0028] Alternative embodiments re-weight the six tools for past, current, or future operating "
+        f"eras: a past-era embodiment favors proven line and square geometry; a future-era embodiment "
+        f"favors cross-branch adaptability and curvature flow. The origin and the five steps are unchanged. "
+        f"[0029] The invention is not limited to the embodiments described. Any {subj} that collapses "
+        f"shape, rule, and dimension into one controlled origin, re-expands through the six defined tools, "
+        f"and emits the machine-readable build record falls within the scope of the appended claims."
+    )
+
+    mfg = HW_PROCESSES if kind == "hardware" else SW_PROCESSES
+    claims = [
+        f"1. A {subj} for {catl}, comprising: six-tool mapped elements wherein a line-path module (110), "
+        f"a triangle hierarchy unit (120), a square bound frame (130), a cross decision branch (140), a "
+        f"circle node anchor (150), and a curvature flow shaper (160) jointly define {art}; and an "
+        f"autoread block (170) emitting a machine-readable build record ending STATUS=SIGNATURE-1 VALID.",
+        f"2. The {subj} of claim 1, wherein the line-path module (110) governs {toolmap['LINE']}.",
+        f"3. The {subj} of claim 1, wherein the triangle hierarchy unit (120) governs {toolmap['TRIANGLE']}.",
+        f"4. The {subj} of claim 1, wherein the square bound frame (130) bounds {toolmap['SQUARE']} and "
+        f"triggers a re-solve from a single controlled origin when a bound is crossed.",
+        f"5. The {subj} of claim 1, wherein the cross decision branch (140) decides {toolmap['CROSS']} "
+        f"as solvable forks re-derivable when conditions change.",
+        f"6. The {subj} of claim 1, wherein the circle node anchor (150) anchors {toolmap['CIRCLE']} as "
+        f"radial datums holding position while surrounding geometry flexes within tolerance.",
+        f"7. The {subj} of claim 1, wherein the curvature flow shaper (160) shapes {toolmap['CURVATURE']} "
+        f"to eliminate sharp discontinuities.",
+        f"8. The {subj} of claim 1, further configured to operate at {p1}.",
+        f"9. The {subj} of claim 8, further configured to operate at {p2} within {p3}.",
+        f"10. A method of producing {art}, comprising in order: seeding a grid to anchor the {dev} "
+        f"as a binary-1 identity at a single controlled origin; setting the finished function as the "
+        f"destination on an infinite line and back-solving toward the origin; routing the target through "
+        f"line, triangle, square, cross, circle, and curvature tools; admitting human variance in "
+        f"perspective, chance, and tolerance slop; and emitting the {dev} as one valid build among "
+        f"infinite option paths.",
+        f"11. The method of claim 10, wherein seeding comprises establishing the single controlled origin "
+        f"from which every downstream dimension of the {dev} is derived.",
+        f"12. The method of claim 10, wherein routing comprises claiming, per tool, the geometry belonging "
+        f"to the line-path module (110), triangle hierarchy unit (120), square bound frame (130), cross "
+        f"decision branch (140), circle node anchor (150), and curvature flow shaper (160), resolving "
+        f"conflicts by re-solving from the origin.",
+        f"13. The method of claim 10, wherein admitting human variance comprises holding the rated {p1} "
+        f"while tolerating builder, operator, and environment variation.",
+        f"14. The method of claim 10, further comprising emitting the machine-readable build record ending "
+        f"STATUS=SIGNATURE-1 VALID and verifying the record before release.",
+        f"15. The {subj} of claim 1, produced by means comprising {r.choice(mfg)}, wherein the means follow "
+        f"the six-tool sequence of the {dev}.",
+        f"16. The {subj} of claim 15, wherein the means further comprise calibration and QA burn-in with the "
+        f"autoread block (170) stamped on the unit.",
+        f"17. The {subj} of claim 1, further comprising a network interface coupling the {dev} to a remote "
+        f"node, wherein the autoread block (170) is transmittable to the remote node for verification.",
+        f"18. The {subj} of claim 1, wherein the autoread block (170) records as-built {p1} and {p2} per "
+        f"unit such that behavioral drift between units is machine-detectable.",
+        f"19. The method of claim 10, wherein a failed verification of the build record returns the {dev} "
+        f"to the back-solving step rather than releasing a drifted unit.",
+        f"20. The {subj} of claim 1, wherein the six tools are re-weighted for a past, current, or future "
+        f"operating era without changing the single controlled origin.",
+    ]
     return {
         "filing_note": ("DRAFT patent application prepared for inventor review. "
                         "Review every section for accuracy and completeness before filing. "
@@ -339,6 +503,7 @@ def build_patent_draft(r, kind, title, category, params, toolmap):
         "claims": claims,
         "abstract": abstract,
     }
+
 
 def build_manufacture(r, kind, title, category, params):
     dev = _dev_of(title)

@@ -291,6 +291,7 @@
   .lenspane { animation: fadein .25s ease-out; }
   @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
   .lensbtn.readbtn { border-style: dashed; color: #ffb3b3; }
+  .lensbtn.copybtn { border-style: dashed; color: #ffb3b3; }
   .lensbtn.dlallbtn { border-color: var(--red); color: #ff9a9a; font-weight: bold; }
   #aubar { position: fixed; left: 50%; transform: translateX(-50%); bottom: 14px; z-index: 9999;
     background: #0d0d12; border: 1px solid var(--red); border-radius: 6px;
@@ -1841,7 +1842,43 @@ function lensBar(r) {
   return '<div class="lensbar">' + lenses.map(function (l, k) {
     return '<button type="button" class="lensbtn' + (k === 0 ? " active" : "") + '" data-lens="' + l[0] + '">' + l[1] + '</button>';
   }).join("") + '<button type="button" class="lensbtn readbtn" data-read="1" title="Read this section aloud">&#128266; Read aloud</button>' +
-  '<button type="button" class="lensbtn dlallbtn zipdl" data-dl="' + idx + '" title="Download the full filing package as a zip">&#8681; Download all</button></div>';
+  '<button type="button" class="lensbtn dlallbtn zipdl" data-dl="' + idx + '" title="Download the full filing package as a zip">&#8681; Download all</button>' +
+  '<button type="button" class="lensbtn copybtn" data-copy="' + idx + '" title="Copy the full package text to the clipboard">&#128203; Copy all</button></div>';
+}
+/* ---- Copy-all: whole filing package as paste-ready text ---- */
+function copyToast(msg) {
+  var t = document.getElementById("copytoast");
+  if (!t) {
+    t = document.createElement("div"); t.id = "copytoast";
+    t.style.cssText = "position:fixed;left:50%;bottom:70px;transform:translateX(-50%);background:#0d0d12;" +
+      "border:1px solid var(--red);color:#ffd7d7;padding:10px 16px;border-radius:6px;z-index:10000;" +
+      "box-shadow:0 0 18px rgba(255,30,30,.45);font-size:14px;display:none;max-width:90vw;";
+    document.body.appendChild(t);
+  }
+  t.textContent = msg; t.style.display = "block";
+  setTimeout(function () { t.style.display = "none"; }, 2200);
+}
+function copyFallback(txt) {
+  var ta = document.createElement("textarea");
+  ta.value = txt; ta.setAttribute("readonly", "");
+  ta.style.position = "fixed"; ta.style.opacity = "0"; ta.style.top = "0";
+  document.body.appendChild(ta); ta.select();
+  try { ta.setSelectionRange(0, ta.value.length); } catch (e) {}
+  var ok = false;
+  try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+  ta.remove();
+  copyToast(ok ? "Copied - ready to paste." : "Copy was blocked by the browser.");
+}
+function copyAllText(r) {
+  var txt = specSheetText(r) + "\n" +
+    "======================================================================\n" +
+    "PATENT DRAFT - FULL TEXT\n" +
+    "======================================================================\n\n" + draftText(r);
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(txt).then(
+      function () { copyToast("Copied - ready to paste."); },
+      function () { copyFallback(txt); });
+  } else { copyFallback(txt); }
 }
 /* ---- Read-aloud: every lens (patent, overview, manufacture, AI, code, demo, wiki, leaks) ---- */
 var AU = { q: [], i: 0, active: false, paused: false, rate: 1, label: "" };
@@ -2485,6 +2522,8 @@ function bindWikiSearch(inputId, resId, lens) {
   document.getElementById("results").addEventListener("click", function (e) {
     var rd = e.target.closest ? e.target.closest("[data-read]") : null;
     if (rd) { var d0 = rd.closest(".details"); if (d0) auReadCard(d0); return; }
+    var cp = e.target.closest ? e.target.closest("[data-copy]") : null;
+    if (cp) { var cr = ALLSTORE[Number(cp.getAttribute("data-copy"))]; if (cr) copyAllText(cr); return; }
     var lb = e.target.closest ? e.target.closest('.lensbtn[data-lens]') : null;
     if (lb) {
       auStop();

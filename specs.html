@@ -1834,6 +1834,14 @@ function aiAnswer(r, q) {
   }
   return "Good question. I can answer from this spec about " + aiTopics() + ". Try asking <b>what is it</b> or <b>how does it work</b>.";
 }
+function wordDictLink(r) {
+  if (r[12] !== "WORD") return "";
+  var w = "", m = /Blend of '([^']+)'/.exec(r[13] || "");
+  if (m) w = m[1];
+  else w = String(r[1] || "").split(" ")[0].replace(/^['"]+|['"]+$/g, "").toLowerCase();
+  if (!w) return "";
+  return '<a class="lensbtn" style="text-decoration:none;display:inline-block" target="_blank" rel="noopener" href="https://justinahiggins614-cmyk.github.io/jah-dictionary/?w=' + encodeURIComponent(w) + '" title="Open this word in the IWB Dictionary">&#128214; IWB Dictionary</a>';
+}
 function lensBar(r) {
   var lenses = [["patent", "Patent filing"], ["overview", "Overview"], ["make", "Manufacture"],
                 ["ai", "AI explains"], ["code", "Code"], ["demo", "Demo"],
@@ -1844,7 +1852,7 @@ function lensBar(r) {
     return '<button type="button" class="lensbtn' + (k === 0 ? " active" : "") + '" data-lens="' + l[0] + '">' + l[1] + '</button>';
   }).join("") + '<button type="button" class="lensbtn readbtn" data-read="1" title="Read this section aloud">&#128266; Read aloud</button>' +
   '<button type="button" class="lensbtn copybtn" data-copy="' + idx + '" title="Copy the full package text to the clipboard">&#128203; Copy all</button>' +
-  '<button type="button" class="lensbtn dlallbtn zipdl" data-dl="' + idx + '" title="Download the full filing package as a zip">&#8681; Download all</button></div>';
+  '<button type="button" class="lensbtn dlallbtn zipdl" data-dl="' + idx + '" title="Download the full filing package as a zip">&#8681; Download all</button>' + wordDictLink(r) + '</div>';
 }
 /* ---- Copy-all: whole filing package as paste-ready text ---- */
 function copyToast(msg) {
@@ -2780,6 +2788,52 @@ function bindWikiSearch(inputId, resId, lens) {
     document.getElementById("loading").textContent =
       "Could not load the spec data (" + err.message + "). Please try again later.";
   }
+  var WORDMAP = {};
+  function wordToast(msg) {
+    var t = document.getElementById("wordtoast");
+    if (!t) {
+      t = document.createElement("div"); t.id = "wordtoast";
+      t.style.cssText = "position:fixed;top:12px;left:50%;transform:translateX(-50%);background:#101c33;color:#e6d9b5;padding:10px 18px;border:2px solid #b8943a;border-radius:6px;z-index:9999;font-family:Arial;font-size:.9em;max-width:90vw;text-align:center";
+      document.body.appendChild(t);
+    }
+    t.textContent = msg; t.style.display = "block";
+    setTimeout(function(){ t.style.display = "none"; }, 6000);
+  }
+  function gunzipText(url) {
+    return fetch(url).then(function (resp) {
+      if (!resp.ok) throw new Error("HTTP " + resp.status);
+      return resp.arrayBuffer().then(function (buf) {
+        var ds = new DecompressionStream("gzip");
+        return new Response(new Blob([buf]).stream().pipeThrough(ds)).text();
+      });
+    });
+  }
+  function loadWordIndexes() {
+    gunzipText("data/index/words.search.json.gz").then(function (text) {
+      parseIndex(text, "");
+      return gunzipText("data/index/words.idx.json.gz");
+    }).then(function (text) {
+      text.split("\n").forEach(function (ln) {
+        ln = ln.trim(); if (!ln) return;
+        try { var e = JSON.parse(ln); WORDMAP[e[0]] = e[1]; } catch (x) {}
+      });
+      apply();
+      handleWordParam();
+    }).catch(function () { handleWordParam(); });
+  }
+  function handleWordParam() {
+    var q = null;
+    try { q = new URLSearchParams(window.location.search).get("word"); } catch (e) {}
+    if (!q) return;
+    var id = WORDMAP[String(q).toLowerCase()];
+    if (id) { openSpec(id); }
+    else {
+      var qi = document.getElementById("q");
+      if (qi) { qi.value = q; }
+      state.q = q; apply();
+      wordToast("The word invention for \"" + q + "\" is still being drafted \u2014 check back soon.");
+    }
+  }
   function finishLoad() {
     var seen = {};
     DATA.forEach(function (r) { seen[r[3]] = true; });
@@ -2795,6 +2849,7 @@ function bindWikiSearch(inputId, resId, lens) {
     apply();
     dataReady = true;
     maybeRenderSections();
+    loadWordIndexes();
   }
   document.getElementById("groupgrid").addEventListener("click", function (e) {
     var c = e.target.closest ? e.target.closest(".groupcard") : null;

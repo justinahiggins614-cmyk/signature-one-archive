@@ -2828,8 +2828,18 @@ function bindWikiSearch(inputId, resId, lens) {
     }).catch(function () { handleWordParam(); });
   }
   function handleWordParam() {
-    var q = null;
-    try { q = new URLSearchParams(window.location.search).get("word"); } catch (e) {}
+    var q = null, sid = null;
+    try {
+      var usp = new URLSearchParams(window.location.search);
+      q = usp.get("word");
+      sid = usp.get("spec");
+    } catch (e) {}
+    if (sid) {
+      sid = String(sid).trim().toUpperCase();
+      if (/^\d{1,6}$/.test(sid)) sid = "JAH-SPEC-" + ("000000" + sid).slice(-6);
+      openSpec(sid);
+      return;
+    }
     if (!q) return;
     var id = WORDMAP[String(q).toLowerCase()];
     if (id) { openSpec(id); }

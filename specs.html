@@ -298,6 +298,19 @@
   .lensbtn.readbtn { border-style: dashed; color: #ffb3b3; }
   .lensbtn.copybtn { border-style: dashed; color: #ffb3b3; }
   .lensbtn.dlallbtn { border-color: var(--red); color: #ff9a9a; font-weight: bold; }
+  .lensbtn.officialbtn { border-color: #c9a227; color: #f5d76e; font-weight: bold;
+    box-shadow: 0 0 10px rgba(201,162,39,.35); }
+  .lensbtn.officialbtn.active, .lensbtn.officialbtn:hover { border-color: #f5d76e; color: #ffe9a3;
+    box-shadow: 0 0 14px rgba(201,162,39,.55); }
+  .osv-badge { display: inline-block; padding: 10px 18px; border: 2px solid #c9a227; border-radius: 4px;
+    color: #f5d76e; background: rgba(201,162,39,.08); font-family: Orbitron, monospace;
+    letter-spacing: .12em; text-transform: uppercase; font-weight: bold; margin: 6px 0 12px; }
+  .osv-note { font-size: .82em; color: #ffb3b3; background: rgba(255,34,34,.06);
+    border-left: 3px solid var(--red); padding: 8px 12px; margin: 10px 0; }
+  .osv-table { border-collapse: collapse; width: 100%; margin: 8px 0; font-size: .85em; }
+  .osv-table th, .osv-table td { border: 1px solid #3a3a44; padding: 6px 8px; text-align: left; vertical-align: top; }
+  .osv-table th { color: #f5d76e; background: rgba(201,162,39,.08); }
+  .osv-ok { color: #7dff9a; } .osv-flag { color: #ffb3b3; font-weight: bold; }
   #aubar { position: fixed; left: 50%; transform: translateX(-50%); bottom: 14px; z-index: 9999;
     background: #0d0d12; border: 1px solid var(--red); border-radius: 6px;
     padding: 10px 14px; display: flex; gap: 10px; align-items: center;
@@ -1851,11 +1864,12 @@ function wordDictLink(r) {
 function lensBar(r) {
   var lenses = [["patent", "Patent filing"], ["overview", "Overview"], ["make", "Manufacture"],
                 ["ai", "AI explains"], ["code", "Code"], ["demo", "Demo"],
-                ["wiki", "Wiki"], ["leaks", "Leaks"]];
+                ["wiki", "Wiki"], ["leaks", "Leaks"], ["official", "&#127963;&#65039; Official Standard"]];
   var idx = ALLSTORE.length;
   ALLSTORE.push(r);
   return '<div class="lensbar">' + lenses.map(function (l, k) {
-    return '<button type="button" class="lensbtn' + (k === 0 ? " active" : "") + '" data-lens="' + l[0] + '">' + l[1] + '</button>';
+    var xc = l[0] === "official" ? " officialbtn" : "";
+    return '<button type="button" class="lensbtn' + (k === 0 ? " active" : "") + xc + '" data-lens="' + l[0] + '">' + l[1] + '</button>';
   }).join("") + '<button type="button" class="lensbtn readbtn" data-read="1" title="Read this section aloud">&#128266; Read aloud</button>' +
   '<button type="button" class="lensbtn copybtn" data-copy="' + idx + '" title="Copy the full package text to the clipboard">&#128203; Copy all</button>' +
   '<button type="button" class="lensbtn dlallbtn zipdl" data-dl="' + idx + '" title="Download the full filing package as a zip">&#8681; Download all</button>' + wordDictLink(r) + '</div>';
@@ -2109,6 +2123,76 @@ function leaksHTML(r) {
   h += '<p style="margin:10px 0"><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/?dossier=' + encodeURIComponent(r[0]) + '" target="_blank" rel="noopener" style="color:#ff6b6b;font-weight:bold;letter-spacing:1px">&#9654; OPEN THE FULL CLASSIFIED DOSSIER ON JAH-N WIKI LEAKS</a></p>';
   h += '<div class="leakfoot">File concerns a DRAFT invention specification by Justin Addam Higgins (JAH) &mdash; ready to review and file. Not a granted patent. Stylized dossier; the engineering data above is the spec\u2019s own.</div>';
   h += '</div>';
+  return h;
+}
+/* ---- Official Standard Version: filing-ready legal-standard package, loaded on demand ---- */
+function officialHTML(r) {
+  return '<div class="official-load" data-spec="' + esc(r[0]) + '" data-loaded="0">' +
+    '<span class="osv-badge">&#127963;&#65039; Official Standard Version</span>' +
+    '<p>Checking for a prepared Official Standard Version&hellip;</p></div>';
+}
+function loadOfficial(det) {
+  var pane = det.querySelector('.lenspane[data-pane="official"]');
+  if (!pane) return;
+  var box = pane.querySelector('.official-load');
+  if (!box || box.getAttribute("data-loaded") !== "0") return;
+  box.setAttribute("data-loaded", "1");
+  var id = box.getAttribute("data-spec");
+  fetch("data/official/" + encodeURIComponent(id) + ".json").then(function (res) {
+    if (!res.ok) throw 0;
+    return res.json();
+  }).then(function (d) {
+    box.innerHTML = renderOSV(d);
+  }, function () {
+    box.innerHTML = '<span class="osv-badge">&#127963;&#65039; Official Standard Version</span>' +
+      '<div class="osv-note">No Official Standard Version has been prepared for ' + esc(id) +
+      ' yet. The draft specification above remains the record of invention.</div>';
+  });
+}
+function renderOSV(d) {
+  var h = '<span class="osv-badge">&#127963;&#65039; Official Standard Version</span>';
+  h += '<div class="osv-note">' + esc(d.status || "") + '</div>';
+  h += '<h4>Corrected claims</h4><ol>' +
+    (d.corrected_claims || []).map(function (c) { return '<li>' + esc(c) + '</li>'; }).join("") + '</ol>';
+  if (d.claim_fixes && d.claim_fixes.length) {
+    h += '<h4>What was fixed</h4><table class="osv-table"><tr><th>Claim</th><th>Correction</th></tr>' +
+      d.claim_fixes.map(function (f) {
+        return '<tr><td>' + esc(String(f.claim)) + '</td><td>' + esc(f.change) + '</td></tr>';
+      }).join("") + '</table>';
+  }
+  if (d.glossary && d.glossary.length) {
+    h += '<h4>Technical glossary (metaphor &rarr; standard term)</h4><table class="osv-table"><tr><th>Term</th><th>Ref</th><th>Standard technical meaning</th></tr>' +
+      d.glossary.map(function (g) {
+        return '<tr><td>' + esc(g.term) + '</td><td>' + esc(g.ref) + '</td><td>' + esc(g.standard_term) + '</td></tr>';
+      }).join("") + '</table>';
+  }
+  if (d.antecedent_audit && d.antecedent_audit.length) {
+    h += '<h4>Antecedent-basis audit</h4><table class="osv-table"><tr><th>Ref</th><th>Term</th><th>Introduced</th><th>Reused</th><th>Status</th></tr>' +
+      d.antecedent_audit.map(function (a) {
+        var st = /OK/.test(a.status) ? '<span class="osv-ok">' + esc(a.status) + '</span>'
+                                     : '<span class="osv-flag">' + esc(a.status) + '</span>';
+        return '<tr><td>' + esc(a.ref) + '</td><td>' + esc(a.term) + '</td><td>' + esc(a.introduced) +
+               '</td><td>' + esc(a.reused_as_the) + '</td><td>' + st + '</td></tr>';
+      }).join("") + '</table>';
+  }
+  if (d.abstract_check) {
+    h += '<h4>Abstract compliance</h4><p>USPTO abstract: ' + esc(String(d.abstract_check.uspsto_abstract_words)) +
+      ' words (limit ' + esc(String(d.abstract_check.word_limit)) + ') &mdash; <span class="osv-ok">' +
+      esc(d.abstract_check.result) + '</span>.</p>';
+  }
+  if (d.admin_pack) {
+    var ap = d.admin_pack, dec = ap.declaration_37_cfr_1_63 || {}, ads = ap.ads || {}, fees = ap.fees || {};
+    h += '<h4>Administrative pack (templates &mdash; complete and sign before filing)</h4>';
+    h += '<p><b>Inventor\\u2019s declaration (37 CFR 1.63):</b> ' + esc(dec.statement || "") +
+      ' Inventor: ' + esc(dec.inventor || "") + '. Signature: ' + esc(dec.signature || "") +
+      ' Date: ' + esc(dec.date || "[to be signed]") + '.';
+    h += '<p><b>Application data sheet:</b> inventor ' + esc(ads.inventor || "") + '; applicant ' +
+      esc(ads.applicant || "") + '; entity status ' + esc(ads.entity_status || "") +
+      '; correspondence ' + esc(ads.correspondence_address || "") + '.</p>';
+    h += '<p><b>Fees:</b> ' + esc(fees.note || "") + '</p>';
+  }
+  if (d.reviewer_note) h += '<div class="osv-note">' + esc(d.reviewer_note) + '</div>';
+  if (d.source_claims_note) h += '<p style="font-size:.8em;color:#8a8a95">' + esc(d.source_claims_note) + '</p>';
   return h;
 }
 var NL = String.fromCharCode(10);
@@ -2391,7 +2475,8 @@ function detailsHTML(r, i) {
     '<div class="lenspane" data-pane="code" style="display:none">' + codeHTML(r) + '</div>' +
     '<div class="lenspane" data-pane="demo" style="display:none">' + demoHTML(r[16], i) + '</div>' +
     '<div class="lenspane" data-pane="wiki" style="display:none">' + wikiHTML(r) + '</div>' +
-    '<div class="lenspane" data-pane="leaks" style="display:none">' + leaksHTML(r) + '</div>';
+    '<div class="lenspane" data-pane="leaks" style="display:none">' + leaksHTML(r) + '</div>' +
+    '<div class="lenspane" data-pane="official" style="display:none">' + officialHTML(r) + '</div>';
 }
 /* ---- Lazy spec loading: full records are fetched one chunk at a time ---- */
 var FULLCACHE = {};
@@ -2699,6 +2784,7 @@ function bindWikiSearch(inputId, resId, lens) {
       for (var pi = 0; pi < panes.length; pi++) {
         panes[pi].style.display = panes[pi].getAttribute("data-pane") === want ? "block" : "none";
       }
+      if (want === "official") loadOfficial(det);
       return;
     }
     var dl = e.target.closest ? e.target.closest(".dlbtn") : null;

@@ -14,3 +14,4 @@
 2026-09-30T01:27:35Z total=110288 (size cap reached, no push)
 2026-09-30 03:28:49 UTC drip fill: +10500 new, 75788 total specs (chunks=75788 hot=0)
 2026-09-30 05:43:06 UTC drip fill (dupe-block repaired by re-ID): +13052 new, 88840 total specs (chunks=88840 hot=0)
+2026-09-30 07:29:37 UTC spec-drip: +11279 new, 100119 total specs (this repo)

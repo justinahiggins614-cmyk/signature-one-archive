@@ -10,3 +10,4 @@
 2026-09-29 17:28:32 UTC spec drip fill: total=117083 (+11523 new this run; push withheld, repo size cap reached)
 2026-09-29 19:27:41 UTC +11443 new, 76026 total specs (local)
 2026-09-29 21:30:18 UTC drip fill: +11438 new, 87464 total specs (chunks=87464 hot=0)
+2026-09-29 23:29:29 UTC drip fill (recovered interrupted run): +11520 new, 98984 total specs (chunks=98984 hot=0)

@@ -1,0 +1,50 @@
+{
+  "site": "Signature Spec Catalog Pending Patents",
+  "site_url": "https://justinahiggins614-cmyk.github.io/signature-one-archive/",
+  "creator": "Justin Addam Higgins (JAH)",
+  "description": "Original draft patent specifications authored by Justin Addam Higgins (JAH), marching toward 1,000,000 \u2014 plus a patent and working program for every dictionary word.",
+  "for_bots": "Machine-readable manifest. Humans use the site above; bots, scrapers, and AI assistants should use the endpoints below \u2014 plain JSON/JSONL over HTTPS, no JavaScript needed.",
+  "records_approx": 151000,
+  "records_as_of": "2026-09-29",
+  "note": "Counts grow on automated schedules; re-read this file for the latest shape of the data.",
+  "endpoints": [
+    {
+      "path": "data/index/shards.json",
+      "format": "json",
+      "desc": "Shard registry. Lists every shard repo (base URL + index path); resolve chunks through each shard's base URL."
+    },
+    {
+      "path": "data/index/specs.idx.json.gz",
+      "format": "gzipped json",
+      "desc": "Search index over all spec records (title, category, id)."
+    },
+    {
+      "path": "data/volumes/specs-cNNNNN.jsonl.gz",
+      "format": "gzipped jsonl",
+      "desc": "Spec records in chunks of 150 (NNNNN = zero-padded chunk number, globally unique across shards)."
+    },
+    {
+      "path": "data/index/words.idx.json.gz",
+      "format": "gzipped json",
+      "desc": "Index of word-patent records (word -> spec id)."
+    },
+    {
+      "path": "data/volumes/words-cNNNNN.jsonl.gz",
+      "format": "gzipped jsonl",
+      "desc": "Word-patent records in chunks of 150."
+    }
+  ],
+  "deep_links": [
+    {
+      "pattern": "specs.html?spec=<JAH-SPEC-id>",
+      "desc": "Deep link to a spec's full lens view."
+    },
+    {
+      "pattern": "specs.html?word=<word>",
+      "desc": "Deep link to a word's patent + program."
+    }
+  ],
+  "raw_github_base": "https://raw.githubusercontent.com/justinahiggins614-cmyk/signature-one-archive/main/",
+  "raw_example": "https://raw.githubusercontent.com/justinahiggins614-cmyk/signature-one-archive/main/data/index/shards.json",
+  "sitemap": "https://justinahiggins614-cmyk.github.io/signature-one-archive/sitemap.xml"
+}

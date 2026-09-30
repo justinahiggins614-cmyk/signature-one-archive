@@ -2151,8 +2151,9 @@ function loadOfficial(det) {
   }).then(function (d) {
     box.innerHTML = renderOSV(d);
   }, function () {
-    var gen = null;
-    try { gen = buildOSV(JSON.parse(decodeURIComponent(box.getAttribute("data-rec")))); } catch (e) { gen = null; }
+    var recJ = null, gen = null;
+    try { recJ = JSON.parse(decodeURIComponent(box.getAttribute("data-rec"))); gen = buildOSV(recJ); }
+    catch (e) { gen = null; }
     if (!gen) {
       box.innerHTML = '<span class="osv-badge">&#127963;&#65039; Official Standard Version</span>' +
         '<div class="osv-note">No Official Standard Version has been prepared for ' + esc(id) +
@@ -2164,16 +2165,23 @@ function loadOfficial(det) {
     pr.then(function (full) {
       var figs = [];
       if (full) { try { figs = [fig1(full), fig2(full), fig3(full)]; } catch (e) { figs = []; } }
-      box.innerHTML = renderOSV(gen, true, figs);
+      var xf = [];
+      if (recJ && typeof osvExtraFigs === "function" && typeof osvFigSVG === "function") {
+        try { xf = osvExtraFigs(recJ).map(function (f) {
+          return {n:f.n, title:f.title, svg:osvFigSVG(recJ, f)}; }); } catch (e) { xf = []; }
+      }
+      box.innerHTML = renderOSV(gen, true, figs, xf);
     });
   });
 }
-function renderOSV(d, generated, figs) {
+function renderOSV(d, generated, figs, xf) {
   var h = '<span class="osv-badge">&#127963;&#65039; Official Standard Version</span>';
   if (generated) h += '<div class="osv-note"><b>Official Standard &mdash; system-prepared draft.</b> ' +
     'Generated on this device from the draft record &mdash; no hand-prepared sidecar is on file. ' +
     'The draft remains the record of invention.</div>';
   h += '<div class="osv-note">' + esc(d.status || "") + '</div>';
+  if (d.transmutation_note) h += '<div class="osv-note"><b>Transmutation note:</b> ' +
+    esc(d.transmutation_note) + '</div>';
   (d.document || []).forEach(function (sec) {
     h += '<h4>' + esc(sec.heading) + '</h4>';
     if (sec.claims) {
@@ -2194,6 +2202,12 @@ function renderOSV(d, generated, figs) {
       h += figs.map(function (svg, k) {
         return '<div class="fig"><div class="figcap">FIG. ' + (k + 1) + '</div>' + svg + '</div>';
       }).join("");
+      if (xf && xf.length) {
+        h += xf.map(function (f) {
+          return '<div class="fig"><div class="figcap">FIG. ' + f.n + ' &mdash; ' + esc(f.title) +
+            ' (generated from the draft record)</div>' + f.svg + '</div>';
+        }).join("");
+      }
     }
   });
   if (d.admin_pack) {

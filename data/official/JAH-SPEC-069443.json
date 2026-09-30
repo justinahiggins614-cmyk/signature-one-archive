@@ -1,1 +1,224 @@
-{"abstract_check":{"result":"PASS","uspsto_abstract_words":138,"word_limit":150},"admin_pack":{"ads":{"applicant":"Justin Addam Higgins","correspondence_address":"[TO BE COMPLETED BY INVENTOR]","entity_status":"[TO BE DETERMINED: micro / small / large]","inventor":"Justin Addam Higgins","spec_id":"JAH-SPEC-069443","title":"Ai agents array for A/B testing using sharded counters Rev 2"},"declaration_37_cfr_1_63":{"date":"","inventor":"Justin Addam Higgins","signature":"________________________________","spec_id":"JAH-SPEC-069443","statement":"I believe I am the original inventor of the subject matter claimed herein. I authorize the filing of this application.","title":"Ai agents array for A/B testing using sharded counters Rev 2"},"fees":{"examination_fee":"[per current USPTO fee schedule]","filing_fee":"[per current USPTO fee schedule]","note":"Verify the current USPTO fee schedule at uspto.gov before filing. Entity status determines the final amounts.","search_fee":"[per current USPTO fee schedule]"}},"antecedent_audit":[{"introduced":"claim 1 ('a line-path module (110)')","ref":"(110)","reused_as_the":"claims 2, 12","status":"OK","term":"line-path module"},{"introduced":"claim 1 ('a triangle hierarchy unit (120)')","ref":"(120)","reused_as_the":"claims 3, 12","status":"OK","term":"triangle hierarchy unit"},{"introduced":"claim 1 ('a square bound frame (130)')","ref":"(130)","reused_as_the":"claims 4, 12","status":"OK","term":"square bound frame"},{"introduced":"claim 1 ('a cross decision branch (140)')","ref":"(140)","reused_as_the":"claims 5, 12","status":"OK","term":"cross decision branch"},{"introduced":"claim 1 ('a circle node anchor (150)')","ref":"(150)","reused_as_the":"claims 6, 12","status":"OK","term":"circle node anchor"},{"introduced":"claim 1 ('a curvature flow shaper (160)')","ref":"(160)","reused_as_the":"claims 7, 12","status":"OK","term":"curvature flow shaper"},{"introduced":"claim 1 ('an autoread block (170)')","ref":"(170)","reused_as_the":"claims 14, 16, 17, 18","status":"OK","term":"autoread block"},{"introduced":"claim 1 ('an ai agents array')","ref":"-","reused_as_the":"claims 2-9","status":"OK after fix","term":"ai agents array"},{"introduced":"claim 10 ('an ai agents array')","ref":"-","reused_as_the":"claims 11-14, 19","status":"OK after fix","term":"ai agents array"},{"introduced":"not present in claims","ref":"(100)","reused_as_the":"-","status":"FLAG - verify (100) is defined in the description, or remove the reference","term":"control core (per review notes)"}],"claim_fixes":[{"change":"'jointly define an;' -> 'jointly define an ai agents array;' (dangling article repaired; antecedent for dependent claims)","claim":1},{"change":"'governs data flow path' -> 'governs the data flow path' (missing article)","claim":2},{"change":"'shapes load and latency curves shaping ai agents array behavior' -> 'shapes load and latency curves governing ai agents array behavior' (redundant participle removed)","claim":7},{"change":"'A method of producing an,' -> 'A method of producing an ai agents array,' (dangling article repaired; antecedent for claims 11-14, 19)","claim":10},{"change":"'the rated WORKERS of 4' -> 'the WORKERS of 4' ('rated' had no antecedent)","claim":13},{"change":"Capitalization of 'ai agents array' normalized to lowercase throughout for consistency","claim":"all"}],"corrected_claims":["1. A system for ai agents, comprising: six-tool mapped elements wherein a line-path module (110), a triangle hierarchy unit (120), a square bound frame (130), a cross decision branch (140), a circle node anchor (150), and a curvature flow shaper (160) jointly define an ai agents array; and an autoread block (170) emitting a machine-readable build record ending STATUS=SIGNATURE-1 VALID.","2. The system of claim 1, wherein the line-path module (110) governs the data flow path through the ai agents array pipeline.","3. The system of claim 1, wherein the triangle hierarchy unit (120) governs decision hierarchy fanning from the ai agents array core.","4. The system of claim 1, wherein the square bound frame (130) bounds memory and system bounds containing the ai agents array and triggers a re-solve from a single controlled origin when a bound is crossed.","5. The system of claim 1, wherein the cross decision branch (140) decides branch logic where ai agents array paths intersect as solvable forks re-derivable when conditions change.","6. The system of claim 1, wherein the circle node anchor (150) anchors nodes and endpoints orbiting the ai agents array as radial datums holding position while surrounding geometry flexes within tolerance.","7. The system of claim 1, wherein the curvature flow shaper (160) shapes load and latency curves governing ai agents array behavior to eliminate sharp discontinuities.","8. The system of claim 1, further configured to operate at WORKERS of 4.","9. The system of claim 8, further configured to operate at UPTIME of 99.99% within BATCH of 16.","10. A method of producing an ai agents array, comprising in order: seeding a grid to anchor the ai agents array as a binary-1 identity at a single controlled origin; setting the finished function as the destination on an infinite line and back-solving toward the origin; routing the target through line, triangle, square, cross, circle, and curvature tools; admitting human variance in perspective, chance, and tolerance slop; and emitting the ai agents array as one valid build among infinite option paths.","11. The method of claim 10, wherein seeding comprises establishing the single controlled origin from which every downstream dimension of the ai agents array is derived.","12. The method of claim 10, wherein routing comprises claiming, per tool, the geometry belonging to the line-path module (110), triangle hierarchy unit (120), square bound frame (130), cross decision branch (140), circle node anchor (150), and curvature flow shaper (160), resolving conflicts by re-solving from the origin.","13. The method of claim 10, wherein admitting human variance comprises holding the WORKERS of 4 while tolerating builder, operator, and environment variation.","14. The method of claim 10, further comprising emitting the machine-readable build record ending STATUS=SIGNATURE-1 VALID and verifying the record before release.","15. The system of claim 1, produced by means comprising containerization, wherein the means follow the six-tool sequence of the ai agents array.","16. The system of claim 15, wherein the means further comprise calibration and QA burn-in with the autoread block (170) stamped on the unit.","17. The system of claim 1, further comprising a network interface coupling the ai agents array to a remote node, wherein the autoread block (170) is transmittable to the remote node for verification.","18. The system of claim 1, wherein the autoread block (170) records as-built WORKERS of 4 and UPTIME of 99.99% per unit such that behavioral drift between units is machine-detectable.","19. The method of claim 10, wherein a failed verification of the build record returns the ai agents array to the back-solving step rather than releasing a drifted unit.","20. The system of claim 1, wherein the six tools are re-weighted for a past, current, or future operating era without changing the single controlled origin."],"glossary":[{"ref":"(110)","standard_term":"data-flow routing stage","term":"line-path module"},{"ref":"(120)","standard_term":"hierarchical decision tree (directed acyclic structure fanning from the core)","term":"triangle hierarchy unit"},{"ref":"(130)","standard_term":"bounded execution sandbox: memory and system boundary enforcement that triggers re-solve from the origin when a bound is crossed","term":"square bound frame"},{"ref":"(140)","standard_term":"conditional branch router: fork/join control-flow unit at path intersections","term":"cross decision branch"},{"ref":"(150)","standard_term":"anchored node registry: fixed reference datums holding node and endpoint positions","term":"circle node anchor"},{"ref":"(160)","standard_term":"load/latency smoothing controller: shapes throughput curves to remove discontinuities","term":"curvature flow shaper"},{"ref":"(170)","standard_term":"build attestation record: machine-readable verification manifest ending STATUS=SIGNATURE-1 VALID","term":"autoread block"}],"osv_version":"OSV-1.0","prepared":"2026-09-30","reviewer_note":"Prior-art search and patentability judgment are NOT included: they require a registered patent practitioner. No prior art was invented for this package.","source_claims_note":"Corrections applied only inside this Official Standard Version. The original draft record is preserved unchanged as the archive.","spec_id":"JAH-SPEC-069443","status":"Official Standard Version - filing-ready draft. NOT filed with the USPTO. NOT a granted patent. Review by a registered patent practitioner recommended before filing.","title":"Ai agents array for A/B testing using sharded counters Rev 2"}
+{
+ "spec_id": "JAH-SPEC-069443",
+ "title": "Ai agents array for A/B testing using sharded counters Rev 2",
+ "osv_version": "OSV-2.0",
+ "prepared": "2026-09-30",
+ "status": "Official Standard Version - filing-ready draft. NOT filed with the USPTO. NOT a granted patent. Review by a registered patent practitioner recommended before filing.",
+ "document": [
+  {
+   "heading": "TITLE OF THE INVENTION",
+   "body": [
+    "AI Agents Array for A/B Testing Using Sharded Counters"
+   ]
+  },
+  {
+   "heading": "CROSS-REFERENCE TO RELATED APPLICATIONS",
+   "body": [
+    "No related applications are claimed."
+   ]
+  },
+  {
+   "heading": "STATEMENT REGARDING FEDERALLY SPONSORED RESEARCH OR DEVELOPMENT",
+   "body": [
+    "Not applicable."
+   ]
+  },
+  {
+   "heading": "BACKGROUND OF THE INVENTION",
+   "body": [
+    "1. Field of the Invention. This invention relates to distributed computing systems, and more particularly to systems for conducting A/B testing across arrays of artificial-intelligence agents using sharded counters.",
+    "2. Description of Related Art. Large-scale A/B testing distributes experiment assignments across many compute nodes. As agent counts grow, centralized counters become a bottleneck: increments serialize, latency rises, and a single counter failure can stall measurement across the fleet. Sharding counters across nodes relieves the bottleneck but introduces drift - per-shard tallies diverge, recovery is slow, and there is no single verifiable record of what each unit built or decided. A need remains for an A/B testing array that scales across shards while keeping every unit's behavior anchored to one verifiable origin."
+   ]
+  },
+  {
+   "heading": "SUMMARY OF THE INVENTION",
+   "body": [
+    "The invention provides a system for ai agents comprising six tool-mapped modules - a line-path module (110), a triangle hierarchy unit (120), a square bound frame (130), a cross decision branch (140), a circle node anchor (150), and a curvature flow shaper (160) - which jointly define an ai agents array, and an autoread block (170) emitting a machine-readable build record ending STATUS=SIGNATURE-1 VALID.",
+    "It is an object of the invention to hold steady throughput across sharded A/B testing at scale. It is a further object to bound execution so that a crossed bound triggers a re-solve from a single controlled origin. It is a further object to make every unit's build machine-verifiable before release."
+   ]
+  },
+  {
+   "heading": "BRIEF DESCRIPTION OF THE DRAWINGS",
+   "body": [
+    "FIG. 1 is a system block diagram of the six tool modules (110)-(160) arranged about the ai agents array core.",
+    "FIG. 2 is a chart of the rated performance measurements of the system.",
+    "FIG. 3 is a flowchart of the method of producing the ai agents array."
+   ]
+  },
+  {
+   "heading": "DETAILED DESCRIPTION OF THE INVENTION",
+   "body": [
+    "The ai agents array is a distributed system for conducting A/B testing across a fleet of artificial-intelligence agents. Experiment assignments are tallied by sharded counters (64 shards) so that no single counter bottlenecks measurement, while every unit remains anchored to a single controlled origin from which all behavior is derived.",
+    "Referring to FIG. 1, the system comprises six tool-mapped modules arranged about the ai agents array core: a line-path module (110), being a data-flow routing stage that governs the data flow path through the pipeline; a triangle hierarchy unit (120), being a hierarchical decision tree fanning from the core in a directed acyclic structure; a square bound frame (130), being a bounded execution sandbox enforcing memory and system bounds and triggering a re-solve from the single controlled origin when a bound is crossed; a cross decision branch (140), being a conditional branch router deciding branch logic where paths intersect as solvable forks re-derivable when conditions change; a circle node anchor (150), being an anchored node registry holding nodes and endpoints as radial datums while surrounding geometry flexes within tolerance; and a curvature flow shaper (160), being a load and latency smoothing controller shaping throughput curves to eliminate sharp discontinuities. The six modules jointly define the ai agents array. A control core (100) sequences the reversed-allowance steps described below. An autoread block (170) emits a machine-readable build record ending STATUS=SIGNATURE-1 VALID for verification of each unit before release.",
+    "In the rated embodiment the system is configured with WORKERS of 4, UPTIME of 99.99%, BATCH of 16, LATENCY_P99 of 168 ms, CONTEXT_TOKENS of 1000k, SHARDS of 64, USERS of 134,000 concurrent, MODEL_PARAMS of 65.0B, REPLICAS of 3, and STORAGE of 10000 GB. Measured performance (FIG. 2) is: recovery time 12.4 s +/-0.5; API rate limit 50,000 req/min; P99 latency 174.6 ms; max throughput 500,000 req/s; model size 44.6 GB +/-0.1; max payload 436.9 KB +/-1.0.",
+    "The system is constructed from the following materials: build pipeline definition, container image, observability instrumentation, deployment manifest, automated test suite, and source code (Signature-One toolchain). Construction proceeds by: (1) authoring the build pipeline definition implementing the six-tool control paths; (2) defining observability instrumentation with compilation gates; (3) proving behavior with the deployment manifest under load validation; (4) packaging the container image through unit and integration testing; (5) releasing through containerization with the automated test suite; and (6) attaching the source code and emitting the autoread block (170) per deploy. Equivalent materials or processes may be substituted only where the autoread block still validates.",
+    "In operation (FIG. 3) the ai agents array is produced by: seeding a grid to anchor the array as a binary-1 identity at the single controlled origin; setting the finished function as the destination on an infinite line and back-solving toward the origin; routing the target through the line, triangle, square, cross, circle, and curvature tools, claiming per tool the geometry belonging to modules (110)-(160) and resolving conflicts by re-solving from the origin; admitting human variance in perspective, chance, and tolerance slop while holding the rated WORKERS of 4; and emitting the ai agents array as one valid build among infinite option paths, with the machine-readable build record verified before release. A failed verification returns the array to the back-solving step rather than releasing a drifted unit.",
+    "In alternative embodiments the six tools are re-weighted for past, current, or future operating eras without changing the single controlled origin; the array may be coupled through a network interface to a remote node with the autoread block (170) transmittable for remote verification; and as-built WORKERS and UPTIME are recorded per unit such that behavioral drift between units is machine-detectable."
+   ]
+  },
+  {
+   "heading": "CLAIMS",
+   "claims": [
+    "1. A system for ai agents, comprising: six-tool mapped elements wherein a line-path module (110), a triangle hierarchy unit (120), a square bound frame (130), a cross decision branch (140), a circle node anchor (150), and a curvature flow shaper (160) jointly define an ai agents array; and an autoread block (170) emitting a machine-readable build record ending STATUS=SIGNATURE-1 VALID.",
+    "2. The system of claim 1, wherein the line-path module (110) governs the data flow path through the ai agents array pipeline.",
+    "3. The system of claim 1, wherein the triangle hierarchy unit (120) governs decision hierarchy fanning from the ai agents array core.",
+    "4. The system of claim 1, wherein the square bound frame (130) bounds memory and system bounds containing the ai agents array and triggers a re-solve from a single controlled origin when a bound is crossed.",
+    "5. The system of claim 1, wherein the cross decision branch (140) decides branch logic where ai agents array paths intersect as solvable forks re-derivable when conditions change.",
+    "6. The system of claim 1, wherein the circle node anchor (150) anchors nodes and endpoints orbiting the ai agents array as radial datums holding position while surrounding geometry flexes within tolerance.",
+    "7. The system of claim 1, wherein the curvature flow shaper (160) shapes load and latency curves governing ai agents array behavior to eliminate sharp discontinuities.",
+    "8. The system of claim 1, further configured to operate at WORKERS of 4.",
+    "9. The system of claim 8, further configured to operate at UPTIME of 99.99% within BATCH of 16.",
+    "10. A method of producing an ai agents array, comprising in order: seeding a grid to anchor the ai agents array as a binary-1 identity at a single controlled origin; setting the finished function as the destination on an infinite line and back-solving toward the origin; routing the target through line, triangle, square, cross, circle, and curvature tools; admitting human variance in perspective, chance, and tolerance slop; and emitting the ai agents array as one valid build among infinite option paths.",
+    "11. The method of claim 10, wherein seeding comprises establishing the single controlled origin from which every downstream dimension of the ai agents array is derived.",
+    "12. The method of claim 10, wherein routing comprises claiming, per tool, the geometry belonging to the line-path module (110), triangle hierarchy unit (120), square bound frame (130), cross decision branch (140), circle node anchor (150), and curvature flow shaper (160), resolving conflicts by re-solving from the origin.",
+    "13. The method of claim 10, wherein admitting human variance comprises holding the WORKERS of 4 while tolerating builder, operator, and environment variation.",
+    "14. The method of claim 10, further comprising emitting the machine-readable build record ending STATUS=SIGNATURE-1 VALID and verifying the record before release.",
+    "15. The system of claim 1, produced by means comprising containerization, wherein the means follow the six-tool sequence of the ai agents array.",
+    "16. The system of claim 15, wherein the means further comprise calibration and QA burn-in with the autoread block (170) stamped on the unit.",
+    "17. The system of claim 1, further comprising a network interface coupling the ai agents array to a remote node, wherein the autoread block (170) is transmittable to the remote node for verification.",
+    "18. The system of claim 1, wherein the autoread block (170) records as-built WORKERS of 4 and UPTIME of 99.99% per unit such that behavioral drift between units is machine-detectable.",
+    "19. The method of claim 10, wherein a failed verification of the build record returns the ai agents array to the back-solving step rather than releasing a drifted unit.",
+    "20. The system of claim 1, wherein the six tools are re-weighted for a past, current, or future operating era without changing the single controlled origin."
+   ]
+  },
+  {
+   "heading": "ABSTRACT",
+   "body": [
+    "An ai agents array for ai agents unifies six geometric control tools - line paths, triangle hierarchies, square bounds, cross branches, circle nodes, and curvature flow - in a single solvable origin. A control core (100) sequences five reversed-allowance steps that back-solve the finished function from an infinite-line destination to the origin. Line-path (110), triangle (120), square-bound (130), cross-branch (140), circle-node (150), and curvature-flow (160) modules respectively govern data flow path through the ai agents array pipeline, decision hierarchy fanning from the ai agents array core, memory and system bounds containing the ai agents array, branch logic where ai agents array paths intersect, nodes and endpoints orbiting the ai agents array, and load and latency curves shaping ai agents array behavior. An autoread block (170) emits a machine-readable build record ending STATUS=SIGNATURE-1 VALID for verification of each unit."
+   ]
+  }
+ ],
+ "claim_fixes": [
+  {
+   "change": "'jointly define an;' -> 'jointly define an ai agents array;' (dangling article repaired; antecedent for dependent claims)",
+   "claim": 1
+  },
+  {
+   "change": "'governs data flow path' -> 'governs the data flow path' (missing article)",
+   "claim": 2
+  },
+  {
+   "change": "'shapes load and latency curves shaping ai agents array behavior' -> 'shapes load and latency curves governing ai agents array behavior' (redundant participle removed)",
+   "claim": 7
+  },
+  {
+   "change": "'A method of producing an,' -> 'A method of producing an ai agents array,' (dangling article repaired; antecedent for claims 11-14, 19)",
+   "claim": 10
+  },
+  {
+   "change": "'the rated WORKERS of 4' -> 'the WORKERS of 4' ('rated' had no antecedent)",
+   "claim": 13
+  },
+  {
+   "change": "Capitalization of 'ai agents array' normalized to lowercase throughout for consistency",
+   "claim": "all"
+  },
+  {
+   "claim": "abstract",
+   "change": "'A Ai agents array' -> 'An ai agents array' (duplicated article repaired)"
+  }
+ ],
+ "antecedent_audit": [
+  {
+   "introduced": "claim 1 ('a line-path module (110)')",
+   "ref": "(110)",
+   "reused_as_the": "claims 2, 12",
+   "status": "OK",
+   "term": "line-path module"
+  },
+  {
+   "introduced": "claim 1 ('a triangle hierarchy unit (120)')",
+   "ref": "(120)",
+   "reused_as_the": "claims 3, 12",
+   "status": "OK",
+   "term": "triangle hierarchy unit"
+  },
+  {
+   "introduced": "claim 1 ('a square bound frame (130)')",
+   "ref": "(130)",
+   "reused_as_the": "claims 4, 12",
+   "status": "OK",
+   "term": "square bound frame"
+  },
+  {
+   "introduced": "claim 1 ('a cross decision branch (140)')",
+   "ref": "(140)",
+   "reused_as_the": "claims 5, 12",
+   "status": "OK",
+   "term": "cross decision branch"
+  },
+  {
+   "introduced": "claim 1 ('a circle node anchor (150)')",
+   "ref": "(150)",
+   "reused_as_the": "claims 6, 12",
+   "status": "OK",
+   "term": "circle node anchor"
+  },
+  {
+   "introduced": "claim 1 ('a curvature flow shaper (160)')",
+   "ref": "(160)",
+   "reused_as_the": "claims 7, 12",
+   "status": "OK",
+   "term": "curvature flow shaper"
+  },
+  {
+   "introduced": "claim 1 ('an autoread block (170)')",
+   "ref": "(170)",
+   "reused_as_the": "claims 14, 16, 17, 18",
+   "status": "OK",
+   "term": "autoread block"
+  },
+  {
+   "introduced": "claim 1 ('an ai agents array')",
+   "ref": "-",
+   "reused_as_the": "claims 2-9",
+   "status": "OK after fix",
+   "term": "ai agents array"
+  },
+  {
+   "introduced": "claim 10 ('an ai agents array')",
+   "ref": "-",
+   "reused_as_the": "claims 11-14, 19",
+   "status": "OK after fix",
+   "term": "ai agents array"
+  },
+  {
+   "introduced": "not present in claims",
+   "ref": "(100)",
+   "reused_as_the": "-",
+   "status": "OK - defined as control core in the abstract and detailed description",
+   "term": "control core (per review notes)"
+  }
+ ],
+ "abstract_check": {
+  "uspsto_abstract_words": 138,
+  "word_limit": 150,
+  "result": "PASS"
+ },
+ "admin_pack": {
+  "ads": {
+   "applicant": "Justin Addam Higgins",
+   "correspondence_address": "[TO BE COMPLETED BY INVENTOR]",
+   "entity_status": "[TO BE DETERMINED: micro / small / large]",
+   "inventor": "Justin Addam Higgins",
+   "spec_id": "JAH-SPEC-069443",
+   "title": "Ai agents array for A/B testing using sharded counters Rev 2"
+  },
+  "declaration_37_cfr_1_63": {
+   "date": "",
+   "inventor": "Justin Addam Higgins",
+   "signature": "________________________________",
+   "spec_id": "JAH-SPEC-069443",
+   "statement": "I believe I am the original inventor of the subject matter claimed herein. I authorize the filing of this application.",
+   "title": "Ai agents array for A/B testing using sharded counters Rev 2"
+  },
+  "fees": {
+   "examination_fee": "[per current USPTO fee schedule]",
+   "filing_fee": "[per current USPTO fee schedule]",
+   "note": "Verify the current USPTO fee schedule at uspto.gov before filing. Entity status determines the final amounts.",
+   "search_fee": "[per current USPTO fee schedule]"
+  }
+ },
+ "reviewer_note": "Prior-art search and patentability judgment are NOT included: they require a registered patent practitioner. No prior art was invented for this package.",
+ "source_claims_note": "Corrections applied only inside this Official Standard Version. The original draft record is preserved unchanged as the archive."
+}

@@ -1862,9 +1862,9 @@ function wordDictLink(r) {
   return '<a class="lensbtn" style="text-decoration:none;display:inline-block" target="_blank" rel="noopener" href="https://justinahiggins614-cmyk.github.io/jah-dictionary/?w=' + encodeURIComponent(w) + '" title="Open this word in the IWB Dictionary">&#128214; IWB Dictionary</a>';
 }
 function lensBar(r) {
-  var lenses = [["patent", "Patent filing"], ["overview", "Overview"], ["make", "Manufacture"],
+  var lenses = [["official", "&#127963;&#65039; Official Standard"], ["patent", "Patent filing"], ["overview", "Overview"], ["make", "Manufacture"],
                 ["ai", "AI explains"], ["code", "Code"], ["demo", "Demo"],
-                ["wiki", "Wiki"], ["leaks", "Leaks"], ["official", "&#127963;&#65039; Official Standard"]];
+                ["wiki", "Wiki"], ["leaks", "Leaks"]];
   var idx = ALLSTORE.length;
   ALLSTORE.push(r);
   return '<div class="lensbar">' + lenses.map(function (l, k) {
@@ -2152,44 +2152,32 @@ function loadOfficial(det) {
 function renderOSV(d) {
   var h = '<span class="osv-badge">&#127963;&#65039; Official Standard Version</span>';
   h += '<div class="osv-note">' + esc(d.status || "") + '</div>';
-  h += '<h4>Corrected claims</h4><ol>' +
-    (d.corrected_claims || []).map(function (c) { return '<li>' + esc(c) + '</li>'; }).join("") + '</ol>';
-  if (d.claim_fixes && d.claim_fixes.length) {
-    h += '<h4>What was fixed</h4><table class="osv-table"><tr><th>Claim</th><th>Correction</th></tr>' +
-      d.claim_fixes.map(function (f) {
-        return '<tr><td>' + esc(String(f.claim)) + '</td><td>' + esc(f.change) + '</td></tr>';
-      }).join("") + '</table>';
-  }
-  if (d.glossary && d.glossary.length) {
-    h += '<h4>Technical glossary (metaphor &rarr; standard term)</h4><table class="osv-table"><tr><th>Term</th><th>Ref</th><th>Standard technical meaning</th></tr>' +
-      d.glossary.map(function (g) {
-        return '<tr><td>' + esc(g.term) + '</td><td>' + esc(g.ref) + '</td><td>' + esc(g.standard_term) + '</td></tr>';
-      }).join("") + '</table>';
-  }
-  if (d.antecedent_audit && d.antecedent_audit.length) {
-    h += '<h4>Antecedent-basis audit</h4><table class="osv-table"><tr><th>Ref</th><th>Term</th><th>Introduced</th><th>Reused</th><th>Status</th></tr>' +
-      d.antecedent_audit.map(function (a) {
-        var st = /OK/.test(a.status) ? '<span class="osv-ok">' + esc(a.status) + '</span>'
-                                     : '<span class="osv-flag">' + esc(a.status) + '</span>';
-        return '<tr><td>' + esc(a.ref) + '</td><td>' + esc(a.term) + '</td><td>' + esc(a.introduced) +
-               '</td><td>' + esc(a.reused_as_the) + '</td><td>' + st + '</td></tr>';
-      }).join("") + '</table>';
-  }
-  if (d.abstract_check) {
-    h += '<h4>Abstract compliance</h4><p>USPTO abstract: ' + esc(String(d.abstract_check.uspsto_abstract_words)) +
-      ' words (limit ' + esc(String(d.abstract_check.word_limit)) + ') &mdash; <span class="osv-ok">' +
-      esc(d.abstract_check.result) + '</span>.</p>';
-  }
+  (d.document || []).forEach(function (sec) {
+    h += '<h4>' + esc(sec.heading) + '</h4>';
+    if (sec.claims) {
+      h += '<ol>' + sec.claims.map(function (c, i) {
+        return '<li><b>' + (i + 1) + '.</b> ' + esc(c) + '</li>';
+      }).join("") + '</ol>';
+    } else {
+      h += (sec.body || []).map(function (p) { return '<p>' + esc(p) + '</p>'; }).join("");
+    }
+  });
   if (d.admin_pack) {
     var ap = d.admin_pack, dec = ap.declaration_37_cfr_1_63 || {}, ads = ap.ads || {}, fees = ap.fees || {};
-    h += '<h4>Administrative pack (templates &mdash; complete and sign before filing)</h4>';
-    h += '<p><b>Inventor\\u2019s declaration (37 CFR 1.63):</b> ' + esc(dec.statement || "") +
+    h += '<h4>Filing administration pack (templates &mdash; complete and sign before filing)</h4>';
+    h += '<p><b>Inventor\u2019s declaration (37 CFR 1.63):</b> ' + esc(dec.statement || "") +
       ' Inventor: ' + esc(dec.inventor || "") + '. Signature: ' + esc(dec.signature || "") +
       ' Date: ' + esc(dec.date || "[to be signed]") + '.';
     h += '<p><b>Application data sheet:</b> inventor ' + esc(ads.inventor || "") + '; applicant ' +
       esc(ads.applicant || "") + '; entity status ' + esc(ads.entity_status || "") +
       '; correspondence ' + esc(ads.correspondence_address || "") + '.</p>';
     h += '<p><b>Fees:</b> ' + esc(fees.note || "") + '</p>';
+  }
+  if (d.claim_fixes && d.claim_fixes.length) {
+    h += '<h4>Preparation notes (not part of the patent document)</h4><table class="osv-table"><tr><th>Claim</th><th>Correction</th></tr>' +
+      d.claim_fixes.map(function (f) {
+        return '<tr><td>' + esc(String(f.claim)) + '</td><td>' + esc(f.change) + '</td></tr>';
+      }).join("") + '</table>';
   }
   if (d.reviewer_note) h += '<div class="osv-note">' + esc(d.reviewer_note) + '</div>';
   if (d.source_claims_note) h += '<p style="font-size:.8em;color:#8a8a95">' + esc(d.source_claims_note) + '</p>';

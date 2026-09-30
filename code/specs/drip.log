@@ -12,3 +12,4 @@
 2026-09-29 21:30:18 UTC drip fill: +11438 new, 87464 total specs (chunks=87464 hot=0)
 2026-09-29 23:29:29 UTC drip fill (recovered interrupted run): +11520 new, 98984 total specs (chunks=98984 hot=0)
 2026-09-30T01:27:35Z total=110288 (size cap reached, no push)
+2026-09-30 03:28:49 UTC drip fill: +10500 new, 75788 total specs (chunks=75788 hot=0)

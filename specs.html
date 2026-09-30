@@ -1076,6 +1076,7 @@ STATUS=SIGNATURE-1_VALID</pre>
   Specs carrying a Signature line badge (Signature AI, Signature Software, Signature Code, Signature Gaming, Signature Hardware) are JAH's original designs in the same product area as a public patent record &mdash; not the patented invention itself.<br>
   Published by Manon &nbsp;&middot;&nbsp; 2026 &nbsp;&middot;&nbsp; <a href="index.html">The Signature-One Archive</a></p>
 </footer>
+<script src="osv.js"></script>
 <script>
 var DATA = [];
 var CATS = [];
@@ -2126,8 +2127,14 @@ function leaksHTML(r) {
   return h;
 }
 /* ---- Official Standard Version: filing-ready legal-standard package, loaded on demand ---- */
+function osvRec(r) {
+  return {i:r[0],t:r[1],a:r[2],c:r[3],cpc:r[4],pd:r[6],tools:r[7]||{},params:r[8]||{},
+    steps:r[10]||[],line:r[12]||"",ln:r[13]||"",mix:r[19]||null,m:r[17]||null,x:r[18]||null,
+    mf:r[15]||null};
+}
 function officialHTML(r) {
-  return '<div class="official-load" data-spec="' + esc(r[0]) + '" data-loaded="0">' +
+  return '<div class="official-load" data-spec="' + esc(r[0]) + '" data-loaded="0" data-rec="' +
+    encodeURIComponent(JSON.stringify(osvRec(r))) + '">' +
     '<span class="osv-badge">&#127963;&#65039; Official Standard Version</span>' +
     '<p>Checking for a prepared Official Standard Version&hellip;</p></div>';
 }
@@ -2144,13 +2151,28 @@ function loadOfficial(det) {
   }).then(function (d) {
     box.innerHTML = renderOSV(d);
   }, function () {
-    box.innerHTML = '<span class="osv-badge">&#127963;&#65039; Official Standard Version</span>' +
-      '<div class="osv-note">No Official Standard Version has been prepared for ' + esc(id) +
-      ' yet. The draft specification above remains the record of invention.</div>';
+    var gen = null;
+    try { gen = buildOSV(JSON.parse(decodeURIComponent(box.getAttribute("data-rec")))); } catch (e) { gen = null; }
+    if (!gen) {
+      box.innerHTML = '<span class="osv-badge">&#127963;&#65039; Official Standard Version</span>' +
+        '<div class="osv-note">No Official Standard Version has been prepared for ' + esc(id) +
+        ' yet. The draft specification above remains the record of invention.</div>';
+      return;
+    }
+    var card = det.closest ? det.closest(".spec-card") : null;
+    var pr = (card && card._openPromise) ? card._openPromise : Promise.resolve(null);
+    pr.then(function (full) {
+      var figs = [];
+      if (full) { try { figs = [fig1(full), fig2(full), fig3(full)]; } catch (e) { figs = []; } }
+      box.innerHTML = renderOSV(gen, true, figs);
+    });
   });
 }
-function renderOSV(d) {
+function renderOSV(d, generated, figs) {
   var h = '<span class="osv-badge">&#127963;&#65039; Official Standard Version</span>';
+  if (generated) h += '<div class="osv-note"><b>Official Standard &mdash; system-prepared draft.</b> ' +
+    'Generated on this device from the draft record &mdash; no hand-prepared sidecar is on file. ' +
+    'The draft remains the record of invention.</div>';
   h += '<div class="osv-note">' + esc(d.status || "") + '</div>';
   (d.document || []).forEach(function (sec) {
     h += '<h4>' + esc(sec.heading) + '</h4>';
@@ -2160,6 +2182,18 @@ function renderOSV(d) {
       }).join("") + '</ol>';
     } else {
       h += (sec.body || []).map(function (p) { return '<p>' + esc(p) + '</p>'; }).join("");
+    }
+    if (sec.table) {
+      h += '<table class="osv-table"><tr>' + sec.table.head.map(function (c) {
+        return '<th>' + esc(c) + '</th>';
+      }).join("") + '</tr>' + sec.table.rows.map(function (rw) {
+        return '<tr>' + rw.map(function (c) { return '<td>' + esc(c) + '</td>'; }).join("") + '</tr>';
+      }).join("") + '</table>';
+    }
+    if (sec.figures && figs && figs.length) {
+      h += figs.map(function (svg, k) {
+        return '<div class="fig"><div class="figcap">FIG. ' + (k + 1) + '</div>' + svg + '</div>';
+      }).join("");
     }
   });
   if (d.admin_pack) {
@@ -2172,12 +2206,31 @@ function renderOSV(d) {
       esc(ads.applicant || "") + '; entity status ' + esc(ads.entity_status || "") +
       '; correspondence ' + esc(ads.correspondence_address || "") + '.</p>';
     h += '<p><b>Fees:</b> ' + esc(fees.note || "") + '</p>';
+    if (ap.drawings_ref) h += '<p><b>Drawings:</b> ' + esc(ap.drawings_ref) + '</p>';
   }
   if (d.claim_fixes && d.claim_fixes.length) {
     h += '<h4>Preparation notes (not part of the patent document)</h4><table class="osv-table"><tr><th>Claim</th><th>Correction</th></tr>' +
       d.claim_fixes.map(function (f) {
         return '<tr><td>' + esc(String(f.claim)) + '</td><td>' + esc(f.change) + '</td></tr>';
       }).join("") + '</table>';
+  }
+  if (d.glossary && d.glossary.length) {
+    h += '<h4>Technical glossary (terms of this specification)</h4><table class="osv-table"><tr><th>Term</th><th>Meaning</th></tr>' +
+      d.glossary.map(function (g) {
+        return '<tr><td>' + esc(g.term) + '</td><td>' + esc(g.meaning) + '</td></tr>';
+      }).join("") + '</table>';
+  }
+  if (d.antecedent_audit && d.antecedent_audit.length) {
+    h += '<h4>Antecedent-basis audit</h4><table class="osv-table"><tr><th>Element</th><th>Introduced</th><th>Reused as &ldquo;the&rdquo;</th><th>Status</th></tr>' +
+      d.antecedent_audit.map(function (a) {
+        return '<tr><td>' + esc(a.term) + '</td><td>' + esc(a.introduced) + '</td><td>' +
+          esc(a.reused_as_the) + '</td><td>' + esc(a.status) + '</td></tr>';
+      }).join("") + '</table>';
+  }
+  if (d.abstract_check) {
+    h += '<p><b>Abstract check:</b> ' + esc(String(d.abstract_check.words)) +
+      ' words against the ' + esc(String(d.abstract_check.word_limit)) +
+      '-word USPTO limit &mdash; <b>' + esc(d.abstract_check.result) + '</b></p>';
   }
   if (d.reviewer_note) h += '<div class="osv-note">' + esc(d.reviewer_note) + '</div>';
   if (d.source_claims_note) h += '<p style="font-size:.8em;color:#8a8a95">' + esc(d.source_claims_note) + '</p>';

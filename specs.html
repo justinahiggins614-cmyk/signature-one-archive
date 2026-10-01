@@ -269,6 +269,8 @@
   .demobox { margin: 10px 0; padding: 14px; background: #050506; border: 1px solid var(--blood);
     border-radius: 2px; }
   .snote { font-size: .76em; color: #8b8b95; margin-top: 10px; font-style: italic; }
+  .jahident { border: 1px solid #4a4433; background: #14161c; padding: 12px 14px; margin-bottom: 16px; }
+  .jahident h4 { margin-top: 0; }
   .sim .srow { margin: 10px 0; }
   .sim .srow label { display: block; font-size: .84em; color: #b9b9c4; margin-bottom: 4px; }
   .sim .srow label b { color: var(--red); text-shadow: 0 0 8px rgba(255,34,34,.6); }
@@ -467,6 +469,34 @@
   </div>
 </div>
 
+<div class="searchwrap" id="browse">
+  <div class="searchrow">
+    <input id="q" type="search" placeholder="Search by title, keyword, spec ID, inventor, or category&hellip;" autocomplete="off">
+    <button id="go" type="button">Search</button>
+  </div>
+  <div class="filters" id="filters"></div>
+  <div class="sortrow">Sort:
+    <select id="sort">
+      <option value="az">A to Z</option>
+      <option value="new">Newest first</option>
+      <option value="old">Oldest first</option>
+    </select>
+    &nbsp;Era:
+    <select id="eraf">
+      <option value="">All eras</option>
+      <option value="Past">Past</option>
+      <option value="Current">Current</option>
+      <option value="Future">Future</option>
+    </select>
+  </div>
+</div>
+<nav id="letters" aria-label="Jump by letter"></nav>
+<noscript><div class="noscript">This catalog needs JavaScript turned on to search and list specs.</div></noscript>
+<p id="count"></p>
+<div id="loading">ESTABLISHING UPLINK</div>
+<div id="results"></div>
+<button id="more" type="button" style="display:none">Show more</button>
+
 <div class="examples">
   <h2 class="sect">Example Specs &mdash; the format every spec follows</h2>
 
@@ -485,20 +515,21 @@
     <h4>Key parameters (as published)</h4>
     <ul>
       <li>H = 4.00 in &middot; D_RIM = 3.25 in &middot; D_BASE = 2.25 in &middot; WALL = 0.04 in</li>
-      <li>TAPER = 7.5 deg &middot; RIM_ROLL = 0.06 in radius &middot; BASE_FILLET = 0.12 in radius</li>
-      <li>Base thickness 0.08 in &middot; centered injection gate 0.10 in &middot; MATERIAL = PP &middot; RIBS = 12 &middot; RIB_DEPTH = 0.031 in &middot; STACK_DEPTH = 3.60 in</li>
+      <li>TAPER = 7.13 deg &middot; RIM_ROLL = 0.06 in radius &middot; BASE_FILLET = 0.12 in radius</li>
+      <li>Base thickness 0.08 in &middot; centered injection gate 0.10 in &middot; MATERIAL = PP &middot; RIBS = 12 &middot; RIB_DEPTH = 0.03 in &middot; STACK_DEPTH = 3.60 in</li>
     </ul>
     <h4>Signature-tool mapping (as published)</h4>
     <ul>
       <li><b>LINE</b> &mdash; wall thickness, height</li>
-      <li><b>TRIANGLE</b> &mdash; 7.5&deg; taper</li>
+      <li><b>TRIANGLE</b> &mdash; 7.13&deg; taper</li>
       <li><b>SQUARE</b> &mdash; bounding box 3.25 &times; 4.00 &times; 3.25 in</li>
       <li><b>CROSS</b> &mdash; ribbing decision, transparency, rim roll</li>
       <li><b>CIRCLE</b> &mdash; rim and base diameter</li>
       <li><b>CURVATURE</b> &mdash; rim roll, base fillet radius</li>
     </ul>
     <h4>Final autoread block (as published)</h4>
-    <pre class="autoread">OBJECT: BASIC PLASTIC CUP | H=4.00in | D_RIM=3.25in | D_BASE=2.25in | WALL=0.04in | TAPER=7.5deg | RIM_ROLL=0.06in | BASE_FILLET=0.12in | MATERIAL=PP | RIBS=12 | RIB_DEPTH=0.031in | STACK_DEPTH=3.60in | INJECTION_GATE=0.10in CENTER | BOUNDING_BOX=3.5in 4.5x10.0in (10 units) | STATUS=SIGNATURE-1 VALID</pre>
+    <pre class="autoread">OBJECT: BASIC PLASTIC CUP | H=4.00in | D_RIM=3.25in | D_BASE=2.25in | WALL=0.04in | TAPER=7.13deg | RIM_ROLL=0.06in | BASE_FILLET=0.12in | MATERIAL=PP | RIBS=12 | RIB_DEPTH=0.03in | STACK_DEPTH=3.60in | INJECTION_GATE=0.10in CENTER | BOUNDING_BOX=3.5x4.5x10.0in_LxWxH (10 units) | STATUS=SIGNATURE-1 VALID</pre>
+    <p class="snote">Bounding-box axes are fixed across the catalog: <b>L&times;W&times;H</b> (length &times; width &times; height). Wall taper is the wall-to-vertical angle implied by the listed dimensions: arctan(((3.25&minus;2.25)/2)/4.00) &asymp; 7.13&deg;. <b>SIGNATURE-1 VALID</b> means the block passes Signature-One schema validation — a data/specification status, <b>not</b> physical or manufacturing validation.</p>
     <div class="fulltext">
 <h4>Full written spec — verbatim</h4>
 <p><strong>A TEST RUN OF FORCED LOGIC 1 (BASIC TEST)</strong><br>
@@ -533,7 +564,7 @@ Material thickness lines define structural limits</p>
 Triangle apex (virtual): above rim center<br>
 Base width: 2.25 in<br>
 Rim width: 3.25 in<br>
-Taper angle: 7.5 degrees</p>
+Taper angle: 7.13 degrees</p>
 <p class="sub">1.3 SQUARE</p>
 <p>Bounding box for manufacturability<br>
 Width: 3.25 in<br>
@@ -565,7 +596,7 @@ Comfort curvature: lip smoothness tolerance plus or minus 0.01 in</p>
 Rim diameter: 3.25 in<br>
 Base diameter: 2.25 in<br>
 Wall thickness: 0.04 in<br>
-Taper angle: 7.5 degrees</p>
+Taper angle: 7.13 degrees</p>
 <p class="sub">2.2 WALL PROFILE</p>
 <p>Shape: truncated cone<br>
 Vertical ribs: 12<br>
@@ -649,7 +680,7 @@ H=4.00in
 D_RIM=3.25in
 D_BASE=2.25in
 WALL=0.04in
-TAPER=7.5deg
+TAPER=7.13deg
 RIM_ROLL=0.06in
 BASE_FILLET=0.12in
 MATERIAL=PP
@@ -659,7 +690,7 @@ RIB_SPACING=0.25in
 STACK_DEPTH=3.60in
 VENT=0.03in
 INJECTION_GATE=0.10in CENTER
-BOUNDING_BOX=3.5x4.5x10.0in (10 units)
+BOUNDING_BOX=3.5x4.5x10.0in_LxWxH (10 units)
 SIGNATURE_TOOLS=LINE TRIANGLE SQUARE CROSS CIRCLE CURVATURE
 STATUS=SIGNATURE-1 VALID</pre>
 <hr>
@@ -678,7 +709,7 @@ Runner system: cold or hot runner<br>
 Ejector system: pin ejectors<br>
 Ejector pin count: 6<br>
 Ejector pin diameter: 0.12 in<br>
-Draft angle: 7.5 degrees<br>
+Draft angle: 7.13 degrees<br>
 Vent depth: 0.0015 in<br>
 Vent width: 0.03 in</p>
 <p class="sub">6.3 MATERIAL HANDLING</p>
@@ -753,7 +784,7 @@ TOLERANCE=0.01in
 SHRINKAGE=1.5percent
 STACK_DEPTH=3.60in
 GATE=0.10in_CENTER
-BOX=3.5x4.5x10.0in
+BOX=3.5x4.5x10.0in_LxWxH
 STATUS=SIGNATURE-1_VALID</pre>
 </div>
     </div>
@@ -794,7 +825,7 @@ STATUS=SIGNATURE-1_VALID</pre>
       <li><b>Multi-Path Solved Reality</b> &mdash; final geometric and logical definition</li>
     </ol>
     <h4>5.0 Final autoread block (as published)</h4>
-    <pre class="autoread">L=2.50in, W=0.75in, T=0.35in, PORT=USB-C, CORE=RaspberryPi_AI, POWER=5VDC_3A, TOOLS=LINE_3A, TOOLS=LINE_TRIANGLE_SQUARE_CROSS_CIRCLE_CURVATURE, FUNCTION=Universal_Mapper_Speck_Maker, STATUS=SIGNATURE-1_VALID</pre>
+    <pre class="autoread">L=2.50in, W=0.75in, T=0.35in, PORT=USB-C, CORE=RaspberryPi_AI, POWER=5VDC_3A, TOOLS=LINE_TRIANGLE_SQUARE_CROSS_CIRCLE_CURVATURE, FUNCTION=Universal_Mapper_Speck_Maker, STATUS=SIGNATURE-1_VALID</pre>
     <div class="exgrid">
       <figure>
         <img src="assets/semi-chip.jpg" alt="Semiconductor replacement chip layout diagram">
@@ -821,6 +852,7 @@ STATUS=SIGNATURE-1_VALID</pre>
 <p><strong>SIGNATURE‑ONE SEMICONDUCTOR REPLACEMENT<br>
 FORCED BY MY UNIVERSAL REDUCTION ALGO<br>
 FULL WORK — REQUEST: "SEMICONDUCTOR REPLACEMENT DEVICE"</strong></p>
+<p class="snote">Scope note: this specification describes a <b>compute-module device / system</b> (USB-C enclosure with an embedded compute core) presented as a semiconductor-replacement <b>concept</b>. It does not claim device-level semiconductor definition (transistor architecture, process technology, timing, voltage domains) — those fields are intentionally absent and must be supplied before this spec can stand as a semiconductor design.</p>
 <hr>
 <h4>0.0 OBJECT CLASSIFICATION</h4>
 <p>Object: Signature‑One Semiconductor Replacement<br>
@@ -1048,26 +1080,7 @@ STATUS=SIGNATURE-1_VALID</pre>
   <div class="trackgrid" id="trackgrid"><p class="sectsub">Loading academy tracks&hellip;</p></div>
 </div>
 
-<div class="searchwrap" id="browse">
-  <div class="searchrow">
-    <input id="q" type="search" placeholder="Search by title, keyword, spec ID, inventor, or category&hellip;" autocomplete="off">
-    <button id="go" type="button">Search</button>
-  </div>
-  <div class="filters" id="filters"></div>
-  <div class="sortrow">Sort:
-    <select id="sort">
-      <option value="az">A to Z</option>
-      <option value="new">Newest first</option>
-      <option value="old">Oldest first</option>
-    </select>
-  </div>
-</div>
-<nav id="letters" aria-label="Jump by letter"></nav>
-<noscript><div class="noscript">This catalog needs JavaScript turned on to search and list specs.</div></noscript>
-<p id="count"></p>
-<div id="loading">ESTABLISHING UPLINK</div>
-<div id="results"></div>
-<button id="more" type="button" style="display:none">Show more</button>
+
 <button id="totop" type="button" title="Back to top">&#8593;</button>
 <footer>
   <div class="fname">The Spec Catalog</div>
@@ -1084,7 +1097,7 @@ var GROUPS = [];
 var GROUPMAP = {};
 var groupsReady = false, dataReady = false;
 var LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#".split("");
-var state = { q: "", cat: "", group: "", sort: "az", shown: 100 };
+var state = { q: "", cat: "", group: "", era: "", sort: "az", shown: 100 };
 var filtered = [];
 
 function letterOf(title) {
@@ -1100,6 +1113,137 @@ function esc(s) {
   return String(s == null ? "" : s)
     .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
+/* ============ JAH Signature-One Governance & Canonical Spec Schema v1.0 ============
+   The JAH-SPEC-###### ID + stamp + content hash IS Manon's own patent governance:
+   his own system's deterministic legal-ID coding (like Disney has its own money).
+   Every record is legal-ID coded and provably made; every boundless product points
+   to its ID; the system's own track record is its own confirmation.
+   This is his own patent authority -- not the USPTO, not a government system. */
+var JAHSCHEMA_VERSION = "1.0";
+var JAHSCHEMA_REQUIRED = ["SPEC_ID", "STATUS"];
+var JAHSCHEMA_RECOMMENDED = ["OBJECT", "DOMAIN", "VERSION", "DIMENSIONS", "MATERIAL", "PROCESS", "SIGNATURE_TOOLS", "PARAMETERS", "ASSUMPTIONS", "VALIDATION_STATUS", "SOURCE", "HASH"];
+function jahParseAutoread(text) {
+  /* Tolerant parser: newline- or |-separated KEY=VALUE (or KEY: VALUE) pairs.
+     Tolerates extra spaces, mixed case, reordered fields, unknown fields,
+     unicode, duplicate keys (last wins). Never invents defaults; rejects
+     cleanly on bad requireds (SPEC_ID, STATUS). */
+  var fields = {}, warnings = [], order = [];
+  var chunks = String(text == null ? "" : text).split(/[\n|]/);
+  for (var i = 0; i < chunks.length; i++) {
+    var c = chunks[i].replace(/^\s+|\s+$/g, "");
+    if (!c) continue;
+    var eq = c.indexOf("=");
+    if (eq < 0) eq = c.indexOf(":");
+    if (eq < 0) { warnings.push("line " + (i + 1) + " is not KEY=VALUE: " + c.slice(0, 40)); continue; }
+    var k = c.slice(0, eq).replace(/^\s+|\s+$/g, "").toUpperCase().replace(/[^A-Z0-9_]/g, "_");
+    var v = c.slice(eq + 1).replace(/^\s+|\s+$/g, "").replace(/^:\s*/, "");
+    if (!k) { warnings.push("line " + (i + 1) + " has empty key"); continue; }
+    if (fields.hasOwnProperty(k)) warnings.push("duplicate key " + k + " — last value kept");
+    if (order.indexOf(k) < 0) order.push(k);
+    fields[k] = v;
+  }
+  if (fields.SPEC && !fields.SPEC_ID) fields.SPEC_ID = fields.SPEC;
+  var missing = [];
+  for (var j = 0; j < JAHSCHEMA_REQUIRED.length; j++) {
+    var rk = JAHSCHEMA_REQUIRED[j];
+    if (!fields[rk]) missing.push(rk);
+  }
+  return { fields: fields, order: order, warnings: warnings,
+           valid: missing.length === 0, missing: missing };
+}
+function jahCanonicalText(rec) {
+  /* Canonical serialization: fixed key order, sorted extra fields, no whitespace
+     games. Hash THIS (never the HTML) for the content hash. */
+  var p = jahParseAutoread(rec.autoread || "");
+  var lines = ["SCHEMA=JAH-SPEC-SCHEMA " + JAHSCHEMA_VERSION,
+    "SPEC_ID=" + rec.spec_id, "TITLE=" + rec.title,
+    "INVENTOR=Justin Addam Higgins", "PREPARED=" + (rec.prepared || "")];
+  var keys = Object.keys(p.fields).sort();
+  for (var i = 0; i < keys.length; i++) {
+    if (keys[i] === "SPEC_ID" || keys[i] === "SPEC") continue;
+    lines.push(keys[i] + "=" + p.fields[keys[i]]);
+  }
+  return lines.join("\n");
+}
+function jahHashHex(text, cb) {
+  var done = function (h, algo) { cb(algo + ":" + h); };
+  try {
+    if (window.crypto && window.crypto.subtle && window.isSecureContext !== false) {
+      var enc = new TextEncoder().encode(String(text));
+      window.crypto.subtle.digest("SHA-256", enc).then(function (buf) {
+        var b = new Uint8Array(buf), s = "";
+        for (var i = 0; i < b.length; i++) s += ("0" + b[i].toString(16)).slice(-2);
+        done(s, "sha256");
+      }, function () { done(String(hashStr(String(text))).padStart(8, "0"), "fnv1a-fallback"); });
+      return;
+    }
+  } catch (e) {}
+  done(String(hashStr(String(text))).padStart(8, "0"), "fnv1a-fallback");
+}
+function jahCrossLinks(r) {
+  var id = r[0];
+  return '<p class="snote"><b>Cross-site identity.</b> ' +
+    'Spec: <b>' + esc(id) + '</b> &middot; ' +
+    '<a href="specs.html?spec=' + encodeURIComponent(id) + '">this record</a> &middot; ' +
+    '<a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/?dossier=' + encodeURIComponent(id) + '" target="_blank" rel="noopener">JAH-N dossier</a> &middot; ' +
+    '<a href="https://justinahiggins614-cmyk.github.io/jah-wiki/" target="_blank" rel="noopener">JAH Wiki</a> &middot; ' +
+    '<a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/" target="_blank" rel="noopener">AI Telephone Book</a></p>';
+}
+function jahCompletenessHTML(r) {
+  var p = jahParseAutoread(r[9] || "");
+  var pd = r[14] || {}, t = (pd.objects || {}).technical || {};
+  var items = [
+    ["Title", !!r[1]], ["Abstract", !!r[2]], ["Key parameters", !!(r[8] && Object.keys(r[8]).length)],
+    ["Signature-tool mapping", !!(r[7] && Object.keys(r[7]).length)],
+    ["Machine-readable autoread block", p.valid],
+    ["Reversed-allowance algorithm steps", !!((r[10] || []).length)],
+    ["Measurements", !!((r[17] || []).length)], ["Manufacture", !!r[15]],
+    ["Patent draft + claims", !!((t.claims || {}).independent || (pd.claims || []).length)],
+    ["Drawings (FIG. 1–3, generated from data)", true],
+    ["Validation answers", !!Object.keys(pd.validation || {}).length],
+    ["Source / inventor", true]
+  ];
+  return '<h4>Completeness checklist (factual — not a quality score)</h4><p>' +
+    items.map(function (it) {
+      return '<span class="flag ' + (it[1] ? "on" : "off") + '">' + (it[1] ? "✓ " : "☐ ") + esc(it[0]) + "</span>";
+    }).join(" ") + "</p>";
+}
+function jahIdentityHTML(r) {
+  var pd = r[14] || {}, t = (pd.objects || {}).technical || {}, idn = t.identity || {};
+  var ver = idn.version ? esc(idn.version) + " rev " + esc(idn.revision || 0) : "1 rev 0";
+  var hashId = "jahhash-" + String(r[0]).replace(/[^A-Za-z0-9]/g, "");
+  var jidx = JAHSTORE.length;
+  JAHSTORE.push(r);
+  var h = '<div class="jahident"><h4>JAH Signature-One Governance Identity</h4>' +
+    kvTable([
+      ["Canonical Spec ID", r[0]],
+      ["Document type", "DRAFT_PATENT_SPECIFICATION"],
+      ["Patent status", "NOT_GRANTED — not a granted patent"],
+      ["Source", "JAH_ORIGINAL — authored by Justin Addam Higgins"],
+      ["USPTO affiliation", "NONE — not affiliated with the USPTO or any government agency"],
+      ["Governance", "JAH Signature-One Patent Authority (Manon's own patent governance)"],
+      ["Content hash", '<span id="' + hashId + '">computing…</span> (SHA-256 of canonical record data, not the page HTML)'],
+      ["Schema", "JAH-SPEC-SCHEMA " + JAHSCHEMA_VERSION],
+      ["Version", ver + " · Prepared " + (r[6] || "")],
+      ["Specification status", "SPECIFICATION_COMPLETE — schema validation (data status)"],
+      ["Engineering validation", "NOT_VALIDATED — not prototype-tested, not manufacturing-validated"],
+      ["Compliance", "any compliance wording (FDA, BPA-free, food-safe…) is CLAIMED, not verified, unless a verification source is attached"]
+    ]) +
+    '<div class="filingnote"><b>SIGNATURE-1 VALID</b> = this record passes Signature-One schema validation — a data/specification status. It is <b>not</b> physical, prototype, or manufacturing validation.</div>' +
+    '<div class="snote">Governance note: this record lives under Manon\'s own patent governance — the JAH Signature-One Patent Authority. Like Disney has its own money, this system has its own deterministic legal-ID coding: the JAH-SPEC ID, the official stamp, and the content hash ARE the protection and credibility. Every record is legal-ID coded and provably made; every boundless product points to its ID; the system\'s own track record is its own confirmation. This is his own patent authority — not the USPTO, not a government system.</div>' +
+    jahCrossLinks(r) + jahCompletenessHTML(r) +
+    '<p><button class="demotoggle jahdl" type="button" data-jahdl="' + jidx + '">Download spec record (.json)</button> ' +
+    '<span class="snote">Standalone-interpretable: the full record with its canonical hash — readable without this page.</span></p>' +
+    "</div>";
+  var rec = { spec_id: r[0], title: r[1], prepared: r[6], autoread: r[9] || "" };
+  setTimeout(function () {
+    jahHashHex(jahCanonicalText(rec), function (hh) {
+      var el = document.getElementById(hashId);
+      if (el) el.textContent = hh;
+    });
+  }, 0);
+  return h;
+}
 function hay(r) {
   return (r[0] + " " + r[1] + " " + r[2] + " " + r[3] + " " + r[4]).toLowerCase();
 }
@@ -1108,6 +1252,7 @@ function apply() {
   filtered = DATA.filter(function (r) {
     if (state.cat && r[3] !== state.cat) return false;
     if (state.group && GROUPMAP[r[3]] !== state.group) return false;
+    if (state.era && r[5] !== state.era) return false;
     if (q && hay(r).indexOf(q) < 0) return false;
     return true;
   });
@@ -1302,6 +1447,7 @@ function demoHTML(d, i) {
   DEMOSTORE.push(d);
   return '<h4>Working demo</h4>' +
     '<p>' + esc(d.blurb) + '</p>' +
+    '<div class="snote"><b>DEMO_STATUS=NOT_TESTED</b> — interactive simulation of the mechanism. Not tested against a physical prototype.</div>' +
     '<button class="demotoggle" type="button" data-demo="' + idx + '">Run demo</button>' +
     '<div class="demobox" id="demobox-' + idx + '" style="display:none"></div>' +
     '<div class="snote">' + esc(d.note) + '</div>';
@@ -1374,6 +1520,36 @@ function calcPress(idx, k) {
 }
 var FIGSTORE = [];
 var CODESTORE = [];
+var JAHSTORE = [];
+function jahCanonicalRecord(r, cb) {
+  /* Standalone-interpretable single-spec record: everything needed to
+     verify and re-read this spec without the page around it. */
+  var rec = { spec_id: r[0], title: r[1], prepared: r[6] || "",
+              autoread: r[9] || "" };
+  jahHashHex(jahCanonicalText(rec), function (hh) {
+    cb({
+      schema: "JAH-SPEC-SCHEMA " + JAHSCHEMA_VERSION,
+      canonical_hash: hh,
+      hash_note: "SHA-256 of the canonical record text (see AUTOREAD_SCHEMA.md); not the page HTML",
+      spec_id: r[0], title: r[1], abstract: r[2], category: r[3],
+      cpc: r[4], era: r[5], prepared_date: r[6] || "",
+      inventor: "Justin Addam Higgins", owner: "Justin Addam Higgins",
+      document_type: "DRAFT_PATENT_SPECIFICATION",
+      patent_status: "NOT_GRANTED",
+      source: "JAH_ORIGINAL", uspto_affiliation: "NONE",
+      governance: "JAH Signature-One Patent Authority -- Manon's own patent governance (deterministic JAH-SPEC ID + stamp + hash are the protection and credibility). Not the USPTO, not a government system.",
+      version: (r[14] && r[14].objects && r[14].objects.technical && r[14].objects.technical.identity
+                ? r[14].objects.technical.identity.version + " rev " + r[14].objects.technical.identity.revision : "1 rev 0"),
+      specification_status: "SPECIFICATION_COMPLETE (schema validation — data status, not physical validation)",
+      engineering_validated: false, prototype_tested: false, manufacturing_validated: false,
+      signature_tool_mapping: r[7] || {},
+      key_parameters: r[8] || {},
+      autoread_block: r[9] || "",
+      algorithm_steps: r[10] || [],
+      measurements: r[17] || []
+    });
+  });
+}
 function hashStr(s) {
   var h = 2166136261;
   for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
@@ -1786,6 +1962,7 @@ function aiHTML(r) {
   var idx = AISTORE.length;
   AISTORE.push(r);
   return '<h4>' + esc(a.headline) + '</h4>' +
+    '<div class="snote"><b>GENERATED INTERPRETATION</b> — the AI explainer below is generated <i>from</i> this specification. It is not the specification itself. SPECIFICATION = source of record.</div>' +
     '<p><b>What it is.</b> ' + esc(a.what) + '</p>' +
     '<p><b>How it works.</b></p><ol>' +
     a.how_it_works.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join("") + '</ol>' +
@@ -2502,6 +2679,7 @@ function codeHTML(r) {
   var kind = demoKind(r[16]);
   var h = '<h4>Working program — ' + esc(r[0]) + '.py</h4>' +
     '<p>Your own runnable Python program for this spec: the working simulation, the how-to-use walkthrough, and the manufacture steps. Download it and run it anywhere Python 3 lives.</p>' +
+    '<div class="snote"><b>Environment:</b> LANGUAGE=Python 3 &middot; DEPENDENCIES=standard library only (no installs) &middot; OS=any with Python 3 &middot; CPU/GPU=any &middot; NETWORK_REQUIRED=no &middot; INPUT=on-screen sliders &middot; OUTPUT=computed measurements</div>' +
     '<button class="demotoggle dlbtn" type="button" data-dl="' + idx + '">Download ' + esc(r[0]) + '.py</button>' +
     '<pre class="codeprev">' + esc(preview) + NL + '...</pre>' +
     '<div class="snote">At this scale a compiled .exe per spec is not practical; this Python program is the full working version.</div>';
@@ -2515,7 +2693,7 @@ function codeHTML(r) {
 function detailsHTML(r, i) {
   var abs = esc(r[2]);
   return lensBar(r) +
-    '<div class="lenspane" data-pane="patent">' + patentFrontPage(r) + patentHTML(r[14]) + figsHTML(r) + dlAllHTML(r) + '</div>' +
+    '<div class="lenspane" data-pane="patent">' + jahIdentityHTML(r) + patentFrontPage(r) + patentHTML(r[14]) + figsHTML(r) + dlAllHTML(r) + '</div>' +
     '<div class="lenspane" data-pane="overview" style="display:none">' +
       '<h4>Abstract</h4><p>' + abs + '</p>' +
       measurementsHTML(r[17]) +
@@ -2653,6 +2831,7 @@ function render() {
   DEMOSTORE.length = 0;
   FIGSTORE.length = 0;
   CODESTORE.length = 0;
+  JAHSTORE.length = 0;
   AISTORE.length = 0;
   ALLSTORE.length = 0;
   var box = document.getElementById("results");
@@ -2812,6 +2991,10 @@ function bindWikiSearch(inputId, resId, lens) {
     state.sort = e.target.value;
     apply();
   };
+  document.getElementById("eraf").onchange = function (e) {
+    state.era = e.target.value;
+    apply();
+  };
   var totop = document.getElementById("totop");
   totop.onclick = function () { window.scrollTo(0, 0); };
   window.addEventListener("scroll", function () {
@@ -2827,6 +3010,20 @@ function bindWikiSearch(inputId, resId, lens) {
     if (rd) { var d0 = rd.closest(".details"); if (d0) auReadCard(d0); return; }
     var cp = e.target.closest ? e.target.closest("[data-copy]") : null;
     if (cp) { var cr = ALLSTORE[Number(cp.getAttribute("data-copy"))]; if (cr) copyAllText(cr); return; }
+    var jd = e.target.closest ? e.target.closest(".jahdl") : null;
+    if (jd) {
+      var jr = JAHSTORE[Number(jd.getAttribute("data-jahdl"))];
+      if (jr) jahCanonicalRecord(jr, function (rec) {
+        var blob = new Blob([JSON.stringify(rec, null, 2)], {type: "application/json"});
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = rec.spec_id + ".json";
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 800);
+      });
+      return;
+    }
     var lb = e.target.closest ? e.target.closest('.lensbtn[data-lens]') : null;
     if (lb) {
       auStop();

@@ -99,7 +99,8 @@ def make_mix_spec(idx, used, pool, seed):
     dev = f"{devA}-{devB} hybrid"
     steps = g.build_steps(dev, fn)
     prepared = g.random_date(r)
-    autoread = g.build_autoread(spec_id, title, cat, cpc, era, params)
+    autoread = g.build_autoread(spec_id, title, cat, cpc, era, params,
+                                object_phrase=dev)
     abstract = g.build_abstract(r, kind, dev, fn, mech)
     manufacture = g.build_manufacture(r, kind, title, cat, params)
     demo = g.build_demo(r, kind, title, cat)

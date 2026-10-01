@@ -248,16 +248,19 @@ def build_steps(dev, fn):
         f"5. Multi-Path Solved Reality: emit the {dev} as one valid build among infinite option paths.",
     ]
 
-def build_autoread(spec_id, title, cat, cpc, era, params):
-    lines = [
-        f"SPEC={spec_id}",
-        f"TITLE={title}",
-        "INVENTOR=Justin Addam Higgins",
-        f"CATEGORY={cat} | CPC={cpc} | ERA={era}",
-    ]
-    lines += [f"{k}={v}" for k, v in params.items()]
-    lines.append("STATUS=SIGNATURE-1 VALID")
-    return "\n".join(lines)
+def build_autoread(spec_id, title, cat, cpc, era, params, object_phrase=None):
+    # Governance-tagged autoread block (JAH-SPEC-SCHEMA 1.0). All generators
+    # route through here, so every drip emits the identity fields. Kept in
+    # sync with code/specs/autoread.py (the canonical parser).
+    # Path-anchored import: the drip runs `python3 code/specs/generate_specs.py`
+    # from the repo root, so sys.path does not include code/specs/.
+    import os as _os, sys as _sys
+    _here = _os.path.dirname(_os.path.abspath(__file__))
+    if _here not in _sys.path:
+        _sys.path.insert(0, _here)
+    import autoread as _ja
+    return _ja.make_autoread(spec_id, title, cat, cpc, era, params,
+                             object_phrase=object_phrase)
 
 # ----------------------------------------------------------------------------
 # Full patent draft + manufacture means + working demo (2026-09-28)
@@ -1061,7 +1064,8 @@ def make_spec(i, used, seed=None, category=None, title_suffix=""):
     params = build_params(r, kind)
     toolmap = build_toolmap(kind, dev)
     steps = build_steps(dev, fn)
-    autoread = build_autoread(spec_id, title, cat, cpc, era, params)
+    autoread = build_autoread(spec_id, title, cat, cpc, era, params,
+                              object_phrase=dev[0])
     manufacture = build_manufacture(r, kind, title, cat, params)
     demo = build_demo(r, kind, title, cat)
     measurements = build_measurements(r, kind, title, cat)

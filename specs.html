@@ -28,6 +28,14 @@
   .jahnet-links { display: flex; flex-wrap: wrap; gap: 4px 14px; justify-content: center; }
   .jahnet-links a { color: #c9a227; text-decoration: none; font-size: .78em; letter-spacing: .06em; }
   .jahnet-links a:hover { color: #ffe9a8; text-decoration: underline; }
+  .jahnet-drop { position: relative; display: inline-block; }
+  .jahnet-drop summary { color: #c9a227; font-size: .78em; letter-spacing: .06em; cursor: pointer; list-style: none; }
+  .jahnet-drop summary::-webkit-details-marker { display: none; }
+  .jahnet-drop summary::marker { content: ""; }
+  .jahnet-drop summary:hover { color: #ffe9a8; text-decoration: underline; }
+  .jahnet-menu { display: none; position: absolute; top: 130%; left: 50%; transform: translateX(-50%); background: #0a0a10; border: 1px solid #3a0d0d; padding: 6px 0; min-width: 150px; z-index: 62; }
+  .jahnet-drop[open] .jahnet-menu { display: block; }
+  .jahnet-menu a { display: block; padding: 7px 16px; white-space: nowrap; }
   header { padding: 34px 20px 26px; text-align: center; color: #fff;
            background: radial-gradient(ellipse at 50% -10%, #2a0a0a 0%, #060608 62%);
            border-bottom: 3px solid var(--red);
@@ -434,7 +442,7 @@
 </style>
 </head>
 <body>
-<nav class="jahnet" aria-label="The JAH Network"><span class="jahnet-label">THE JAH NETWORK</span><span class="jahnet-links"><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">Globally Rejustered Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/">Signature Spec Catalog Pending Patents</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">The Signature Dictionary</a><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">JAH-N Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">Signature Universal Paradox Immune Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">The Signature AI Telephone Book</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">The Signature PC System Depository</a></span></nav>
+<nav class="jahnet" aria-label="The JAH Network"><span class="jahnet-label">THE JAH NETWORK</span><span class="jahnet-links"><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">Globally Rejustered Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/">Signature Spec Catalog Pending Patents</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">The Signature Dictionary</a><details class="jahnet-drop"><summary>Wiki Sites &#9662;</summary><span class="jahnet-menu"><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">JAH-N Wiki</a></span></details><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">Signature Universal Paradox Immune Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">The Signature AI Telephone Book</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">The Signature PC System Depository</a></span></nav>
 <div class="scanlines" aria-hidden="true"></div>
 <header id="top">
   <div class="eye" aria-hidden="true"></div>

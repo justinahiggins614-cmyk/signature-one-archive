@@ -31,3 +31,4 @@
 2026-10-01T09:45:52+00:00 spec total = 347355
 2026-10-01 07:29 EDT +11516 new, 104321 total specs
 2026-10-01 13:28:32 UTC +11334 new, 115655 total specs (UNPUSHED: repo size cap reached)
+2026-10-01 15:29:42 total=108508 (+10853 this run; NOT pushed: repo-size guard 882.7MB>850MB, shard-13 pending)

@@ -1216,6 +1216,28 @@ function jahCompletenessHTML(r) {
       return '<span class="flag ' + (it[1] ? "on" : "off") + '">' + (it[1] ? "✓ " : "☐ ") + esc(it[0]) + "</span>";
     }).join(" ") + "</p>";
 }
+function specTypeLabel(r) {
+  /* Derived only from recorded index fields — never invented. */
+  if (/^JAH-WORD/.test(r[0] || "")) return "Word invention";
+  var m = r[19];
+  if (m) {
+    var t = m[1];
+    if (t === "VARIANT") return (/^\s*Version/i.test(r[13] || "")) ? "Version edition" : "Variant";
+    if (t === "REVISION") return "Revision";
+    if (t === "PRODUCTLINE") return "Product line";
+    return "MIX hybrid";
+  }
+  if (r[12]) return "Signature-line";
+  return "Original draft (new)";
+}
+function provenanceText(r) {
+  /* Provenance assembled only from recorded fields: signature line, line note, parent/mix lineage. */
+  var parts = [];
+  if (r[12]) parts.push("Signature line: " + r[12]);
+  if (r[13]) parts.push(r[13]);
+  if (r[19]) parts.push(lineageLabel(r) + " " + variantText(r));
+  return parts.length ? parts.join(" \u2014 ") : "none recorded in this record";
+}
 function jahIdentityHTML(r) {
   var pd = r[14] || {}, t = (pd.objects || {}).technical || {}, idn = t.identity || {};
   var ver = idn.version ? esc(idn.version) + " rev " + esc(idn.revision || 0) : "1 rev 0";
@@ -1227,6 +1249,8 @@ function jahIdentityHTML(r) {
       ["Canonical Spec ID", r[0]],
       ["Document type", "DRAFT_PATENT_SPECIFICATION"],
       ["Patent status", "NOT_GRANTED — not a granted patent"],
+      ["Spec type", specTypeLabel(r)],
+      ["Provenance", provenanceText(r)],
       ["Source", "JAH_ORIGINAL — authored by Justin Addam Higgins"],
       ["USPTO affiliation", "NONE — not affiliated with the USPTO or any government agency"],
       ["Governance", "JAH Signature-One Patent Authority (Manon's own patent governance)"],
@@ -1548,6 +1572,10 @@ function jahCanonicalRecord(r, cb) {
       governance: "JAH Signature-One Patent Authority -- Manon's own patent governance (deterministic JAH-SPEC ID + stamp + hash are the protection and credibility). Not the USPTO, not a government system.",
       version: (r[14] && r[14].objects && r[14].objects.technical && r[14].objects.technical.identity
                 ? r[14].objects.technical.identity.version + " rev " + r[14].objects.technical.identity.revision : "1 rev 0"),
+      spec_type: specTypeLabel(r),
+      signature_line: r[12] || "",
+      provenance_note: r[13] || "",
+      mix_from: r[19] ? [r[19][0], r[19][1]] : null,
       specification_status: "SPECIFICATION_COMPLETE (schema validation — data status, not physical validation)",
       engineering_validated: false, prototype_tested: false, manufacturing_validated: false,
       signature_tool_mapping: r[7] || {},
@@ -1909,12 +1937,15 @@ var ALLSTORE = [];
 function dlAllHTML(r) {
   var idx = ALLSTORE.length;
   ALLSTORE.push(r);
+  var dp = r[14] || {}, dti = ((dp.objects || {}).technical || {}).identity || {};
+  var dver = dti.version ? (dti.version + " rev " + (dti.revision || 0)) : "1 rev 0";
   return '<h4>Filing package</h4>' +
     '<div class="dlrow">' +
     '<button class="demotoggle sheetdl" type="button" data-dl="' + idx + '">Download spec sheet (.txt)</button>' +
     '<button class="demotoggle zipdl" type="button" data-dl="' + idx + '">Download all (.zip)</button>' +
     '</div>' +
-    '<div class="snote">Download all collects the whole filing package — patent draft, FIG. 1–3, working code, spec sheet, manufacture, AI explainer, autoread, and the master-spec.json record — organized in folders, in one zip.</div>';
+    '<div class="snote">Download all collects the whole filing package — patent draft, FIG. 1–3, working code, spec sheet, manufacture, AI explainer, autoread, and the master-spec.json record — organized in folders, in one zip.</div>' +
+    '<div class="snote">Package file: <b>' + esc(r[0]) + '-patent-package.zip</b> (generated on click) &middot; record version ' + esc(dver) + ' &middot; record hash: see the Content hash row in the identity block above &middot; status: DRAFT (not granted)</div>';
 }
 function saveBlob(blob, filename) {
   var a = document.createElement("a");
@@ -2929,7 +2960,10 @@ function renderTracks() {
 function openSpec(id, lens) {
   var row = null;
   for (var i = 0; i < DATA.length; i++) if (DATA[i][0] === id) { row = DATA[i]; break; }
-  if (!row) return;
+  if (!row) {
+    wordToast('No specification found with ID "' + id + '" in the published catalog. Check the ID and try again.');
+    return;
+  }
   state.q = ""; state.cat = ""; state.group = "";
   var qi = document.getElementById("q"); if (qi) qi.value = "";
   apply();
@@ -3162,7 +3196,12 @@ function bindWikiSearch(inputId, resId, lens) {
   }
   function loadWordIndexes() {
     gunzipText("data/index/words.search.json.gz").then(function (text) {
+      var specRows = DATA.length;
       parseIndex(text, "");
+      var sc = document.getElementById("statCount");
+      if (sc) sc.title = "Published draft specs (index-derived): " + specRows.toLocaleString() +
+        " JAH-SPEC + " + (DATA.length - specRows).toLocaleString() +
+        " JAH-WORD word inventions. The 1,000,000+ goal is shown separately.";
       return gunzipText("data/index/words.idx.json.gz");
     }).then(function (text) {
       text.split("\n").forEach(function (ln) {
@@ -3197,9 +3236,22 @@ function bindWikiSearch(inputId, resId, lens) {
     }
   }
   function finishLoad() {
-    var seen = {};
-    DATA.forEach(function (r) { seen[r[3]] = true; });
-    CATS = Object.keys(seen).sort();
+    var seenCats = {}, seenIds = {}, dupes = 0;
+    DATA.forEach(function (r) {
+      seenCats[r[3]] = true;
+      if (seenIds[r[0]]) { dupes++; } else { seenIds[r[0]] = true; }
+    });
+    CATS = Object.keys(seenCats).sort();
+    if (dupes > 0) {
+      try { console.warn("Signature Spec Catalog: " + dupes + " duplicate spec IDs in the loaded index"); } catch (e) {}
+      var sc0 = document.getElementById("statCount");
+      if (sc0 && sc0.parentElement && sc0.parentElement.parentElement) {
+        var chip = document.createElement("span");
+        chip.className = "chip";
+        chip.innerHTML = "Data note: <b>" + dupes.toLocaleString() + "</b> duplicate IDs detected";
+        sc0.parentElement.parentElement.appendChild(chip);
+      }
+    }
     document.getElementById("statCount").textContent = DATA.length.toLocaleString();
     document.getElementById("statNodes").textContent = DATA.length.toLocaleString();
     var pct = Math.min(100, DATA.length / 1000000 * 100);

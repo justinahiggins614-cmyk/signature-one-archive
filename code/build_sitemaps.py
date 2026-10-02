@@ -1,0 +1,110 @@
+#!/usr/bin/env python3
+"""Build per-shard sitemap XML files + the main sitemap index for the Spec Catalog.
+
+Layout (per the 2026-10-01 discoverability pass):
+  - Each frozen shard repo (signature-one-archive-shard-N) carries its own
+    sitemap-specs.xml at its repo ROOT (<=50,000 URLs per file, so shard-2 is
+    split into sitemap-specs-1.xml / sitemap-specs-2.xml).
+  - The main repo carries sitemap-main-1.xml / sitemap-main-2.xml at its repo
+    ROOT for the newest chunks (never inside data/ -- the 850MB data guard).
+  - The main repo's sitemap-index.xml lists the static pages sitemap plus every
+    shard sitemap plus the two main sitemaps.
+
+Re-run this after every 2h drip (the drip owns data/ chunks; it must call this
+script afterwards so the newest JAH-SPEC IDs get sitemap coverage). The spec
+deep-links (specs.html?spec=JAH-SPEC-######) live on the MAIN site; shard
+sitemaps only *list* URLs, they don't serve the pages.
+
+Ranges below were verified contiguous from the live indexes on 2026-10-01
+(shard-2: 1-52500 ... shard-16: 325051-341550, main: 341551-438346).
+"""
+import os
+
+HOME = os.path.expanduser("~")
+MAIN = os.path.join(HOME, "workspace", "signature-one-archive")
+SITE = "https://justinahiggins614-cmyk.github.io/signature-one-archive"
+TODAY = "2026-10-01"
+
+# (shard_dir_name, first_id, last_id) -- shard-2 gets split files
+SHARDS = [
+    ("signature-one-archive-shard-2", 1, 52500),
+    ("signature-one-archive-shard-3", 52501, 97500),
+    ("signature-one-archive-shard-4", 97501, 121500),
+    ("signature-one-archive-shard-5", 121501, 141000),
+    ("signature-one-archive-shard-6", 141001, 160500),
+    ("signature-one-archive-shard-7", 160501, 177000),
+    ("signature-one-archive-shard-8", 177001, 194850),
+    ("signature-one-archive-shard-9", 194851, 212700),
+    ("signature-one-archive-shard-10", 212701, 230550),
+    ("signature-one-archive-shard-11", 230551, 254550),
+    ("signature-one-archive-shard-12", 254551, 272550),
+    ("signature-one-archive-shard-13", 272551, 290550),
+    ("signature-one-archive-shard-14", 290551, 308550),
+    ("signature-one-archive-shard-15", 308551, 325050),
+    ("signature-one-archive-shard-16", 325051, 341550),
+]
+MAIN_RANGE = (341551, 438346)
+URL_LIMIT = 50000
+
+
+def spec_url(n):
+    return "%s/specs.html?spec=JAH-SPEC-%06d" % (SITE, n)
+
+
+def write_urlset(path, first, last):
+    parts = ['<?xml version="1.0" encoding="UTF-8"?>\n',
+             '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n']
+    for n in range(first, last + 1):
+        parts.append("  <url><loc>%s</loc><changefreq>monthly</changefreq></url>\n" % spec_url(n))
+    parts.append("</urlset>\n")
+    with open(path, "w", encoding="utf-8") as f:
+        f.writelines(parts)
+    return last - first + 1
+
+
+def main():
+    index_entries = [SITE + "/sitemap.xml"]  # static pages first
+    total = 0
+
+    # --- shard sitemaps, written into each shard repo's root ---
+    for dirname, first, last in SHARDS:
+        root = os.path.join(HOME, "workspace", dirname)
+        n = last - first + 1
+        if n > URL_LIMIT:
+            mid = first + n // 2 - 1
+            write_urlset(os.path.join(root, "sitemap-specs-1.xml"), first, mid)
+            write_urlset(os.path.join(root, "sitemap-specs-2.xml"), mid + 1, last)
+            base = "https://justinahiggins614-cmyk.github.io/" + dirname
+            index_entries += [base + "/sitemap-specs-1.xml", base + "/sitemap-specs-2.xml"]
+        else:
+            write_urlset(os.path.join(root, "sitemap-specs.xml"), first, last)
+            index_entries.append("https://justinahiggins614-cmyk.github.io/" + dirname + "/sitemap-specs.xml")
+        total += n
+        print("shard %-32s %d-%d (%d urls)" % (dirname, first, last, n))
+
+    # --- main repo's own newest chunks (repo ROOT, never data/) ---
+    mf, ml = MAIN_RANGE
+    write_urlset(os.path.join(MAIN, "sitemap-main-1.xml"), mf, mf + URL_LIMIT - 1)
+    write_urlset(os.path.join(MAIN, "sitemap-main-2.xml"), mf + URL_LIMIT, ml)
+    index_entries += [SITE + "/sitemap-main-1.xml", SITE + "/sitemap-main-2.xml"]
+    total += ml - mf + 1
+    print("main %-36s %d-%d (%d urls)" % ("(repo root)", mf, ml, ml - mf + 1))
+
+    # --- sitemap index on main ---
+    lines = ['<?xml version="1.0" encoding="UTF-8"?>\n',
+             "<!-- Spec Catalog sitemap index. Shard sitemaps live on each frozen shard repo;\n",
+             "     sitemap-main-*.xml cover the newest chunks on the main repo. After each 2h drip,\n",
+             "     re-run code/build_sitemaps.py so new JAH-SPEC IDs are listed, then commit+push. -->\n",
+             '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n']
+    for loc in index_entries:
+        lines.append("  <sitemap><loc>%s</loc><lastmod>%s</lastmod></sitemap>\n" % (loc, TODAY))
+    lines.append("</sitemapindex>\n")
+    with open(os.path.join(MAIN, "sitemap-index.xml"), "w", encoding="utf-8") as f:
+        f.writelines(lines)
+
+    print("index entries: %d, total spec urls: %d" % (len(index_entries), total))
+    assert total == 438346, "expected 438346, got %d" % total
+
+
+if __name__ == "__main__":
+    main()

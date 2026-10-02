@@ -9,6 +9,33 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 
 <meta name="description" content="The Spec Catalog: draft patent specifications authored by Justin Addam Higgins (JAH) — every field of invention, past, current, and future. Ready to review and file.">
+<link rel="canonical" href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "name": "Signature Spec Catalog Pending Patents",
+      "alternateName": "The Signature Spec Catalog",
+      "url": "https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html",
+      "description": "The Spec Catalog: draft patent specifications authored by Justin Addam Higgins (JAH) — every field of invention, past, current, and future. Ready to review and file.",
+      "creator": { "@type": "Person", "name": "Justin Addam Higgins" },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "Dataset",
+      "name": "Signature Spec Catalog: original draft patent specifications by Justin Addam Higgins (JAH)",
+      "description": "438,346 original draft invention specifications (as of 2026-10-01), each carrying a permanent JAH-SPEC-###### identifier. Every record is a draft specification — ready to review and file — not a granted patent, and not affiliated with the USPTO or any government agency.",
+      "url": "https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html",
+      "creator": { "@type": "Person", "name": "Justin Addam Higgins" },
+      "datePublished": "2026-10-01",
+      "inLanguage": "en",
+      "creativeWorkStatus": "Draft"
+    }
+  ]
+}
+</script>
 <style>  * { box-sizing: border-box; }
   :root { --red: #ff2222; --red-dim: #8f1010; --blood: #3a0d0d; }
   html { scrollbar-color: var(--red-dim) #0a0a0d; }
@@ -386,6 +413,11 @@
     letter-spacing: .08em; }
   .groupcard .gcats { color: #8b8b95; font-size: .76em; margin-top: 6px; line-height: 1.5; }
   .groupcard.active { border-color: var(--red); box-shadow: 0 0 18px rgba(255,34,34,.4); }
+  a.groupcard { color: inherit; text-decoration: none; display: block; }
+  a.groupcard:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+  .staticcount { font-size: .82em; color: #b9b9c7; margin: 10px 0 0; letter-spacing: .03em; }
+  a.speclink { color: inherit; text-decoration: none; }
+  a.speclink:hover, a.speclink:focus { text-decoration: underline; color: #ffe9a8; }
   .varbadge { display: inline-block; background: #7a2bff; color: #fff; font-size: .68em;
     letter-spacing: .22em; text-transform: uppercase; font-weight: 700; padding: 4px 10px;
     border-radius: 2px; margin: 4px 0; box-shadow: 0 0 12px rgba(122,43,255,.5); }
@@ -466,6 +498,7 @@
     <span class="chip"><b id="statFields">&hellip;</b> fields covered</span>
     <span class="chip">Goal <b>1,000,000+</b> specs</span>
   </div>
+  <p class="staticcount">438,346 original draft specifications published in this catalog (as of 2026-10-01). The live counter above refreshes from the same catalog index when the data loads.</p>
   <div class="hubstatus"><span class="pulse"></span>HUB ONLINE &nbsp;&middot;&nbsp; <b id="statNodes">&hellip;</b> NODES SYNCED &nbsp;&middot;&nbsp; UPLINK SECURE</div>
   <nav class="sitenav" aria-label="Site sections">
     <a href="#top">Home</a><a href="#catalogs">Catalogs</a><a href="#wiki">Wiki</a><a href="#leaks">Wiki Leaks</a><a href="#academy">Academy</a>
@@ -493,13 +526,13 @@
     <button id="go" type="button">Search</button>
   </div>
   <div class="filters" id="filters"></div>
-  <div class="sortrow">Sort:
+  <div class="sortrow"><label for="sort">Sort:</label>
     <select id="sort">
       <option value="az">A to Z</option>
       <option value="new">Newest first</option>
       <option value="old">Oldest first</option>
     </select>
-    &nbsp;Era:
+    &nbsp;<label for="eraf">Era:</label>
     <select id="eraf">
       <option value="">All eras</option>
       <option value="Past">Past</option>
@@ -512,7 +545,7 @@
 <noscript><div class="noscript">This catalog needs JavaScript turned on to search and list specs.</div></noscript>
 <p id="count"></p>
 <div id="loading">ESTABLISHING UPLINK</div>
-<div id="results"></div>
+<div id="results" role="region" aria-label="Spec search results"></div>
 <button id="more" type="button" style="display:none">Show more</button>
 
 <div class="examples">
@@ -1105,7 +1138,7 @@ STATUS=SIGNATURE-1_VALID</pre>
   <p>Draft invention specifications authored by Justin Addam Higgins (JAH), in the forced Signature-One format.<br>
   Drafts &mdash; ready to review and file. Not granted patents. Not affiliated with the USPTO or any government agency.<br>
   Specs carrying a Signature line badge (Signature AI, Signature Software, Signature Code, Signature Gaming, Signature Hardware) are JAH's original designs in the same product area as a public patent record &mdash; not the patented invention itself.<br>
-  Published by Manon &nbsp;&middot;&nbsp; 2026 &nbsp;&middot;&nbsp; <a href="index.html">The Signature-One Archive</a> &nbsp;&middot;&nbsp; <a href="standard.html">The Spec Catalog Standard</a></p>
+  Published by Manon &nbsp;&middot;&nbsp; 2026 &nbsp;&middot;&nbsp; <a href="index.html">The Signature-One Archive</a> &nbsp;&middot;&nbsp; <a href="standard.html">The Spec Catalog Standard</a> &nbsp;&middot;&nbsp; <a href="methodology.html">Data &amp; Methodology</a></p>
 </footer>
 <script src="osv.js"></script>
 <script>
@@ -1615,6 +1648,9 @@ function mulberry(seed) {
 function figShell(r, figNum, title, inner, W, H) {
   W = W || 560; H = H || 360;
   return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + W + ' ' + H + '" role="img">' +
+    '<title>' + esc(title + ' \u2014 ' + r[0]) + '</title>' +
+    '<desc>' + esc('Patent-style figure for draft specification ' + r[0] + ' (' + r[1] + '): ' + title +
+      '. Drawing generated from the spec\u2019s own data. Draft figure for a draft specification \u2014 not a filed patent drawing.') + '</desc>' +
     '<rect x="0" y="0" width="' + W + '" height="' + H + '" fill="#ffffff"/>' +
     '<rect x="8" y="8" width="' + (W - 16) + '" height="' + (H - 16) + '" fill="none" stroke="#000000" stroke-width="2"/>' +
     '<text x="' + (W / 2) + '" y="36" text-anchor="middle" font-family="Georgia, serif" font-size="17" font-weight="bold" fill="#000000">' + esc(title) + '</text>' +
@@ -2850,7 +2886,7 @@ function card(r, i) {
     '<div class="num">' + id + '</div>' +
     (r[12] ? '<div><span class="sigbadge">' + esc(r[12]).toUpperCase() + '</span></div>' : '') +
     variantBadge(r) +
-    '<h3>' + title + '</h3>' +
+    '<h3><a class="speclink" href="specs.html?spec=' + id + '" data-spec="' + id + '">' + title + '</a></h3>' +
     '<div class="meta">' + meta + '</div>' +
     (r[13] ? '<div class="sigenote">' + esc(r[13]) + '</div>' : '') +
     '<div><span class="tag">' + esc(r[3]) + '</span>' +
@@ -2945,11 +2981,11 @@ function renderGroups() {
   var h = "";
   GROUPS.forEach(function (g) {
     var n = groupCount(g.name);
-    h += '<div class="groupcard' + (state.group === g.name ? " active" : "") + '" data-group="' + esc(g.name) + '" role="button" tabindex="0">' +
+    h += '<a class="groupcard' + (state.group === g.name ? " active" : "") + '" data-group="' + esc(g.name) + '" href="specs.html?group=' + encodeURIComponent(g.name) + '">' +
       '<h3>' + esc(g.name) + '</h3>' +
       '<div class="gcount">' + n.toLocaleString() + ' SPECS</div>' +
       '<div class="gcats">' + esc(g.categories.slice(0, 6).join(" \u00b7 ")) + (g.categories.length > 6 ? " \u00b7 \u2026" : "") + '</div>' +
-      '</div>';
+      '</a>';
   });
   box.innerHTML = h;
 }
@@ -2969,6 +3005,42 @@ function renderTracks() {
   });
   box.innerHTML = h;
 }
+function stampSpecSEO(r) {
+  /* Per-spec discoverability: descriptive title, canonical ?spec= URL, and a
+     TechArticle JSON-LD block keyed by the permanent JAH-SPEC ID. Called
+     whenever a spec view opens (including ?spec= deep links). */
+  try {
+    var id = r[0], title = String(r[1] || id);
+    var canon = "https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html?spec=" + encodeURIComponent(id);
+    document.title = id + ": " + title + " \u2014 Signature Spec Catalog (draft specification)";
+    var link = document.querySelector('link[rel="canonical"]');
+    if (link) link.setAttribute("href", canon);
+    var ld = document.getElementById("specJsonLd");
+    if (!ld) {
+      ld = document.createElement("script");
+      ld.type = "application/ld+json";
+      ld.id = "specJsonLd";
+      document.head.appendChild(ld);
+    }
+    ld.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": title,
+      "identifier": id,
+      "url": canon,
+      "mainEntityOfPage": canon,
+      "author": { "@type": "Person", "name": "Justin Addam Higgins" },
+      "creator": { "@type": "Person", "name": "Justin Addam Higgins" },
+      "description": String(r[2] || "").substring(0, 500),
+      "articleSection": r[3] || "",
+      "datePublished": r[6] || "",
+      "inLanguage": "en",
+      "creativeWorkStatus": "Draft",
+      "copyrightHolder": { "@type": "Person", "name": "Justin Addam Higgins" },
+      "disclaimer": "Draft invention specification by Justin Addam Higgins (JAH), ready to review and file. Not a granted patent; not affiliated with the USPTO or any government agency."
+    });
+  } catch (e) {}
+}
 function openSpec(id, lens) {
   var row = null;
   for (var i = 0; i < DATA.length; i++) if (DATA[i][0] === id) { row = DATA[i]; break; }
@@ -2976,6 +3048,7 @@ function openSpec(id, lens) {
     wordToast('No specification found with ID "' + id + '" in the published catalog. Check the ID and try again.');
     return;
   }
+  stampSpecSEO(row);
   state.q = ""; state.cat = ""; state.group = "";
   var qi = document.getElementById("q"); if (qi) qi.value = "";
   apply();
@@ -3010,7 +3083,7 @@ function bindWikiSearch(inputId, resId, lens) {
       for (var i = 0; i < DATA.length && n < 24; i++) {
         var r = DATA[i];
         if ((r[0] + " " + r[1] + " " + r[3]).toLowerCase().indexOf(q) >= 0) {
-          out.push('<a href="#" data-spec="' + esc(r[0]) + '" data-lens="' + lens + '">' + esc(r[1]) +
+          out.push('<a href="specs.html?spec=' + esc(r[0]) + '" data-spec="' + esc(r[0]) + '" data-lens="' + lens + '">' + esc(r[1]) +
             ' <small>' + esc(r[0]) + ' \u00b7 ' + esc(r[3]) + '</small></a>');
           n++;
         }
@@ -3060,6 +3133,8 @@ function bindWikiSearch(inputId, resId, lens) {
     jumpToLetter(b.getAttribute("data-l"));
   });
   document.getElementById("results").addEventListener("click", function (e) {
+    var s0 = e.target.closest ? e.target.closest("a.speclink") : null;
+    if (s0) { e.preventDefault(); openSpec(s0.getAttribute("data-spec")); return; }
     var rd = e.target.closest ? e.target.closest("[data-read]") : null;
     if (rd) { var d0 = rd.closest(".details"); if (d0) auReadCard(d0); return; }
     var cp = e.target.closest ? e.target.closest("[data-copy]") : null;
@@ -3298,6 +3373,7 @@ function bindWikiSearch(inputId, resId, lens) {
   document.getElementById("groupgrid").addEventListener("click", function (e) {
     var c = e.target.closest ? e.target.closest(".groupcard") : null;
     if (!c) return;
+    e.preventDefault();
     var g = c.getAttribute("data-group");
     state.group = (state.group === g) ? "" : g;
     state.cat = "";
@@ -3316,6 +3392,23 @@ function bindWikiSearch(inputId, resId, lens) {
   });
   bindWikiSearch("wikiq", "wikiresults", "wiki");
   bindWikiSearch("leakq", "leakresults", "leaks");
+  function handleGroupParam() {
+    /* Deep-link support for the group cards: specs.html?group=<group name>.
+       Runs after the catalog-groups list loads; apply() re-runs when data
+       finishes loading, so the filter sticks either way. */
+    var g = null;
+    try { g = new URLSearchParams(window.location.search).get("group"); } catch (e) {}
+    if (!g) return;
+    g = String(g).trim();
+    var ok = GROUPS.some(function (gr) { return gr.name === g; });
+    if (!ok) return;
+    state.group = g;
+    state.cat = "";
+    apply();
+    renderGroups();
+    var br = document.getElementById("browse");
+    if (br && br.scrollIntoView) br.scrollIntoView(true);
+  }
   fetch("data/catalog-groups.json").then(function (resp) {
     if (!resp.ok) throw new Error("HTTP " + resp.status);
     return resp.json();
@@ -3326,6 +3419,7 @@ function bindWikiSearch(inputId, resId, lens) {
     });
     groupsReady = true;
     maybeRenderSections();
+    handleGroupParam();
   }).catch(function () { groupsReady = true; maybeRenderSections(); });
   function setLoading(t) {
     var lt = document.getElementById("loading");

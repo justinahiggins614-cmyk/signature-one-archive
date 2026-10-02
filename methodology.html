@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Data &amp; Methodology — Signature Spec Catalog Pending Patents</title>
+<meta name="description" content="How the Signature Spec Catalog is built and counted: the permanent JAH-SPEC-###### ID scheme, draft-vs-granted honesty, the 16-shard archive architecture, versioning, and what SIGNATURE-1 VALID means.">
+<link rel="canonical" href="https://justinahiggins614-cmyk.github.io/signature-one-archive/methodology.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Data & Methodology — Signature Spec Catalog",
+  "url": "https://justinahiggins614-cmyk.github.io/signature-one-archive/methodology.html",
+  "description": "How the Signature Spec Catalog is built and counted: the permanent JAH-SPEC-###### ID scheme, draft-vs-granted honesty, the 16-shard archive architecture, versioning, and what SIGNATURE-1 VALID means.",
+  "creator": { "@type": "Person", "name": "Justin Addam Higgins" },
+  "inLanguage": "en"
+}
+</script>
+<style>
+  :root { --red: #ff2222; --red-dim: #7a1a1a; --blood: #3a0d0d; }
+  body { background: #060608; color: #d8d8de; font-family: "Share Tech Mono", monospace;
+         margin: 0; line-height: 1.7; }
+  .jahnet { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; justify-content: center; background: #050508; border-bottom: 1px solid #3a0d0d; padding: 8px 12px; font-family: Arial, sans-serif; position: relative; z-index: 61; }
+  .jahnet-label { color: #ff3b3b; font-size: .68em; letter-spacing: .3em; font-weight: bold; }
+  .jahnet-here { background: #ff2222; color: #000; font-size: .62em; font-weight: bold;
+             letter-spacing: .22em; padding: 3px 10px; border-radius: 2px;
+             box-shadow: 0 0 12px rgba(255,34,34,.55); white-space: nowrap; }
+  .jahnet-links { display: flex; flex-wrap: wrap; gap: 4px 14px; justify-content: center; }
+  .jahnet-links a { color: #c9a227; text-decoration: none; font-size: .78em; letter-spacing: .06em; }
+  .jahnet-links a:hover { color: #ffe9a8; text-decoration: underline; }
+  .jahnet-drop { position: relative; display: inline-block; }
+  .jahnet-drop summary { color: #c9a227; font-size: .78em; letter-spacing: .06em; cursor: pointer; list-style: none; }
+  .jahnet-drop summary::-webkit-details-marker { display: none; }
+  .jahnet-drop summary::marker { content: ""; }
+  .jahnet-drop summary:hover { color: #ffe9a8; text-decoration: underline; }
+  .jahnet-menu { display: none; position: absolute; top: 130%; left: 50%; transform: translateX(-50%); background: #0a0a10; border: 1px solid #3a0d0d; padding: 6px 0; min-width: 150px; z-index: 62; }
+  .jahnet-drop[open] .jahnet-menu { display: block; }
+  .jahnet-menu a { display: block; padding: 7px 16px; white-space: nowrap; }
+  header { padding: 40px 20px 30px; text-align: center; color: #fff;
+           background: radial-gradient(ellipse at 50% -10%, #2a0a0a 0%, #060608 62%);
+           border-bottom: 3px solid var(--red); box-shadow: 0 4px 30px rgba(255,34,34,.28); }
+  .eyebrow { color: var(--red); letter-spacing: .32em; font-size: .72em; font-weight: 700;
+             font-family: Orbitron, monospace; }
+  h1 { font-family: Orbitron, monospace; letter-spacing: .04em; font-size: 1.5em;
+       text-shadow: 0 0 18px rgba(255,34,34,.55); margin: 10px 0 6px; }
+  .sub { color: #9a9aa5; font-size: .85em; max-width: 720px; margin: 8px auto 0; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 26px 18px 60px; }
+  h2 { font-family: Orbitron, monospace; color: #fff; font-size: 1.02em; letter-spacing: .12em;
+       text-transform: uppercase; border-bottom: 1px solid var(--red-dim); padding-bottom: 8px;
+       margin: 34px 0 12px; text-shadow: 0 0 10px rgba(255,34,34,.5); }
+  p { font-size: .92em; color: #b9b9c4; }
+  ul { font-size: .9em; color: #b9b9c4; margin: 8px 0 8px 1.2em; }
+  li { margin: 7px 0; }
+  li b, p b { color: #ff8080; }
+  a { color: #ff8080; }
+  a:hover { color: #ffc9c9; }
+  .disc { border-top: 2px solid var(--red); margin-top: 34px; padding-top: 14px;
+          font-size: .84em; color: #8b8b95; }
+  footer { border-top: 1px solid var(--blood); padding: 22px 16px; text-align: center;
+           color: #6d6d76; font-size: .78em; }
+  footer a { color: #c9a227; }
+</style>
+</head>
+<body>
+<nav class="jahnet" aria-label="The JAH Network"><span class="jahnet-label">THE JAH NETWORK</span><span class="jahnet-here">YOU ARE HERE: SIGNATURE SPEC CATALOG</span><span class="jahnet-links"><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">The Signature AI Telephone Book</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">Signature Universal Paradox Immune Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">The Signature Dictionary</a><details class="jahnet-drop"><summary>Wiki Sites &#9662;</summary><span class="jahnet-menu"><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">JAH-N Wiki</a></span></details><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">Globally Rejustered Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html">Signature Spec Catalog Pending Patents</a><a href="https://justinahiggins614-cmyk.github.io/signature-llama/">Signature Llama</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">The Signature PC System Depository</a></span></nav>
+
+<header>
+  <p class="eyebrow">// DATA &amp; METHODOLOGY</p>
+  <h1>How the Catalog Is Built</h1>
+  <p class="sub">The counting, identity, storage, and honesty rules underneath the
+  Signature Spec Catalog — published so humans, search engines, and AI systems can
+  read exactly what this archive is and how it grows.</p>
+</header>
+
+<div class="wrap">
+
+<h2>1. The JAH-SPEC ID scheme</h2>
+<p>Every specification carries one <b>permanent identifier</b> of the form
+<b>JAH-SPEC-######</b> — for example <b>JAH-SPEC-000123</b>. IDs are assigned
+sequentially from 000001, are <b>never reused</b>, and are stamped on the record
+itself, on every patent-figure sheet, and inside the record's canonical hash.
+A spec's permanent address is
+<code>https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html?spec=JAH-SPEC-######</code>
+— a numeric ID alone (e.g. <code>?spec=123</code>) resolves to the same record.</p>
+
+<h2>2. Drafts — not granted patents (honesty rule)</h2>
+<p>Every entry is a <b>draft invention specification</b> authored by
+<b>Justin Addam Higgins (JAH)</b> — original drafts, written in the forced
+Signature-One format, marked <b>ready to review and file</b>. Specs carrying a
+Signature-line badge (Signature AI, Signature Software, Signature Code, Signature
+Gaming, Signature Hardware) are JAH's original designs in the same product area as
+a public patent record — <b>not</b> the patented invention itself. The catalog
+never rewords or copies other people's patents.</p>
+
+<h2>3. Shard architecture</h2>
+<p>The archive is split for scale and speed:</p>
+<ul>
+  <li><b>150-spec data chunks</b>, lazy-loaded — the catalog page stays fast while the archive grows toward 1,000,000+ specs.</li>
+  <li><b>16 frozen shard repos</b> hold the oldest chunks (JAH-SPEC-000001 through JAH-SPEC-341550, 341,550 specs); the <b>main repo</b> holds the newest chunks and the search index. The file <code>data/index/shards.json</code> lists every shard in order — IDs are contiguous across shards with no gaps.</li>
+  <li>An <b>850&nbsp;MB repo-size guard</b> on the data directory: when a drip run would cross it, the oldest chunks move sideways into a new shard repo. <b>Growth is always sideways — records are never cut or trimmed to make room.</b></li>
+</ul>
+
+<h2>4. Versioning</h2>
+<p>The record format is governed by <a href="standard.html">The Spec Catalog Standard</a>
+(<b>STANDARD v1.0</b>, effective 2026-10-01). Every published record carries a
+<b>record version</b> (v1.0 baseline) and a <b>revision-history</b> row on its
+identity block, so any later correction is traceable. The <b>Official Standard
+Version (OSV)</b> lens shows a filing-ready rendering of a record — the original
+draft underneath is never changed; corrections live only in the OSV layer.</p>
+
+<h2>5. What "SIGNATURE-1 VALID" means</h2>
+<p><b>SIGNATURE-1 VALID</b> means the record's autoread block passes Signature-One
+schema validation — a <b>data/specification status</b>, not physical or
+manufacturing validation. It says the record is well-formed under JAH's own
+format; it makes no claim about whether the invention works, is buildable, or is
+patentable.</p>
+
+<div class="disc">
+  <b>Disclaimer.</b> Every specification in the Signature Spec Catalog is a <b>draft invention
+  specification</b> authored by Justin Addam Higgins (JAH) — drafts, ready to review and file.
+  They are <b>not</b> granted patents, have <b>not</b> been filed, and are <b>not</b> affiliated with
+  the USPTO or any government agency. This methodology page describes Manon's own archive and his
+  own patent authority — it is not a government publication and confers no patent rights.
+</div>
+
+</div>
+
+<footer>
+  Published by Manon &nbsp;&middot;&nbsp; 2026 &nbsp;&middot;&nbsp;
+  <a href="index.html">The Signature-One Archive</a> &nbsp;&middot;&nbsp;
+  <a href="specs.html">Signature Spec Catalog</a> &nbsp;&middot;&nbsp;
+  <a href="standard.html">The Spec Catalog Standard</a>
+</footer>
+</body>
+</html>

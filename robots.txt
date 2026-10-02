@@ -1,4 +1,9 @@
 User-agent: *
 Allow: /
-Sitemap: https://justinahiggins614-cmyk.github.io/signature-one-archive/sitemap.xml
+
+# Spec Catalog sitemaps: the index lists the static-pages sitemap, one sitemap
+# per frozen shard repo (covering JAH-SPEC-000001-341550), and the main repo's
+# own sitemaps for the newest chunks (JAH-SPEC-341551+). Rebuilt by
+# code/build_sitemaps.py after each 2h drip.
 Sitemap: https://justinahiggins614-cmyk.github.io/signature-one-archive/sitemap-index.xml
+Sitemap: https://justinahiggins614-cmyk.github.io/signature-one-archive/sitemap.xml

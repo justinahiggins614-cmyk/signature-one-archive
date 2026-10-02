@@ -46,8 +46,9 @@ SHARDS = [
     ("signature-one-archive-shard-17", 341551, 358050),
     ("signature-one-archive-shard-18", 358051, 374550),
     ("signature-one-archive-shard-19", 374551, 391050),
+    ("signature-one-archive-shard-20", 391051, 407550),
 ]
-MAIN_RANGE = (391051, 449465)
+MAIN_RANGE = (407551, 495540)
 URL_LIMIT = 50000
 
 

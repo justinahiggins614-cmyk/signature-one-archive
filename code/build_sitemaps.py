@@ -21,7 +21,7 @@ deep-links (specs.html?spec=JAH-SPEC-######) live on the MAIN site; shard
 sitemaps only *list* URLs, they don't serve the pages.
 
 Ranges below were verified contiguous from the live indexes on 2026-10-02
-(shard-2: 1-52500 ... shard-21: 407551-424050, main: 424051-518355).
+(shard-2: 1-52500 ... shard-22: 424051-440550, main: 440551-529611).
 """
 import json
 import os
@@ -55,8 +55,9 @@ SHARDS = [
     ("signature-one-archive-shard-19", 374551, 391050),
     ("signature-one-archive-shard-20", 391051, 407550),
     ("signature-one-archive-shard-21", 407551, 424050),
+    ("signature-one-archive-shard-22", 424051, 440550),
 ]
-MAIN_RANGE = (424051, 518355)
+MAIN_RANGE = (440551, 529611)
 URL_LIMIT = 50000
 
 

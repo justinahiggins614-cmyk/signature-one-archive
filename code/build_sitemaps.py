@@ -15,16 +15,18 @@ script afterwards so the newest JAH-SPEC IDs get sitemap coverage). The spec
 deep-links (specs.html?spec=JAH-SPEC-######) live on the MAIN site; shard
 sitemaps only *list* URLs, they don't serve the pages.
 
-Ranges below were verified contiguous from the live indexes on 2026-10-01
-(shard-2: 1-52500 ... shard-16: 325051-341550, main: 341551-438346).
+Ranges below were verified contiguous from the live indexes on 2026-10-02
+(shard-2: 1-52500 ... shard-21: 407551-424050, main: 424051-518355).
 """
 import json
 import os
+import re
+from datetime import date
 
 HOME = os.path.expanduser("~")
 MAIN = os.path.join(HOME, "workspace", "signature-one-archive")
 SITE = "https://justinahiggins614-cmyk.github.io/signature-one-archive"
-TODAY = "2026-10-01"
+TODAY = date.today().isoformat()
 
 # (shard_dir_name, first_id, last_id) -- shard-2 gets split files
 SHARDS = [
@@ -68,6 +70,34 @@ def write_urlset(path, first, last):
     return last - first + 1
 
 
+def stamp_static_count(total):
+    """Keep the no-JS crawlable count on specs.html honest.
+
+    The discoverability pass stamped a static record count into the raw HTML
+    so crawlers see a real number without running JS. The drip adds ~11k
+    specs every 2h, so re-stamp it here (this script already runs after every
+    drip and `total` is verified against the shard ranges by the assert in
+    main()). Only the one <p class="staticcount"> line is touched.
+    """
+    path = os.path.join(MAIN, "specs.html")
+    with open(path, encoding="utf-8") as f:
+        html = f.read()
+    new_line = ('<p class="staticcount">%s original draft specifications published '
+                'in this catalog (as of %s). The live counter above refreshes from '
+                'the same catalog index when the data loads.</p>'
+                % (format(total, ","), TODAY))
+    html2, n = re.subn(r'<p class="staticcount">.*?</p>', new_line, html,
+                       count=1, flags=re.S)
+    if n != 1:
+        raise RuntimeError("staticcount line not found in specs.html")
+    if html2 != html:
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(html2)
+        print("stamped static count: %s (as of %s)" % (format(total, ","), TODAY))
+    else:
+        print("static count already current")
+
+
 def main():
     index_entries = [SITE + "/sitemap.xml"]  # static pages first
     total = 0
@@ -89,7 +119,7 @@ def main():
         print("shard %-32s %d-%d (%d urls)" % (dirname, first, last, n))
 
     # --- main repo's own newest chunks (repo ROOT, never data/) ---
-    # MAIN_RANGE start follows the newest shard (shard-18 ends at 374550); end follows state.json.
+    # MAIN_RANGE start follows the newest shard (shard-21 ends at 424050); end follows state.json.
     mf = MAIN_RANGE[0]
     with open(os.path.join(MAIN, "code", "specs", "state.json"), encoding="utf-8") as f:
         ml = json.load(f)["next_index"] - 1
@@ -114,6 +144,7 @@ def main():
     print("index entries: %d, total spec urls: %d" % (len(index_entries), total))
     expected = sum(last - first + 1 for _, first, last in SHARDS) + (ml - mf + 1)
     assert total == expected, "expected %d, got %d" % (expected, total)
+    stamp_static_count(total)
 
 
 if __name__ == "__main__":

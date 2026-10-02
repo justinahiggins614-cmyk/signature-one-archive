@@ -1112,7 +1112,7 @@ STATUS=SIGNATURE-1_VALID</pre>
 
 <div class="wrap" id="wiki" style="margin-top:34px">
   <h2 class="sect">JAH-N Wiki</h2>
-  <p class="sectsub">The encyclopedia of the hub &mdash; every spec carries its own <b>wiki article</b> (open any spec, Wiki lens). Search the articles:</p>
+  <p class="sectsub">The encyclopedia of the hub &mdash; every spec carries its own <b>wiki article</b>. Search the articles:</p>
   <div class="wikisearch"><input id="wikiq" type="search" aria-label="Search wiki articles by title, ID, or category" placeholder="Search wiki articles by title, ID, or category&hellip;" autocomplete="off"></div>
   <div class="wikiresults" id="wikiresults"></div>
 </div>
@@ -2128,8 +2128,7 @@ function wordDictLink(r) {
 }
 function lensBar(r) {
   var lenses = [["official", "&#127963;&#65039; Official Standard"], ["patent", "Patent filing"], ["overview", "Overview"], ["make", "Manufacture"],
-                ["ai", "AI explains"], ["code", "Code"], ["demo", "Demo"],
-                ["wiki", "Wiki"], ["leaks", "Leaks"]];
+                ["ai", "AI explains"], ["code", "Code"], ["demo", "Demo"]];
   var idx = ALLSTORE.length;
   ALLSTORE.push(r);
   return '<div class="lensbar">' + lenses.map(function (l, k) {
@@ -2174,7 +2173,7 @@ function copyAllText(r) {
       function () { copyFallback(txt); });
   } else { copyFallback(txt); }
 }
-/* ---- Read-aloud: every lens (patent, overview, manufacture, AI, code, demo, wiki, leaks) ---- */
+/* ---- Read-aloud: every lens (patent, overview, manufacture, AI, code, demo) ---- */
 var AU = { q: [], i: 0, active: false, paused: false, rate: 1, label: "" };
 function auVoice() {
   try {
@@ -2274,7 +2273,7 @@ function auReadCard(det) {
   var card = det.closest(".spec-card"), title = "";
   if (card) { var h3 = card.querySelector("h3"); if (h3) title = h3.textContent.trim(); }
   var names = { patent: "Patent filing", overview: "Overview", make: "Manufacture",
-                ai: "AI explains", code: "Code", demo: "Demo", wiki: "Wiki", leaks: "Leaks" };
+                ai: "AI explains", code: "Code", demo: "Demo" };
   var label = names[pt.lens] || pt.lens;
   AU.label = (title ? title + " — " : "") + label;
   AU.q = auChunks(AU.label + ". " + pt.text);
@@ -2330,65 +2329,6 @@ function paramLine(r) {
 }
 function measureLine(r) {
   return (r[17] || []).map(function (x) { return x.name + " " + x.value + " " + x.unit; }).join("; ");
-}
-function wikiHTML(r) {
-  var a = r[18] || {}, m = r[15] || {};
-  var h = '<div class="wikibox">';
-  h += '<div class="wikititle">' + esc(r[1]) + '</div>';
-  h += '<div class="wikisub">From JAH-N Wiki &mdash; the encyclopedia of the hub &middot; article ' + esc(r[0]) + '</div>';
-  h += '<table>';
-  h += '<tr><td class="k">Spec ID</td><td>' + esc(r[0]) + '</td></tr>';
-  h += '<tr><td class="k">Inventor / Owner</td><td>Justin Addam Higgins (JAH)</td></tr>';
-  h += '<tr><td class="k">Category</td><td>' + esc(r[3]) + '</td></tr>';
-  h += '<tr><td class="k">CPC class</td><td>' + esc(r[4]) + '</td></tr>';
-  h += '<tr><td class="k">Era</td><td>' + esc(r[5]) + '</td></tr>';
-  h += '<tr><td class="k">Prepared</td><td>' + esc(r[6]) + '</td></tr>';
-  if (r[12]) h += '<tr><td class="k">Signature line</td><td>' + esc(r[12]) + '</td></tr>';
-  if (r[19]) h += '<tr><td class="k">Lineage</td><td>' + esc(variantText(r)) + '</td></tr>';
-  h += '</table>';
-  h += '<h4>Summary</h4><p>' + esc(r[2]) + '</p>';
-  h += '<h4>Description</h4><p>' + esc(a.what || "") + '</p>';
-  h += '<h4>How it works</h4><ol>' +
-    (a.how_it_works || []).map(function (s) { return '<li>' + esc(s) + '</li>'; }).join("") + '</ol>';
-  h += '<h4>Measurements</h4><table>' +
-    (r[17] || []).map(function (x) {
-      return '<tr><td class="k">' + esc(x.name) + '</td><td>' + esc(x.value) + ' ' + esc(x.unit) +
-             ' (\u00b1' + esc(x.tolerance || "\u2014") + ')</td></tr>';
-    }).join("") + '</table>';
-  h += '<h4>Manufacture</h4><p>' + esc(m.note || "") + '</p><ol>' +
-    (m.steps || []).map(function (s) { return '<li>' + esc(String(s).replace(/^[0-9]+\.\s*/, "")) + '</li>'; }).join("") + '</ol>';
-  h += '<h4>Patent draft</h4><p>This article describes draft patent specification ' + esc(r[0]) +
-    ', with a full filing package: field, background, summary, drawings, detailed description, and ' +
-    ((r[14] || {}).claims || []).length + ' claims. See the Patent filing lens for the complete document.</p>';
-  h += '<h4>References</h4><p>Autoread block: <code>' + esc(r[9]) + '</code></p>';
-  h += '<p style="font-size:.78em;color:#8b8b95">Draft specification by Justin Addam Higgins (JAH) &mdash; ready to review and file. Not a granted patent.</p>';
-  h += '<p style="margin-top:12px;padding:10px;border:1px solid #1e3a6e;background:#0d1b33">' +
-    '<a href="https://justinahiggins614-cmyk.github.io/jah-wiki/?page=' + encodeURIComponent(r[0]) + '" target="_blank" rel="noopener" style="color:#9fc2ff;font-weight:bold;letter-spacing:1px">&#128214; JAH WIKI ARTICLE &mdash; the official encyclopedia entry for ' + esc(r[0]) + ' (definition, history, 11 analysis lenses, patent draft, program, AI persona)</a></p>';
-  h += '<p style="margin-top:12px;padding:10px;border:1px solid #5a4a15;background:#141003">' +
-    '<a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/?dossier=' + encodeURIComponent(r[0]) + '" target="_blank" rel="noopener" style="color:#e8d98a;font-weight:bold;letter-spacing:1px">&#9654; CLASSIFIED DOSSIER &mdash; open the full JAH-N Wiki Leaks file for ' + esc(r[0]) + ' (personal AI, read-aloud, AI disc download)</a></p>';
-  h += '</div>';
-  return h;
-}
-function leaksHTML(r) {
-  var a = r[18] || {}, p = r[14] || {};
-  var h = '<div class="leakbox">';
-  h += '<span class="stamp">TOP SECRET</span>';
-  h += '<div class="wikititle" style="color:#e8d98a;border-color:#5a4a15">JAH-N WIKI LEAKS &mdash; SUBJECT FILE ' + esc(r[0]) + '</div>';
-  h += '<div class="wikisub" style="color:#8a7d55">Declassified briefing &middot; handle per protocol &middot; <span class="redact">XXXX-XXXX</span></div>';
-  h += '<h4>1. Subject overview</h4><p>' + esc(r[2]) + '</p>';
-  h += '<h4>2. Technical assessment</h4><p>Category ' + esc(r[3]) + ' (' + esc(r[4]) + '). Key parameters: ' +
-    esc(paramLine(r)) + '. Rated measurements: ' + esc(measureLine(r)) + '.</p>';
-  h += '<h4>3. Science proof</h4><p>The mechanism holds under the reversed universal allowance algorithm: ' +
-    esc((r[10] || []).join(" ")) + '</p>';
-  h += '<h4>4. Math proof</h4><p>Consistency check across the rated measurements and key parameters: all values fall within stated tolerances and the autoread block validates &mdash; ' +
-    esc(r[9] || "") + '</p>';
-  h += '<h4>5. Simulated experts</h4><ol>' +
-    (a.how_it_works || []).map(function (s) { return '<li>' + esc(s) + '</li>'; }).join("") + '</ol>';
-  h += '<h4>6. Officer conclusion</h4><p>' + esc(a.bottom_line || "") + '</p>';
-  h += '<p style="margin:10px 0"><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/?dossier=' + encodeURIComponent(r[0]) + '" target="_blank" rel="noopener" style="color:#ff6b6b;font-weight:bold;letter-spacing:1px">&#9654; OPEN THE FULL CLASSIFIED DOSSIER ON JAH-N WIKI LEAKS</a></p>';
-  h += '<div class="leakfoot">File concerns a DRAFT invention specification by Justin Addam Higgins (JAH) &mdash; ready to review and file. Not a granted patent. Stylized dossier; the engineering data above is the spec\u2019s own.</div>';
-  h += '</div>';
-  return h;
 }
 /* ---- Official Standard Version: filing-ready legal-standard package, loaded on demand ---- */
 function osvRec(r) {
@@ -2794,8 +2734,6 @@ function detailsHTML(r, i) {
     '<div class="lenspane" data-pane="ai" style="display:none">' + aiHTML(r) + '</div>' +
     '<div class="lenspane" data-pane="code" style="display:none">' + codeHTML(r) + '</div>' +
     '<div class="lenspane" data-pane="demo" style="display:none">' + demoHTML(r[16], i) + '</div>' +
-    '<div class="lenspane" data-pane="wiki" style="display:none">' + wikiHTML(r) + '</div>' +
-    '<div class="lenspane" data-pane="leaks" style="display:none">' + leaksHTML(r) + '</div>' +
     '<div class="lenspane" data-pane="official" style="display:none">' + officialHTML(r) + '</div>';
 }
 /* ---- Lazy spec loading: full records are fetched one chunk at a time ---- */

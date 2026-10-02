@@ -102,3 +102,8 @@ record's `id`, `version`, and `hash` so the file is verifiable offline.
 
 - **1.0** (2026-10-01): initial standard, ratified from the nine-site
   consolidated review. Canonical schema in `signature-record-standard.json`.
+- **1.0** (2026-10-01, Spec Catalog master version document): `standard.html`
+  published on the Spec Catalog site — declares STANDARD v1.0 (effective
+  2026-10-01) and record version v1.0 (baseline) for all spec records; adds
+  Record version + Revision history rows to each spec's governance identity
+  block; per-format changelog maintained on that page. No record data changed.

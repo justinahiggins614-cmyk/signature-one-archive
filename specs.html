@@ -33,6 +33,9 @@
   .jahnet-drop summary::-webkit-details-marker { display: none; }
   .jahnet-drop summary::marker { content: ""; }
   .jahnet-drop summary:hover { color: #ffe9a8; text-decoration: underline; }
+  .jahnet-here { background: var(--red); color: #000; font-size: .62em; font-weight: bold;
+             letter-spacing: .22em; padding: 3px 10px; border-radius: 2px;
+             box-shadow: 0 0 12px rgba(255,34,34,.55); white-space: nowrap; }
   .jahnet-menu { display: none; position: absolute; top: 130%; left: 50%; transform: translateX(-50%); background: #0a0a10; border: 1px solid #3a0d0d; padding: 6px 0; min-width: 150px; z-index: 62; }
   .jahnet-drop[open] .jahnet-menu { display: block; }
   .jahnet-menu a { display: block; padding: 7px 16px; white-space: nowrap; }
@@ -207,12 +210,12 @@
                   font-family: inherit; text-transform: uppercase; letter-spacing: .08em; }
   .card .toggle:hover { text-shadow: 0 0 10px rgba(255,34,34,.8); }
   .card .details { display: none; margin-top: 10px; border-top: 1px solid var(--blood);
-                   padding-top: 10px; font-size: .86em; }
+                   padding-top: 10px; font-size: .86em; overflow-x: auto; }
   .card.expanded .details { display: block; }
   .card .details h4 { margin: 12px 0 5px; color: #fff; font-size: .88em; font-family: Orbitron, monospace;
     letter-spacing: .1em; text-transform: uppercase; text-shadow: 0 0 10px rgba(255,34,34,.5); }
   .card .details table { width: 100%; border-collapse: collapse; font-size: .85em; }
-  .card .details td { border: 1px solid #23232c; padding: 4px 8px; vertical-align: top; color: #b9b9c4; }
+  .card .details td { border: 1px solid #23232c; padding: 4px 8px; vertical-align: top; color: #b9b9c4; overflow-wrap: anywhere; }
   .card .details td.k { font-weight: 700; color: #ff8080; white-space: nowrap; width: 110px; }
   .card .details ol { margin: 4px 0 4px 1.3em; line-height: 1.55; color: #b9b9c4; }
   .card .details li { margin: 3px 0; }
@@ -260,6 +263,12 @@
   .goalabel { margin-top: 6px; font-size: .74em; letter-spacing: .24em; color: #9a9aa5;
     text-transform: uppercase; }
   .goalabel b { color: var(--red); text-shadow: 0 0 10px rgba(255,34,34,.7); }
+  .lastupdated { margin-top: 10px; font-size: .68em; letter-spacing: .3em; color: #77777f;
+    text-transform: uppercase; }
+  .lastupdated b { color: #c9a227; font-weight: bold; }
+  .skip { position: absolute; left: -9999px; top: 0; background: var(--red); color: #000;
+          font-weight: bold; font-size: .8em; letter-spacing: .1em; padding: 8px 14px; z-index: 100; }
+  .skip:focus { left: 0; }
 
   .filingnote { font-size: .8em; color: #ffb3b3; background: rgba(255,34,34,.06);
     border: 1px dashed var(--red); border-radius: 2px; padding: 8px 12px; margin: 8px 0; }
@@ -442,7 +451,8 @@
 </style>
 </head>
 <body>
-<nav class="jahnet" aria-label="The JAH Network"><span class="jahnet-label">THE JAH NETWORK</span><span class="jahnet-links"><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">Globally Rejustered Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/">Signature Spec Catalog Pending Patents</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">The Signature Dictionary</a><details class="jahnet-drop"><summary>Wiki Sites &#9662;</summary><span class="jahnet-menu"><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">JAH-N Wiki</a></span></details><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">Signature Universal Paradox Immune Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">The Signature AI Telephone Book</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">The Signature PC System Depository</a></span></nav>
+<a class="skip" href="#browse">Skip to spec search</a>
+<nav class="jahnet" aria-label="The JAH Network"><span class="jahnet-label">THE JAH NETWORK</span><span class="jahnet-here">YOU ARE HERE: SIGNATURE SPEC CATALOG</span><span class="jahnet-links"><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">The Signature AI Telephone Book</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">Signature Universal Paradox Immune Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">The Signature Dictionary</a><details class="jahnet-drop"><summary>Wiki Sites &#9662;</summary><span class="jahnet-menu"><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">JAH-N Wiki</a></span></details><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">Globally Rejustered Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html" aria-current="page">Signature Spec Catalog Pending Patents</a><a href="https://justinahiggins614-cmyk.github.io/signature-llama/">Signature Llama</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">The Signature PC System Depository</a></span></nav>
 <div class="scanlines" aria-hidden="true"></div>
 <header id="top">
   <div class="eye" aria-hidden="true"></div>
@@ -455,7 +465,6 @@
     <span class="chip"><b id="statCount">&hellip;</b> draft specs</span>
     <span class="chip"><b id="statFields">&hellip;</b> fields covered</span>
     <span class="chip">Goal <b>1,000,000+</b> specs</span>
-    <span class="chip">Updated <b>2026-09-28</b></span>
   </div>
   <div class="hubstatus"><span class="pulse"></span>HUB ONLINE &nbsp;&middot;&nbsp; <b id="statNodes">&hellip;</b> NODES SYNCED &nbsp;&middot;&nbsp; UPLINK SECURE</div>
   <nav class="sitenav" aria-label="Site sections">
@@ -464,6 +473,7 @@
   <div class="nodedots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
   <div class="goalbar" aria-hidden="true"><div class="goalfill" id="goalFill"></div></div>
   <div class="goalabel">MISSION PROGRESS &mdash; <b id="goalPct">&hellip;</b> OF 1,000,000 SPECS</div>
+  <p class="lastupdated">CATALOG DATA LAST UPDATED &nbsp;<b id="lastUpdDate">2026-10-01</b></p>
 </header>
 
 <div class="wrap">
@@ -479,7 +489,7 @@
 
 <div class="searchwrap" id="browse">
   <div class="searchrow">
-    <input id="q" type="search" placeholder="Search by title, keyword, spec ID, inventor, or category&hellip;" autocomplete="off">
+    <input id="q" type="search" aria-label="Search specs by title, keyword, spec ID, inventor, or category" placeholder="Search by title, keyword, spec ID, inventor, or category&hellip;" autocomplete="off">
     <button id="go" type="button">Search</button>
   </div>
   <div class="filters" id="filters"></div>
@@ -1070,7 +1080,7 @@ STATUS=SIGNATURE-1_VALID</pre>
 <div class="wrap" id="wiki" style="margin-top:34px">
   <h2 class="sect">JAH-N Wiki</h2>
   <p class="sectsub">The encyclopedia of the hub &mdash; every spec carries its own <b>wiki article</b> (open any spec, Wiki lens). Search the articles:</p>
-  <div class="wikisearch"><input id="wikiq" type="search" placeholder="Search wiki articles by title, ID, or category&hellip;" autocomplete="off"></div>
+  <div class="wikisearch"><input id="wikiq" type="search" aria-label="Search wiki articles by title, ID, or category" placeholder="Search wiki articles by title, ID, or category&hellip;" autocomplete="off"></div>
   <div class="wikiresults" id="wikiresults"></div>
 </div>
 
@@ -1078,7 +1088,7 @@ STATUS=SIGNATURE-1_VALID</pre>
   <h2 class="sect">JAH-N Wiki Leaks</h2>
   <p class="sectsub">Declassified-style dossiers &mdash; every spec also ships a <b>top-secret-file briefing</b>: overview, science proof, math proof, simulated experts, officer conclusion. Search the files:</p>
   <p class="sectsub">&#9654; <a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/" target="_blank" rel="noopener" style="color:#e8d98a">JAH-N Wiki</a> &mdash; every spec, patent, and bizarre-subject file as a classified dossier, each with its own personal AI, read-aloud, and downloadable AI disc / thumbdrive copies.</p>
-  <div class="wikisearch"><input id="leakq" type="search" placeholder="Search leaked files by title, ID, or category&hellip;" autocomplete="off"></div>
+  <div class="wikisearch"><input id="leakq" type="search" aria-label="Search leaked files by title, ID, or category" placeholder="Search leaked files by title, ID, or category&hellip;" autocomplete="off"></div>
   <div class="wikiresults" id="leakresults"></div>
 </div>
 
@@ -1095,7 +1105,7 @@ STATUS=SIGNATURE-1_VALID</pre>
   <p>Draft invention specifications authored by Justin Addam Higgins (JAH), in the forced Signature-One format.<br>
   Drafts &mdash; ready to review and file. Not granted patents. Not affiliated with the USPTO or any government agency.<br>
   Specs carrying a Signature line badge (Signature AI, Signature Software, Signature Code, Signature Gaming, Signature Hardware) are JAH's original designs in the same product area as a public patent record &mdash; not the patented invention itself.<br>
-  Published by Manon &nbsp;&middot;&nbsp; 2026 &nbsp;&middot;&nbsp; <a href="index.html">The Signature-One Archive</a></p>
+  Published by Manon &nbsp;&middot;&nbsp; 2026 &nbsp;&middot;&nbsp; <a href="index.html">The Signature-One Archive</a> &nbsp;&middot;&nbsp; <a href="standard.html">The Spec Catalog Standard</a></p>
 </footer>
 <script src="osv.js"></script>
 <script>
@@ -1257,6 +1267,8 @@ function jahIdentityHTML(r) {
       ["Content hash", '<span id="' + hashId + '">computing…</span> (SHA-256 of canonical record data, not the page HTML)'],
       ["Schema", "JAH-SPEC-SCHEMA " + JAHSCHEMA_VERSION],
       ["Version", ver + " · Prepared " + (r[6] || "")],
+      ["Record version", "v1.0 (baseline) — the catalog record format version; see standard.html, The Spec Catalog Standard"],
+      ["Revision history", "v1.0 · initial published record — the published catalog carries no revision log for this record; record IDs are never reused or silently changed"],
       ["Specification status", "SPECIFICATION_COMPLETE — schema validation (data status)"],
       ["Engineering validation", "NOT_VALIDATED — not prototype-tested, not manufacturing-validated"],
       ["Compliance", "any compliance wording (FDA, BPA-free, food-safe…) is CLAIMED, not verified, unless a verification source is attached"]
@@ -3235,6 +3247,23 @@ function bindWikiSearch(inputId, resId, lens) {
       wordToast("The word invention for \"" + q + "\" is still being drafted \u2014 check back soon.");
     }
   }
+  function refreshLastUpdated() {
+    /* Show the date of the most recent published data-index change, so the
+       "catalog data last updated" line stays current as the drip publishes.
+       Any failure leaves the maintained fallback date in place. */
+    try {
+      fetch("https://api.github.com/repos/justinahiggins614-cmyk/signature-one-archive/commits?path=data/index/&per_page=1")
+        .then(function (resp) { if (!resp.ok) throw new Error("HTTP " + resp.status); return resp.json(); })
+        .then(function (list) {
+          var d = list && list[0] && list[0].commit && list[0].commit.author && list[0].commit.author.date;
+          if (d && /^20\d\d-\d\d-\d\d/.test(d)) {
+            var el = document.getElementById("lastUpdDate");
+            if (el) el.textContent = d.slice(0, 10);
+          }
+        })
+        .catch(function () { /* keep the fallback date */ });
+    } catch (e) { /* keep the fallback date */ }
+  }
   function finishLoad() {
     var seenCats = {}, seenIds = {}, dupes = 0;
     DATA.forEach(function (r) {
@@ -3258,6 +3287,7 @@ function bindWikiSearch(inputId, resId, lens) {
     document.getElementById("goalFill").style.width = Math.max(pct, 0.6) + "%";
     document.getElementById("goalPct").textContent = pct.toFixed(2) + "%";
     document.getElementById("statFields").textContent = CATS.length.toLocaleString();
+    refreshLastUpdated();
     document.getElementById("loading").style.display = "none";
     buildFilters();
     apply();

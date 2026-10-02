@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Spec Catalog Standard v1.0 — Signature Spec Catalog Pending Patents</title>
+<meta name="description" content="The master version document for the Signature Spec Catalog record format: master version v1.0, effective 2026-10-01 — what it governs, version and revision policy, changelog.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root { --red: #ff2222; --red-dim: #7a1a1a; --blood: #3a0d0d; }
+  body { background: #060608; color: #d8d8de; font-family: "Share Tech Mono", monospace;
+         margin: 0; line-height: 1.7; }
+  .jahnet { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; justify-content: center; background: #050508; border-bottom: 1px solid #3a0d0d; padding: 8px 12px; font-family: Arial, sans-serif; position: relative; z-index: 61; }
+  .jahnet-label { color: #ff3b3b; font-size: .68em; letter-spacing: .3em; font-weight: bold; }
+  .jahnet-here { background: #ff2222; color: #000; font-size: .62em; font-weight: bold;
+             letter-spacing: .22em; padding: 3px 10px; border-radius: 2px;
+             box-shadow: 0 0 12px rgba(255,34,34,.55); white-space: nowrap; }
+  .jahnet-links { display: flex; flex-wrap: wrap; gap: 4px 14px; justify-content: center; }
+  .jahnet-links a { color: #c9a227; text-decoration: none; font-size: .78em; letter-spacing: .06em; }
+  .jahnet-links a:hover { color: #ffe9a8; text-decoration: underline; }
+  .jahnet-drop { position: relative; display: inline-block; }
+  .jahnet-drop summary { color: #c9a227; font-size: .78em; letter-spacing: .06em; cursor: pointer; list-style: none; }
+  .jahnet-drop summary::-webkit-details-marker { display: none; }
+  .jahnet-drop summary::marker { content: ""; }
+  .jahnet-drop summary:hover { color: #ffe9a8; text-decoration: underline; }
+  .jahnet-menu { display: none; position: absolute; top: 130%; left: 50%; transform: translateX(-50%); background: #0a0a10; border: 1px solid #3a0d0d; padding: 6px 0; min-width: 150px; z-index: 62; }
+  .jahnet-drop[open] .jahnet-menu { display: block; }
+  .jahnet-menu a { display: block; padding: 7px 16px; white-space: nowrap; }
+  header { padding: 40px 20px 30px; text-align: center; color: #fff;
+           background: radial-gradient(ellipse at 50% -10%, #2a0a0a 0%, #060608 62%);
+           border-bottom: 3px solid var(--red); box-shadow: 0 4px 30px rgba(255,34,34,.28); }
+  .eyebrow { color: var(--red); letter-spacing: .32em; font-size: .72em; font-weight: 700;
+             font-family: Orbitron, monospace; }
+  h1 { font-family: Orbitron, monospace; letter-spacing: .04em; font-size: 1.5em;
+       text-shadow: 0 0 18px rgba(255,34,34,.55); margin: 10px 0 6px; }
+  .sub { color: #9a9aa5; font-size: .85em; max-width: 720px; margin: 8px auto 0; }
+  .masterbox { max-width: 720px; margin: 22px auto 0; border: 1px solid var(--red);
+               background: rgba(255,34,34,.06); padding: 16px 20px; text-align: left; }
+  .masterbox .k { color: #ff8080; font-size: .72em; letter-spacing: .22em; text-transform: uppercase;
+                  font-family: Orbitron, monospace; }
+  .masterbox .v { font-size: 1.05em; color: #fff; margin: 2px 0 10px; }
+  .masterbox .v:last-child { margin-bottom: 0; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 26px 18px 60px; }
+  h2 { font-family: Orbitron, monospace; color: #fff; font-size: 1.02em; letter-spacing: .12em;
+       text-transform: uppercase; border-bottom: 1px solid var(--red-dim); padding-bottom: 8px;
+       margin: 34px 0 12px; text-shadow: 0 0 10px rgba(255,34,34,.5); }
+  p { font-size: .92em; color: #b9b9c4; }
+  ul { font-size: .9em; color: #b9b9c4; margin: 8px 0 8px 1.2em; }
+  li { margin: 7px 0; }
+  li b, p b { color: #ff8080; }
+  a { color: #ff8080; }
+  a:hover { color: #ffc9c9; }
+  .gov { border: 1px dashed var(--red); background: rgba(255,34,34,.05); padding: 12px 16px;
+         font-size: .86em; color: #ffb3b3; margin: 18px 0; }
+  .disc { border-top: 2px solid var(--red); margin-top: 34px; padding-top: 14px;
+          font-size: .84em; color: #8b8b95; }
+  .chlog { width: 100%; border-collapse: collapse; font-size: .86em; margin-top: 10px; }
+  .chlog th, .chlog td { border: 1px solid var(--red-dim); padding: 8px 12px; text-align: left;
+                         vertical-align: top; }
+  .chlog th { color: #ff8080; font-family: Orbitron, monospace; font-size: .74em;
+              letter-spacing: .14em; text-transform: uppercase; background: rgba(255,34,34,.05); }
+  footer { border-top: 1px solid var(--blood); padding: 22px 16px; text-align: center;
+           color: #6d6d76; font-size: .78em; }
+  footer a { color: #c9a227; }
+</style>
+</head>
+<body>
+<nav class="jahnet" aria-label="The JAH Network"><span class="jahnet-label">THE JAH NETWORK</span><span class="jahnet-here">YOU ARE HERE: SIGNATURE SPEC CATALOG</span><span class="jahnet-links"><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">The Signature AI Telephone Book</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">Signature Universal Paradox Immune Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">The Signature Dictionary</a><details class="jahnet-drop"><summary>Wiki Sites &#9662;</summary><span class="jahnet-menu"><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">JAH-N Wiki</a></span></details><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">Globally Rejustered Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html">Signature Spec Catalog Pending Patents</a><a href="https://justinahiggins614-cmyk.github.io/signature-llama/">Signature Llama</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">The Signature PC System Depository</a></span></nav>
+
+<header>
+  <p class="eyebrow">// MASTER VERSION DOCUMENT</p>
+  <h1>The Spec Catalog Standard</h1>
+  <p class="sub">The master version of the record format underneath every spec record published in the
+  Signature Spec Catalog — what the format is, what it governs, and how it changes.</p>
+  <div class="masterbox" aria-label="Master version summary">
+    <div class="k">Master version</div><div class="v">STANDARD v1.0</div>
+    <div class="k">Effective date</div><div class="v">2026-10-01</div>
+    <div class="k">Record version it defines</div><div class="v">v1.0 (baseline) — carried by every published record</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<h2>1. What this Standard is</h2>
+<p>This document is the <b>master version document</b> for the Signature Spec Catalog record format.
+It declares one version — <b>STANDARD v1.0, effective 2026-10-01</b> — and the record format every
+published spec carries is <b>record version v1.0 (baseline)</b>. It describes existing practice; it
+changes no record data. It is published by Manon under his own patent authority — the JAH
+Signature-One Patent Authority — and is not a government standard, not USPTO-affiliated.</p>
+
+<h2>2. What the Standard governs</h2>
+<ul>
+  <li><b>Record identity.</b> Every specification carries a permanent deterministic ID —
+  <b>JAH-SPEC-######</b> for invention specs, <b>JAH-WORD-######</b> for word inventions. IDs are never
+  reused, never re-assigned, and never silently changed. Example published records:
+  <a href="specs.html?spec=JAH-SPEC-325051">JAH-SPEC-325051</a> (first record in the main published index)
+  and <a href="specs.html?spec=JAH-SPEC-426870">JAH-SPEC-426870</a> (most recent in the main published index at time of writing).</li>
+  <li><b>The forced Signature-One spec format.</b> Title, abstract, six-tool signature mapping
+  (line, triangle, square, cross, circle, curvature), key parameters, a machine-readable autoread
+  block, and the five reversed-allowance algorithm steps — plus patent draft, manufacture,
+  measurements, AI explainer, runnable program, and working demo lenses.</li>
+  <li><b>Canonical record JSON + SHA-256 content hash.</b> Each spec page publishes its canonical
+  record text and the hash computed over it; any consumer can recompute the hash and verify the
+  record. The hash covers the record data, not the page HTML.</li>
+  <li><b>SIGNATURE-1 VALID.</b> A data/specification status meaning the record passes Signature-One
+  schema validation. It is <b>not</b> physical, prototype, or manufacturing validation.</li>
+  <li><b>Provenance and lineage.</b> Every record's governance identity block shows spec type
+  (original draft, Signature-line, variant, version edition, revision, product line, MIX hybrid),
+  provenance assembled only from recorded fields, and lineage (signature line, line notes, mix/variant parents).</li>
+  <li><b>Record version + revision history.</b> Every record carries <b>Record version: v1.0 (baseline)</b>
+  and a <b>Revision history</b> row. Revisions are additive: a changed record would bump the record
+  version; the ID stays the same and old versions are never silently overwritten. No revision history
+  is invented — records published before this document show v1.0 with no recorded prior revisions.</li>
+  <li><b>The Official Standard Version (OSV) layer.</b> The gold Official Standard lens on each spec
+  page is a separate filing-ready legal-standard package; the original draft is unchanged and
+  corrections live only in the OSV layer, marked "filing-ready draft — NOT filed, NOT a granted patent".</li>
+  <li><b>Cross-site identity.</b> Each record links to its counterparts by deterministic ID —
+  the JAH-N dossier (<b>?dossier=JAH-SPEC-######</b>), the catalog's own deep link
+  (<b>specs.html?spec=JAH-SPEC-######</b>), and the word invention (<b>?word=&lt;word&gt;</b>).
+  PC-system records (JAH-PC-########) live on the PC Depository; a spec links to a PC system only
+  where a deterministic relationship exists in the data.</li>
+  <li><b>Filing-package downloads.</b> Labeled, generated-on-click downloads (patent package zip,
+  spec record JSON, Arduino sketch, programs) — generated from the record data at click time.</li>
+  <li><b>Status and disclaimers.</b> Every record is marked DRAFT — ready to review and file;
+  <b>not</b> a granted patent, <b>not</b> filed, <b>not</b> affiliated with the USPTO or any
+  government agency.</li>
+</ul>
+
+<div class="gov"><b>Governance note.</b> This Standard sits under Manon's own patent governance — the
+JAH Signature-One Patent Authority. Like Disney has its own money, this system has its own
+deterministic legal-ID coding: the JAH-SPEC ID, the official stamp, and the content hash ARE the
+protection and credibility. This is his own patent authority — not the USPTO, not a government system.</div>
+
+<h2>3. Version and revision policy</h2>
+<ul>
+  <li><b>Master version</b> (this document) changes only when the record format itself changes:
+  v1.0 → v1.1 for additive clarifications, v2.0 for format-breaking changes. Every change is logged
+  in the changelog below.</li>
+  <li><b>Record version</b> on individual specs stays v1.0 (baseline) for all published records.
+  A future record revision bumps the record version and appends to that record's revision history —
+  history is recorded forward, never invented backward.</li>
+  <li><b>No backfill.</b> Seed, generator, and revision information is stamped into new records
+  forward-only; older records keep v1.0 with no fabricated history.</li>
+</ul>
+
+<h2>4. References</h2>
+<ul>
+  <li><a href="specs.html">The Signature Spec Catalog (specs.html)</a> — the published records this Standard governs</li>
+  <li>Open records directly: <a href="specs.html?spec=JAH-SPEC-325051">JAH-SPEC-325051</a> ·
+  <a href="specs.html?spec=JAH-SPEC-426870">JAH-SPEC-426870</a> · word inventions via
+  <a href="specs.html?word=rug">?word=rug</a></li>
+  <li><b>SIGNATURE-RECORD-STANDARD.md</b> (in the site repository) — the common record law across
+  all nine Signature sites; this document is the Spec Catalog's master version under it</li>
+  <li><b>signature-record-standard.json</b> — the machine-readable schema</li>
+</ul>
+
+<h2>5. Changelog</h2>
+<table class="chlog">
+  <tr><th>Version</th><th>Date</th><th>Change</th></tr>
+  <tr><td><b>v1.0</b></td><td>2026-10-01</td><td>Initial publication of the master version document. Defines STANDARD v1.0
+  (effective 2026-10-01) and record version v1.0 (baseline) for all published records. Documents
+  existing practice — identity, canonical JSON + hashes, SIGNATURE-1 validation, provenance/lineage,
+  OSV layer, cross-site identity, and the version/revision policy. No record data changed.</td></tr>
+</table>
+
+<div class="disc">
+  <b>Disclaimer.</b> Every specification in the Signature Spec Catalog is a <b>draft invention
+  specification</b> authored by Justin Addam Higgins (JAH) — drafts, ready to review and file.
+  They are <b>not</b> granted patents, have <b>not</b> been filed, and are <b>not</b> affiliated with
+  the USPTO or any government agency. This Standard is Manon's own record-format standard for his
+  own patent authority — it is not a government standard and confers no patent rights.
+</div>
+
+</div>
+
+<footer>
+  Published by Manon &nbsp;&middot;&nbsp; 2026 &nbsp;&middot;&nbsp;
+  <a href="index.html">The Signature-One Archive</a> &nbsp;&middot;&nbsp;
+  <a href="specs.html">Signature Spec Catalog</a>
+</footer>
+</body>
+</html>

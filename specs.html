@@ -1180,6 +1180,7 @@ STATUS=SIGNATURE-1_VALID</pre>
   Published by Manon &nbsp;&middot;&nbsp; 2026 &nbsp;&middot;&nbsp; <a href="index.html">The Signature-One Archive</a> &nbsp;&middot;&nbsp; <a href="standard.html">The Spec Catalog Standard</a> &nbsp;&middot;&nbsp; <a href="methodology.html">Data &amp; Methodology</a></p>
 </footer>
 <script src="osv.js"></script>
+<script src="js/jah-talk-fallback.js"></script>
 <script>
 var DATA = [];
 var CATS = [];
@@ -2105,13 +2106,33 @@ function aiHTML(r) {
 function aiTopics() {
   return "things like: what is it, how does it work, parameters, measurements, how to build it, the algorithm, who it is for, or the patent claims";
 }
-function aiAnswer(r, q) {
+/* ---- JAHtalk shared talk module: human voice + duties, stat-dump guard ----
+   The per-spec personal AI is a site helper (NOT a canon phone-book AI —
+   it claims no JAH-AI ID). Social/duty intents get warm human replies via
+   JAHtalk.reply; EVERY final reply is guarded against terse machine dumps. */
+function aiProf(r) {
+  var id = r[0] || "", title = r[1] || "this spec";
+  return {name: "Personal AI — " + title, id: "",
+    description: "Personal AI assistant for the draft specification " + id + " (" + title + "). I answer from this spec's own record.",
+    abilities: ["Explain what it is and how it works", "Give its parameters, measurements, and build steps", "Describe the algorithm, patent claims, and who it is for"],
+    domain: "invention drafts", kind: "domain"};
+}
+function aiSocial(r, q) {
+  if (typeof JAHtalk === "undefined") return null;
+  var t = " " + String(q || "").toLowerCase() + " ";
+  if (/\b(what are your duties|what is your duty|what do you do|what can you do|your duties|your job|your role|your abilities|explain your duties|who are you|your name|introduce yourself|what are you for|how are you)\b/.test(t))
+    return JAHtalk.reply(aiProf(r), q);
+  return null;
+}
+function aiAnswerRaw(r, q) {
   var t = String(q || "").toLowerCase();
   var a = r[18] || {}, m = r[15] || {}, p = r[14] || {};
   function has() {
     for (var i = 0; i < arguments.length; i++) if (t.indexOf(arguments[i]) >= 0) return true;
     return false;
   }
+  var soc = aiSocial(r, q);
+  if (soc !== null) return soc;
   if (has("what is", "what's", "whats", "describe", "about", "product is")) {
     return "<b>What it is:</b> " + esc(a.what || r[2] || "");
   }
@@ -2156,6 +2177,10 @@ function aiAnswer(r, q) {
     return "Hello. I am the personal AI for <b>" + esc(r[1]) + "</b> (" + esc(r[0]) + "). Ask me " + aiTopics() + ".";
   }
   return "Good question. I can answer from this spec about " + aiTopics() + ". Try asking <b>what is it</b> or <b>how does it work</b>.";
+}
+function aiAnswer(r, q) {
+  var out = aiAnswerRaw(r, q);
+  return (typeof JAHtalk === "undefined") ? out : JAHtalk.guard(out, aiProf(r));
 }
 function wordDictLink(r) {
   if (r[12] !== "WORD") return "";

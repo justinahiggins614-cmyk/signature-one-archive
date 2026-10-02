@@ -18,6 +18,7 @@ sitemaps only *list* URLs, they don't serve the pages.
 Ranges below were verified contiguous from the live indexes on 2026-10-01
 (shard-2: 1-52500 ... shard-16: 325051-341550, main: 341551-438346).
 """
+import json
 import os
 
 HOME = os.path.expanduser("~")
@@ -42,8 +43,9 @@ SHARDS = [
     ("signature-one-archive-shard-14", 290551, 308550),
     ("signature-one-archive-shard-15", 308551, 325050),
     ("signature-one-archive-shard-16", 325051, 341550),
+    ("signature-one-archive-shard-17", 341551, 358050),
 ]
-MAIN_RANGE = (341551, 438346)
+MAIN_RANGE = (358051, 449465)
 URL_LIMIT = 50000
 
 
@@ -83,7 +85,10 @@ def main():
         print("shard %-32s %d-%d (%d urls)" % (dirname, first, last, n))
 
     # --- main repo's own newest chunks (repo ROOT, never data/) ---
-    mf, ml = MAIN_RANGE
+    # MAIN_RANGE start is fixed (shard-17 ends at 358050); end follows state.json.
+    mf = MAIN_RANGE[0]
+    with open(os.path.join(MAIN, "code", "specs", "state.json"), encoding="utf-8") as f:
+        ml = json.load(f)["next_index"] - 1
     write_urlset(os.path.join(MAIN, "sitemap-main-1.xml"), mf, mf + URL_LIMIT - 1)
     write_urlset(os.path.join(MAIN, "sitemap-main-2.xml"), mf + URL_LIMIT, ml)
     index_entries += [SITE + "/sitemap-main-1.xml", SITE + "/sitemap-main-2.xml"]
@@ -103,7 +108,8 @@ def main():
         f.writelines(lines)
 
     print("index entries: %d, total spec urls: %d" % (len(index_entries), total))
-    assert total == 438346, "expected 438346, got %d" % total
+    expected = sum(last - first + 1 for _, first, last in SHARDS) + (ml - mf + 1)
+    assert total == expected, "expected %d, got %d" % (expected, total)
 
 
 if __name__ == "__main__":

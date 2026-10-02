@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Spec Catalog sitemap index. Shard sitemaps live on each frozen shard repo;
-     sitemap-main-*.xml cover the newest chunks on the main repo. After each 2h drip,
-     re-run code/build_sitemaps.py so new JAH-SPEC IDs are listed, then commit+push. -->
+     sitemap-main-*.xml cover the newest chunks on the main repo;
+     sitemap-words*.xml cover the JAH-WORD word-invention records.
+     After each 2h drip, re-run code/build_sitemaps.py so new JAH-SPEC
+     and JAH-WORD IDs are listed, then commit+push. -->
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap><loc>https://justinahiggins614-cmyk.github.io/signature-one-archive/sitemap.xml</loc><lastmod>2026-10-02</lastmod></sitemap>
   <sitemap><loc>https://justinahiggins614-cmyk.github.io/signature-one-archive-shard-2/sitemap-specs-1.xml</loc><lastmod>2026-10-02</lastmod></sitemap>
@@ -27,4 +29,5 @@
   <sitemap><loc>https://justinahiggins614-cmyk.github.io/signature-one-archive-shard-21/sitemap-specs.xml</loc><lastmod>2026-10-02</lastmod></sitemap>
   <sitemap><loc>https://justinahiggins614-cmyk.github.io/signature-one-archive/sitemap-main-1.xml</loc><lastmod>2026-10-02</lastmod></sitemap>
   <sitemap><loc>https://justinahiggins614-cmyk.github.io/signature-one-archive/sitemap-main-2.xml</loc><lastmod>2026-10-02</lastmod></sitemap>
+  <sitemap><loc>https://justinahiggins614-cmyk.github.io/signature-one-archive/sitemap-words.xml</loc><lastmod>2026-10-02</lastmod></sitemap>
 </sitemapindex>

@@ -7,8 +7,13 @@ Layout (per the 2026-10-01 discoverability pass):
     split into sitemap-specs-1.xml / sitemap-specs-2.xml).
   - The main repo carries sitemap-main-1.xml / sitemap-main-2.xml at its repo
     ROOT for the newest chunks (never inside data/ -- the 850MB data guard).
-  - The main repo's sitemap-index.xml lists the static pages sitemap plus every
-    shard sitemap plus the two main sitemaps.
++  - The main repo carries sitemap-words.xml at its repo ROOT for the word
++    invention records (JAH-WORD-######, specs.html?spec=JAH-WORD-###### deep
++    links). Word records are a separate ID scheme from JAH-SPEC and were
++    invisible to crawlers before this file existed.
+   - The main repo's sitemap-index.xml lists the static pages sitemap plus every
+-    shard sitemap plus the two main sitemaps.
++    shard sitemap plus the two main sitemaps plus the words sitemap.
 
 Re-run this after every 2h drip (the drip owns data/ chunks; it must call this
 script afterwards so the newest JAH-SPEC IDs get sitemap coverage). The spec
@@ -59,11 +64,16 @@ def spec_url(n):
     return "%s/specs.html?spec=JAH-SPEC-%06d" % (SITE, n)
 
 
-def write_urlset(path, first, last):
+def word_url(n):
+    return "%s/specs.html?spec=JAH-WORD-%06d" % (SITE, n)
+
+
+def write_urlset(path, first, last, urlfn=None):
+    urlfn = urlfn or spec_url
     parts = ['<?xml version="1.0" encoding="UTF-8"?>\n',
              '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n']
     for n in range(first, last + 1):
-        parts.append("  <url><loc>%s</loc><changefreq>monthly</changefreq></url>\n" % spec_url(n))
+        parts.append("  <url><loc>%s</loc><changefreq>monthly</changefreq></url>\n" % urlfn(n))
     parts.append("</urlset>\n")
     with open(path, "w", encoding="utf-8") as f:
         f.writelines(parts)
@@ -129,11 +139,29 @@ def main():
     total += ml - mf + 1
     print("main %-36s %d-%d (%d urls)" % ("(repo root)", mf, ml, ml - mf + 1))
 
+    # --- word invention records (JAH-WORD-######, separate ID scheme) ---
+    # Ground truth: code/wordspecs/state.json next_id. IDs are contiguous
+    # 1..N (verified 2026-10-02); the ?spec=JAH-WORD-###### deep link opens the
+    # full record via openSpec, same as JAH-SPEC.
+    with open(os.path.join(MAIN, "code", "wordspecs", "state.json"), encoding="utf-8") as f:
+        wn = json.load(f)["next_id"] - 1
+    if wn > URL_LIMIT:
+        mid = wn // 2
+        write_urlset(os.path.join(MAIN, "sitemap-words-1.xml"), 1, mid, word_url)
+        write_urlset(os.path.join(MAIN, "sitemap-words-2.xml"), mid + 1, wn, word_url)
+        index_entries += [SITE + "/sitemap-words-1.xml", SITE + "/sitemap-words-2.xml"]
+    else:
+        write_urlset(os.path.join(MAIN, "sitemap-words.xml"), 1, wn, word_url)
+        index_entries.append(SITE + "/sitemap-words.xml")
+    print("words %-35s 1-%d (%d urls)" % ("(repo root)", wn, wn))
+
     # --- sitemap index on main ---
     lines = ['<?xml version="1.0" encoding="UTF-8"?>\n',
              "<!-- Spec Catalog sitemap index. Shard sitemaps live on each frozen shard repo;\n",
-             "     sitemap-main-*.xml cover the newest chunks on the main repo. After each 2h drip,\n",
-             "     re-run code/build_sitemaps.py so new JAH-SPEC IDs are listed, then commit+push. -->\n",
+             "     sitemap-main-*.xml cover the newest chunks on the main repo;\n",
+             "     sitemap-words*.xml cover the JAH-WORD word-invention records.\n",
+             "     After each 2h drip, re-run code/build_sitemaps.py so new JAH-SPEC\n",
+             "     and JAH-WORD IDs are listed, then commit+push. -->\n",
              '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n']
     for loc in index_entries:
         lines.append("  <sitemap><loc>%s</loc><lastmod>%s</lastmod></sitemap>\n" % (loc, TODAY))

@@ -237,6 +237,26 @@
   .statusline { font-size: .8em; color: #ff8080; font-weight: 700; margin-top: 10px;
     text-transform: uppercase; letter-spacing: .06em; }
   .sigbadge { display: inline-block; font-size: .7em; font-weight: 800; letter-spacing: .1em;
+/* NETWORK 10-FIX consistency layer (additive, 2026-10-03) */
+.sitekicker { color: #ff3b3b; font-weight: 700; letter-spacing: .2em; font-size: .85em;
+  border: 1px solid #ff3b3b; border-radius: 3px; padding: 1px 8px; margin-left: 10px; white-space: nowrap; }
+.jahstatus { display: inline-block; font-size: .72em; letter-spacing: .18em; font-weight: 700;
+  color: #0a0f1e; background: #e8c766; border-radius: 3px; padding: 2px 9px; margin: 6px 8px 6px 0; }
+.jahstatus.sim { background: #b48cff; color: #141021; }
+.jahstatus.gen { background: #9fc2ff; color: #0a1424; }
+.jahstatus.pub { background: #7fe0c3; color: #0a1a14; }
+.jahprov { font-size: .78em; color: #8a8a95; margin: 8px 0 2px; letter-spacing: .02em; }
+.jahrecord { border: 1px solid #3a0d0d; border-radius: 8px; padding: 8px 12px; margin: 10px 0;
+  background: #0d0d12; font-size: .8em; color: #c9c9d2; }
+.jahrecord .jrp-meta { color: #8a8a95; margin: 4px 0 8px; font-size: .92em; }
+.jahrecord .jrp-meta b { color: #f5d76e; font-weight: 700; letter-spacing: .08em; }
+.jahrecord .jrp-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.jrp-btn { background: #1a0505; border: 1px solid #ff3b3b; color: #ffe9e9; border-radius: 6px;
+  padding: 7px 12px; font-size: .85em; cursor: pointer; text-decoration: none; display: inline-block; }
+.jrp-btn:hover { background: #2a0a0a; }
+.jah-aiid { border-left: 3px solid #ff3b3b; background: #140808; padding: 8px 12px; margin: 8px 0;
+  font-size: .82em; color: #c9c9d2; }
+.jah-aiid b { color: #f5d76e; letter-spacing: .06em; font-weight: 700; }
     color: #000; background: var(--red); border-radius: 2px;
     padding: 3px 9px; margin: 6px 0 2px; box-shadow: 0 0 14px rgba(255,34,34,.6); }
   .sigenote { font-size: .8em; color: #8b8b95; margin-top: 4px; }
@@ -547,7 +567,7 @@ a.fcard .fgo{margin-top:8px;color:#ff8080;font-weight:700;font-size:.85em}
 </head>
 <body>
 <a class="skip" href="#browse">Skip to spec search</a>
-<nav class="jahnet" aria-label="JAH Network Global Ecosystem"><span class="jahnet-label">THE JAH NETWORK</span><span class="jahnet-here">YOU ARE HERE: SIGNATURE SPEC CATALOG</span><span class="jahnet-links"><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">The Signature AI Phone Book</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">Dictionary</a><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">JAH-N Wiki</a><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-llama/">Signature Llama</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">PC Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">Cyber Mega-Mall</a><a href="https://justinahiggins614-cmyk.github.io/signature-university/">Signature University</a><a href="https://justinahiggins614-cmyk.github.io/signature-books/">Book Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-comics/">Comic Store</a><a href="https://justinahiggins614-cmyk.github.io/signature-newspapers/">Global Newspaper Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-3d-print/">3D Print Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-backend/">Mad Scientist Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-boundless-generators/">Boundless Generator Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/">AI Mix Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-olypics/">AI Olypics</a><a href="https://justinahiggins614-cmyk.github.io/signature-chip-maker/">Chip Maker and Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-app-archive/">App Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-robot-matcher/">AI Robot Matcher</a><a href="https://justinahiggins614-cmyk.github.io/signature-experiment-solver/">Experiment Solver</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/">Signature AI Pixel</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-song-maker/">Signature Music Studio</a></span></nav>
+<nav class="jahnet" aria-label="JAH Network Global Ecosystem"><span class="jahnet-label">THE JAH NETWORK</span><span class="sitekicker">SITE 7 OF 25</span><span class="jahnet-here">YOU ARE HERE: SIGNATURE SPEC CATALOG</span><span class="jahnet-links"><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">The Signature AI Phone Book</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">Dictionary</a><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">JAH-N Wiki</a><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-llama/">Signature Llama</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">PC Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">Cyber Mega-Mall</a><a href="https://justinahiggins614-cmyk.github.io/signature-university/">Signature University</a><a href="https://justinahiggins614-cmyk.github.io/signature-books/">Book Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-comics/">Comic Store</a><a href="https://justinahiggins614-cmyk.github.io/signature-newspapers/">Global Newspaper Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-3d-print/">3D Print Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-backend/">Mad Scientist Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-boundless-generators/">Boundless Generator Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/">AI Mix Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-olypics/">AI Olypics</a><a href="https://justinahiggins614-cmyk.github.io/signature-chip-maker/">Chip Maker and Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-app-archive/">App Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-robot-matcher/">AI Robot Matcher</a><a href="https://justinahiggins614-cmyk.github.io/signature-experiment-solver/">Experiment Solver</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/">Signature AI Pixel</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-song-maker/">Signature Music Studio</a></span></nav>
 <div class="scanlines" aria-hidden="true"></div>
 <header id="top">
   <div class="eye" aria-hidden="true"></div>
@@ -1643,7 +1663,7 @@ function demoHTML(d, i) {
   if (!d) return "";
   var idx = DEMOSTORE.length;
   DEMOSTORE.push(d);
-  return '<h4>Working demo</h4>' +
+  return '<h4>Working demo</h4>' + jahStatusBadge("SIMULATION") +
     '<p>' + esc(d.blurb) + '</p>' +
     '<div class="snote"><b>DEMO_STATUS=NOT_TESTED</b> — interactive simulation of the mechanism. Not tested against a physical prototype.</div>' +
     '<button class="demotoggle" type="button" data-demo="' + idx + '">Run demo</button>' +
@@ -2171,12 +2191,15 @@ function aiHTML(r) {
   AISTORE.push(r);
   return '<h4>' + esc(a.headline) + '</h4>' +
     '<div class="snote"><b>GENERATED INTERPRETATION</b> — the AI explainer below is generated <i>from</i> this specification. It is not the specification itself. SPECIFICATION = source of record.</div>' +
+    jahProvenance("AI explainer generated from this specification by the Signature-One drip generator \u00B7 prepared " + (r[6] || "")) +
     '<p><b>What it is.</b> ' + esc(a.what) + '</p>' +
     '<p><b>How it works.</b></p><ol>' +
     a.how_it_works.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join("") + '</ol>' +
     '<p><b>Who it is for.</b> ' + esc(a.who_its_for) + '</p>' +
     '<p><b>Bottom line.</b> ' + esc(a.bottom_line) + '</p>' +
     '<div class="aichat"><h5>Personal AI — your ' + esc(r[0]) + ' assistant</h5>' +
+    jahAiCard(aiProf(r).name, aiProf(r).abilities, "On-page rule-based responder \u2014 answers from this spec\u2019s record; no external model") +
+    jahProvenance("Personal-AI replies generated on this page \u00B7 from spec " + r[0] + " \u00B7 prepared " + (r[6] || "")) +
     '<div class="aimsgs" id="aimsgs-' + idx + '">' +
     '<div class="aimsg ai">I am the AI version of this product. Ask me what it is, how it works, its parameters, how to build it, or anything about this spec — I work as your personal AI for it.</div>' +
     '</div><div class="airow">' +
@@ -2279,9 +2302,9 @@ function lensBar(r) {
   return '<div class="lensbar">' + lenses.map(function (l, k) {
     var xc = l[0] === "official" ? " officialbtn" : "";
     return '<button type="button" class="lensbtn' + (k === 0 ? " active" : "") + xc + '" data-lens="' + l[0] + '">' + l[1] + '</button>';
-  }).join("") + wordDictLink(r) + '<button type="button" class="lensbtn readbtn" data-read="1" title="Read this section aloud">&#128266; Read aloud</button>' +
-  '<button type="button" class="lensbtn copybtn" data-copy="' + idx + '" title="Copy the full package text to the clipboard">&#128203; Copy all</button>' +
-  '<button type="button" class="lensbtn dlallbtn zipdl" data-dl="' + idx + '" title="Download the full filing package as a zip">&#8681; Download all</button></div>';
+  }).join("") + wordDictLink(r) + '<button type="button" class="lensbtn readbtn" data-read="1" data-t="read" title="Read this section aloud">&#128266; Read aloud</button>' +
+  '<button type="button" class="lensbtn copybtn" data-copy="' + idx + '" data-t="copy" title="Copy the full package text to the clipboard">&#128203; Copy all</button>' +
+  '<button type="button" class="lensbtn dlallbtn zipdl" data-dl="' + idx + '" data-t="dl" title="Download the full filing package as a zip">&#8681; Download all</button></div>';
 }
 /* ---- Copy-all: whole filing package as paste-ready text ---- */
 function copyToast(msg) {
@@ -2485,7 +2508,7 @@ function officialHTML(r) {
   return '<div class="official-load" data-spec="' + esc(r[0]) + '" data-loaded="0" data-rec="' +
     encodeURIComponent(JSON.stringify(osvRec(r))) + '">' +
     '<span class="osv-badge">&#127963;&#65039; Official Standard Version</span>' +
-    '<p>Checking for a prepared Official Standard Version&hellip;</p></div>';
+    '<p>Checking for a prepared Official Standard Version (official within the Signature/JAH system)&hellip;</p></div>';
 }
 function loadOfficial(det) {
   var pane = det.querySelector('.lenspane[data-pane="official"]');
@@ -2524,7 +2547,8 @@ function loadOfficial(det) {
   });
 }
 function renderOSV(d, generated, figs, xf) {
-  var h = '<span class="osv-badge">&#127963;&#65039; Official Standard Version</span>';
+  var h = '<span class="osv-badge">&#127963;&#65039; Official Standard Version</span>' +
+    '<div class="osv-note">Official within the Signature/JAH system \u2014 this site\u2019s own standard, not a government or USPTO designation.</div>';
   if (generated) h += '<div class="osv-note"><b>Official Standard &mdash; system-prepared draft.</b> ' +
     'Generated on this device from the draft record &mdash; no hand-prepared sidecar is on file. ' +
     'The draft remains the record of invention.</div>';
@@ -2913,6 +2937,9 @@ function validationBlockHTML(r) {
 function detailsHTML(r, i) {
   var abs = esc(r[2]);
   return '<div class="draftbanner">DRAFT &mdash; NOT A GRANTED PATENT</div>' +
+    jahRecordPanelHTML({status: "DRAFT SPECIFICATION", id: r[0], ver: "v1.0 (baseline)",
+      source: "JAH_ORIGINAL \u2014 authored by Justin Addam Higgins", title: r[1],
+      prov: "Draft specification authored by Justin Addam Higgins \u00B7 prepared " + (r[6] || "")} ) +
     validationBlockHTML(r) +
     lensBar(r) +
     '<div class="lenspane" data-pane="patent">' + jahIdentityHTML(r) + patentFrontPage(r) + patentHTML(r[14]) + figsHTML(r) + dlAllHTML(r) + '</div>' +
@@ -3053,6 +3080,7 @@ function finderRun(){
   var top=ranked.slice(0,5);
   if(!top.length){box.innerHTML='<div class="finder-none">No specs matched "'+esc(ws.join(" "))+'". Try fewer or different words.</div>';return;}
   box.innerHTML='<div class="finder-count">TOP '+top.length+' MATCH'+(top.length>1?"ES":"")+' FOR "'+esc(ws.join(" "))+'"</div>'+
+    jahProvenance("Finder-AI results generated on this page by the keyword finder \u00B7 " + new Date().toISOString().slice(0,10))+
     top.map(function(e){return specFinderCard(e.r);}).join("");
 }
 /* ================= SPEC HELPER (additive, 2026-10-02) =================
@@ -3061,6 +3089,8 @@ function finderRun(){
 var SPECHELPERS={};
 function specHelperHTML(specId){
   return '<div class="spechelper"><div class="spechelper-h">\u25c6 SPEC HELPER \u2014 answers only from this spec record</div>'+
+   jahAiCard("Spec Helper", ["answers only from this spec record’s own fields", "says plainly when the record doesn’t cover a question"], "On-page rule-based responder — no external model")+
+   jahProvenance("Spec-helper answers generated on this page from the open record’s own fields")+
    '<div class="helper-chips"><button type="button" class="hchip" data-hq="__what" data-spec="'+esc(specId)+'">What is it?</button>'+
    '<button type="button" class="hchip" data-hq="__facts" data-spec="'+esc(specId)+'">Key facts</button>'+
    '<button type="button" class="hchip" data-hq="__cover" data-spec="'+esc(specId)+'">What this record covers</button></div>'+
@@ -3093,7 +3123,67 @@ function specHelperAsk(btn,q){
 }
 
 document.getElementById("findergo").onclick=finderRun;
+(function(){
+  var fh = document.querySelector("#finder .finder-h");
+  if (fh && !document.getElementById("finder-aiid")){
+    var d = document.createElement("div"); d.id = "finder-aiid";
+    d.innerHTML = jahAiCard("Finder AI",
+      ["finds specs from plain-words descriptions", "answers only from the catalog index"],
+      "On-page keyword matcher over the catalog\u2019s own search index \u2014 no external model, no invented results");
+    if (d.firstChild) fh.parentNode.insertBefore(d.firstChild, fh.nextSibling);
+  }
+})();
 document.getElementById("finderq").addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();finderRun();}});
+/* ============ NETWORK 10-FIX CONSISTENCY LAYER (additive, 2026-10-03) ============
+   Canonical record-status badge (exactly one of the network set), record action
+   panel (OPEN.SOURCE.ID.VERSION.SHARE.COPY.DOWNLOAD.READ ALOUD), provenance
+   lines, AI identity cards. ES5-safe. */
+function jahStatusBadge(status){
+  var cls = status === "SIMULATION" ? " sim" : (status === "GENERATED" ? " gen" : (status === "PUBLIC RECORD" ? " pub" : ""));
+  return '<span class="jahstatus' + cls + '" title="Network record status \u2014 one canonical status per record">' + esc(status) + "</span>";
+}
+function jahProvenance(txt){ return '<div class="jahprov">PROVENANCE \u00B7 ' + esc(txt) + "</div>"; }
+function jahAiCard(name, duties, engine){
+  var d = (duties && duties.slice) ? duties.slice(0, 3).join(" \u00B7 ") : "";
+  return '<div class="jah-aiid" role="note" aria-label="AI identity card"><b>AI IDENTITY</b> \u00B7 ' +
+    "<b>Name:</b> " + esc(name) + " \u00B7 <b>Duties:</b> " + esc(d || "answers from its own record") +
+    " \u00B7 <b>Engine:</b> " + esc(engine || "On-page rule-based responder \u2014 no external model") + "</div>";
+}
+function jahRecordPanelHTML(o){
+  var h = '<div class="jahrecord" data-open="specs.html?spec=' + encodeURIComponent(o.id) + '">' +
+    jahStatusBadge(o.status || "DRAFT SPECIFICATION") +
+    '<div class="jrp-meta"><b>ID</b> ' + esc(o.id || "") + " \u00B7 <b>VERSION</b> " + esc(o.ver || "") +
+    " \u00B7 <b>SOURCE</b> " + esc(o.source || "") + "</div>" +
+    '<div class="jrp-row">' +
+    '<a class="jrp-btn" href="specs.html?spec=' + encodeURIComponent(o.id) + '">OPEN</a>' +
+    '<button type="button" class="jrp-btn" data-jrp="share">SHARE</button>' +
+    '<button type="button" class="jrp-btn" data-jrp="copy">COPY</button>' +
+    '<button type="button" class="jrp-btn" data-jrp="dl">DOWNLOAD</button>' +
+    '<button type="button" class="jrp-btn" data-jrp="read">READ ALOUD</button></div>';
+  if (o.prov) h += jahProvenance(o.prov);
+  return h + "</div>";
+}
+/* one delegated listener serves every record panel on the page */
+document.addEventListener("click", function (ev){
+  var b = (ev.target && ev.target.closest) ? ev.target.closest("[data-jrp]") : null;
+  if (!b) return;
+  var panel = b.closest ? b.closest(".jahrecord") : null;
+  if (!panel) return;
+  var scope = panel.parentNode || document;
+  var a = b.getAttribute("data-jrp");
+  function hit(sel){ return scope.querySelector(sel); }
+  if (a === "copy"){ var c = hit("[data-t=copy]"); if (c) c.click(); }
+  else if (a === "dl"){ var d = hit("[data-t=dl]"); if (d) d.click(); }
+  else if (a === "read"){ var r = hit("[data-t=read]"); if (r) r.click(); }
+  else if (a === "share"){
+    var url = panel.getAttribute("data-open") || location.href;
+    if (navigator.share){ navigator.share({title: document.title, text: url, url: url}).catch(function(){}); }
+    else if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url); var old = b.textContent; b.textContent = "LINK COPIED";
+      setTimeout(function(){ b.textContent = old; }, 1400);
+    }
+  }
+}, false);
 function card(r, i) {
   var id = esc(r[0]), title = esc(r[1]), abs = esc(r[2]);
   var meta = "Inventor: " + esc("Justin Addam Higgins") + " &middot; Owner: " + esc("Justin Addam Higgins") +
@@ -3102,6 +3192,7 @@ function card(r, i) {
     '<div class="num">' + id + '</div>' +
     (r[12] ? '<div><span class="sigbadge">' + esc(r[12]).toUpperCase() + '</span></div>' : '') +
     variantBadge(r) +
+    '<div>' + jahStatusBadge("DRAFT SPECIFICATION") + '</div>' +
     '<h3><a class="speclink" href="specs.html?spec=' + id + '" data-spec="' + id + '">' + title + '</a></h3>' +
     '<div class="meta">' + meta + '</div>' +
     (r[13] ? '<div class="sigenote">' + esc(r[13]) + '</div>' : '') +

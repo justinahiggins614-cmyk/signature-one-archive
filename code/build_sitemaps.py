@@ -22,7 +22,8 @@ sitemaps only *list* URLs, they don't serve the pages.
 
 Ranges below were verified contiguous from the live indexes on 2026-10-02
 (shard-2: 1-52500 ... shard-26: 490051-506550, shard-27: 506551-523050, shard-28: 523051-539550,
- shard-29: 539551-556050, shard-30: 556051-572550, main: 572551-666199).
+ shard-29: 539551-556050, shard-30: 556051-572550, shard-31: 572551-589050,
+ main: 589051-677719).
 """
 import json
 import os
@@ -65,8 +66,9 @@ SHARDS = [
     ("signature-one-archive-shard-28", 523051, 539550),
     ("signature-one-archive-shard-29", 539551, 556050),
     ("signature-one-archive-shard-30", 556051, 572550),
+    ("signature-one-archive-shard-31", 572551, 589050),
 ]
-MAIN_RANGE = (572551, 666199)
+MAIN_RANGE = (589051, 677719)
 URL_LIMIT = 50000
 
 

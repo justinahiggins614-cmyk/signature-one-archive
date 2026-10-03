@@ -58,3 +58,4 @@
 2026-10-03 17:30:02 UTC drip: +11513 new, 666199 total specs (main 110149 + 28 shards) (repo-size guard tripped at 985010349 bytes, not pushed; shard-30 needed)
 2026-10-03 15:30 EDT drip: +11520 new, 677719 total specs (guard tripped at 944041291 bytes > 850MB, not pushed; shard-31 needed)
 2026-10-03 17:23 EDT | +11517 (4000 new, 1017 signature-line, 2000 hybrids, 2000 versions, 1500 revisions, 1000 product lines) | total 689236 specs | next_index 689237 | id-audit PASS | guard: 903406218 bytes > 850MB cap - NOT pushed, shard-32 needed
+2026-10-03 19:31 EDT drip: +11565 (4000 new, 1065 signature-line [57767 patents covered], 2000 hybrids, 2000 versions, 1500 revisions, 1000 product lines) | total 700801 specs | next_index 700802 | id-audit PASS (0 dupes) | guard 862441409 bytes < 850MB cap | pushed 7d10aca | all_ids store backfilled to 700801 keys | sitemaps rebuilt + counts re-stamped

@@ -92,6 +92,25 @@ def write_urlset(path, first, last, urlfn=None):
     return last - first + 1
 
 
+def _category_count():
+    """Distinct categories in the master catalog_groups list.
+
+    This is the stable category vocabulary the generators draw from; the live
+    page's finishLoad() overwrites the chip with the exact distinct count from
+    the loaded indexes. Used only as the no-JS fallback so the chip never
+    boots as a bare "..."."""
+    import sys
+    sys.path.insert(0, os.path.join(MAIN, "code", "specs"))
+    import catalog_groups
+    groups = getattr(catalog_groups, "groups", getattr(catalog_groups, "GROUPS", []))
+    cats = set()
+    for gr in groups:
+        seq = gr[3] if isinstance(gr, (list, tuple)) else gr.get("categories", [])
+        for c in seq:
+            cats.add(c)
+    return len(cats)
+
+
 def stamp_static_count(total):
     """Keep the no-JS crawlable count on specs.html honest.
 
@@ -124,6 +143,30 @@ def stamp_static_count(total):
                         count=1, flags=re.S)
     if n3 != 1:
         raise RuntimeError("statCount chip not found in specs.html")
+    # Stamp the remaining header chips too, so none boot as a bare "..."
+    # before (or without) the JS index load; finishLoad() overwrites them live.
+    fields = _category_count()
+    html2, n4 = re.subn(r'<b id="statFields">.*?</b>',
+                        '<b id="statFields">%s</b>' % format(fields, ","),
+                        html2, count=1, flags=re.S)
+    if n4 != 1:
+        raise RuntimeError("statFields chip not found in specs.html")
+    html2, n5 = re.subn(r'<b id="statNodes">.*?</b>',
+                        '<b id="statNodes">%s</b>' % format(total, ","),
+                        html2, count=1, flags=re.S)
+    if n5 != 1:
+        raise RuntimeError("statNodes chip not found in specs.html")
+    pct = min(100.0, total / 1000000 * 100)
+    html2, n6 = re.subn(r'<b id="goalPct">.*?</b>',
+                        '<b id="goalPct">%.2f%%</b>' % pct,
+                        html2, count=1, flags=re.S)
+    if n6 != 1:
+        raise RuntimeError("goalPct chip not found in specs.html")
+    html2, n7 = re.subn(r'<div class="goalfill" id="goalFill"( style="width:[^"]*")?></div>',
+                        '<div class="goalfill" id="goalFill" style="width:%.2f%%"></div>' % pct,
+                        html2, count=1)
+    if n7 != 1:
+        raise RuntimeError("goalFill bar not found in specs.html")
     new_dates = ('<p class="lastupdated">CATALOG DATA LAST UPDATED &nbsp;'
                  '<b id="lastUpdDate">%s</b> &nbsp;&middot;&nbsp; PAGE BUILD '
                  '<b id="pageBuildDate">%s</b></p>' % (TODAY, TODAY))

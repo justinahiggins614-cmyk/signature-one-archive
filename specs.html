@@ -26,7 +26,7 @@
     {
       "@type": "Dataset",
       "name": "Signature Spec Catalog: original draft patent specifications by Justin Addam Higgins (JAH)",
-      "description": "438,346 original draft invention specifications (as of 2026-10-01), each carrying a permanent JAH-SPEC-###### identifier. Every record is a draft specification — ready to review and file — not a granted patent, and not affiliated with the USPTO or any government agency.",
+      "description": "575,169 original draft invention specifications (as of 2026-10-03), each carrying a permanent JAH-SPEC-###### identifier. Every record is a draft specification — ready to review and file — not a granted patent, and not affiliated with the USPTO or any government agency.",
       "url": "https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html",
       "creator": { "@type": "Person", "name": "Justin Addam Higgins" },
       "datePublished": "2026-10-01",
@@ -167,6 +167,38 @@
   .fulltext .sub { font-weight: 700; color: #ff8080; margin: 12px 0 2px; }
   .searchwrap { max-width: 900px; margin: 26px auto 0; padding: 0 16px; }
   .searchrow { display: flex; gap: 8px; }
+  #shardjump { padding: 13px 10px; font-size: .85em; border-radius: 2px; border: 1px solid var(--red-dim);
+       background: #0b0b0f; color: #c9a227; font-family: inherit; cursor: pointer; max-width: 150px; }
+  /* Stat drawer: plain row on desktop, collapsible disclosure on mobile (<768px). */
+  .statsummary { display: none; }
+  .statdrawer:not([open]) .stats { display: flex; }
+  @media (max-width: 767px) {
+    .statsummary { display: block; cursor: pointer; color: #ff8080; font-family: Orbitron, monospace;
+       font-size: .74em; letter-spacing: .24em; text-transform: uppercase; padding: 10px; text-align: center; }
+    .statdrawer:not([open]) .stats { display: none; }
+    .searchrow { position: sticky; top: 0; z-index: 35; background: #060608; padding: 8px 4px; }
+    #letters { top: 62px; }
+    #shardjump { max-width: 110px; }
+  }
+  /* Draft banner + validation block (honesty apparatus). */
+  .draftbanner { background: #3a0d0d; border: 2px solid var(--red); color: #fff;
+    font-family: Orbitron, monospace; font-weight: 800; letter-spacing: .18em;
+    text-align: center; padding: 10px 12px; margin: 0 0 14px; font-size: .85em;
+    text-shadow: 0 0 10px rgba(255,34,34,.7); }
+  .valblock { background: rgba(12,12,16,.92); border: 1px solid var(--red-dim);
+    border-left: 4px solid var(--red); padding: 14px 16px; margin: 0 0 14px; font-size: .86em; }
+  .valblock h4 { font-family: Orbitron, monospace; color: #ff8080; letter-spacing: .14em;
+    margin: 12px 0 6px; font-size: .85em; }
+  .valblock h4:first-child { margin-top: 0; }
+  .valblock ul { margin: 6px 0 6px 1.2em; padding: 0; }
+  .valblock li { margin: 4px 0; line-height: 1.55; }
+  .valblock .yes { color: #7dff9a; font-weight: bold; }
+  .valblock .no { color: #8b8b95; }
+  .valblock .lvl-this { color: #ffe9a8; font-weight: bold; }
+  pre.codeprev.ln, pre.autoread.ln { white-space: pre; }
+  .ln-row { display: block; }
+  .ln-n { display: inline-block; min-width: 2.6em; text-align: right; margin-right: 1.1em;
+       color: #5a5a66; -webkit-user-select: none; user-select: none; }
   #q { flex: 1; min-width: 0; padding: 13px 16px; font-size: 1.02em; border-radius: 2px;
        border: 1px solid var(--red-dim); background: #0b0b0f; color: #f2f2f5;
        font-family: inherit; caret-color: var(--red); }
@@ -515,7 +547,7 @@ a.fcard .fgo{margin-top:8px;color:#ff8080;font-weight:700;font-size:.85em}
 </head>
 <body>
 <a class="skip" href="#browse">Skip to spec search</a>
-<nav class="jahnet" aria-label="The JAH Network"><span class="jahnet-label">THE JAH NETWORK</span><span class="jahnet-here">YOU ARE HERE: SIGNATURE SPEC CATALOG</span><span class="jahnet-links"><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">The Signature AI Phone Book</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">Dictionary</a><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">JAH-N Wiki</a><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-llama/">Signature Llama</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">PC Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">Cyber Mega-Mall</a><a href="https://justinahiggins614-cmyk.github.io/signature-university/">Signature University</a><a href="https://justinahiggins614-cmyk.github.io/signature-books/">Book Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-comics/">Comic Store</a><a href="https://justinahiggins614-cmyk.github.io/signature-newspapers/">Global Newspaper Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-3d-print/">3D Print Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-backend/">Mad Scientist Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-boundless-generators/">Boundless Generator Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/">AI Mix Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-olypics/">AI Olypics</a><a href="https://justinahiggins614-cmyk.github.io/signature-chip-maker/">Chip Maker and Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-app-archive/">App Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-robot-matcher/">AI Robot Matcher</a><a href="https://justinahiggins614-cmyk.github.io/signature-experiment-solver/">Experiment Solver</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/">Signature AI Pixel</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-song-maker/">Signature Music Studio</a></span></nav>
+<nav class="jahnet" aria-label="JAH Network Global Ecosystem"><span class="jahnet-label">THE JAH NETWORK</span><span class="jahnet-here">YOU ARE HERE: SIGNATURE SPEC CATALOG</span><span class="jahnet-links"><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">The Signature AI Phone Book</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">Dictionary</a><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">JAH-N Wiki</a><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-llama/">Signature Llama</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">PC Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">Cyber Mega-Mall</a><a href="https://justinahiggins614-cmyk.github.io/signature-university/">Signature University</a><a href="https://justinahiggins614-cmyk.github.io/signature-books/">Book Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-comics/">Comic Store</a><a href="https://justinahiggins614-cmyk.github.io/signature-newspapers/">Global Newspaper Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-3d-print/">3D Print Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-backend/">Mad Scientist Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-boundless-generators/">Boundless Generator Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/">AI Mix Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-olypics/">AI Olypics</a><a href="https://justinahiggins614-cmyk.github.io/signature-chip-maker/">Chip Maker and Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-app-archive/">App Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-robot-matcher/">AI Robot Matcher</a><a href="https://justinahiggins614-cmyk.github.io/signature-experiment-solver/">Experiment Solver</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/">Signature AI Pixel</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-song-maker/">Signature Music Studio</a></span></nav>
 <div class="scanlines" aria-hidden="true"></div>
 <header id="top">
   <div class="eye" aria-hidden="true"></div>
@@ -524,11 +556,14 @@ a.fcard .fgo{margin-top:8px;color:#ff8080;font-weight:700;font-size:.85em}
   <p class="sub">Every entry below is a draft invention specification authored by Justin Addam Higgins (JAH) &mdash;
   every field of invention &mdash; software, hardware, and beyond &mdash; past, current, and future &mdash; each in the forced Signature-One spec format, ready to review and file.</p>
   <div><a class="backlink" href="index.html">&#8592; Back to The Signature-One Archive</a></div>
+  <details class="statdrawer">
+  <summary class="statsummary">Catalog stats</summary>
   <div class="stats">
     <span class="chip"><b id="statCount">&hellip;</b> draft specs</span>
     <span class="chip"><b id="statFields">&hellip;</b> fields covered</span>
     <span class="chip">Goal <b>1,000,000+</b> specs</span>
   </div>
+  </details>
   <p class="staticcount">575,169 original draft specifications published in this catalog (as of 2026-10-03). The live counter above refreshes from the same catalog index when the data loads.</p>
   <div class="hubstatus"><span class="pulse"></span>HUB ONLINE &nbsp;&middot;&nbsp; <b id="statNodes">&hellip;</b> NODES SYNCED &nbsp;&middot;&nbsp; UPLINK SECURE</div>
   <nav class="sitenav" aria-label="Site sections">
@@ -542,6 +577,8 @@ a.fcard .fgo{margin-top:8px;color:#ff8080;font-weight:700;font-size:.85em}
 
 <div class="wrap">
   <div class="infobox">
+    <h2>What is a spec?</h2>
+    <p>A <b>spec</b> (specification) is a written description of an invention: what it is, what it does, how it would be built, and how it would work. Every entry in this catalog is a <b>draft patent specification</b> — the paperwork you would prepare <i>before</i> filing a patent. These are <b>drafts, not granted patents</b>: ideas fully described on paper, authored by Justin Addam Higgins (JAH), ready to review and file.</p>
     <h2>How to use these specs</h2>
     <p>Each entry is a <b>draft invention specification</b> by Justin Addam Higgins (JAH), written in the forced Signature-One format:
     title, abstract, six-tool signature mapping, key parameters, a machine-readable autoread block, and the five reversed-allowance algorithm steps. Open <b>Spec details</b> for lenses: the patent filing with downloadable figures, measurements, manufacture, an AI explainer, your own runnable program, and the working demo.</p>
@@ -555,6 +592,7 @@ a.fcard .fgo{margin-top:8px;color:#ff8080;font-weight:700;font-size:.85em}
   <div class="searchrow">
     <input id="q" type="search" aria-label="Search specs by title, keyword, spec ID, inventor, or category" placeholder="Search by title, keyword, spec ID, inventor, or category&hellip;" autocomplete="off">
     <button id="go" type="button">Search</button>
+    <select id="shardjump" aria-label="Jump to a shard cluster"><option value="">Shard jump&hellip;</option></select>
   </div>
   <div class="filters" id="filters"></div>
   <div class="sortrow"><label for="sort">Sort:</label>
@@ -876,6 +914,7 @@ STACK_DEPTH=3.60in
 GATE=0.10in_CENTER
 BOX=3.5x4.5x10.0in_LxWxH
 STATUS=SIGNATURE-1_VALID</pre>
+<p class="snote"><b>SIGNATURE-1 VALID</b> means this block passes Signature-One schema validation — a data/specification status, <b>not</b> physical or manufacturing validation.</p>
 </div>
     </div>
 
@@ -916,6 +955,7 @@ STATUS=SIGNATURE-1_VALID</pre>
     </ol>
     <h4>5.0 Final autoread block (as published)</h4>
     <pre class="autoread">L=2.50in, W=0.75in, T=0.35in, PORT=USB-C, CORE=RaspberryPi_AI, POWER=5VDC_3A, TOOLS=LINE_TRIANGLE_SQUARE_CROSS_CIRCLE_CURVATURE, FUNCTION=Universal_Mapper_Speck_Maker, STATUS=SIGNATURE-1_VALID</pre>
+<p class="snote"><b>SIGNATURE-1 VALID</b> means this block passes Signature-One schema validation — a data/specification status, <b>not</b> physical or manufacturing validation.</p>
     <div class="exgrid">
       <figure>
         <img src="assets/semi-chip.jpg" alt="Semiconductor replacement chip layout diagram">
@@ -1059,6 +1099,7 @@ POWER=5VDC_3A
 TOOLS=LINE_TRIANGLE_SQUARE_CROSS_CIRCLE_CURVATURE
 FUNCTION=Universal_Mapper_Speck_Maker
 STATUS=SIGNATURE-1_VALID</pre>
+<p class="snote"><b>SIGNATURE-1 VALID</b> means this block passes Signature-One schema validation — a data/specification status, <b>not</b> physical or manufacturing validation.</p>
 <hr>
 <h4>6.0 MANUFACTURING SPECIFICATION</h4>
 <p>Forced by the Universal Reduction Algorithm</p>
@@ -1137,6 +1178,7 @@ THERMAL_VAR=0.01in
 POWER=5VDC_3A
 TOOLS=LINE_TRIANGLE_SQUARE_CROSS_CIRCLE_CURVATURE
 STATUS=SIGNATURE-1_VALID</pre>
+<p class="snote"><b>SIGNATURE-1 VALID</b> means this block passes Signature-One schema validation — a data/specification status, <b>not</b> physical or manufacturing validation.</p>
 </div>
     </div>
 
@@ -1177,8 +1219,9 @@ STATUS=SIGNATURE-1_VALID</pre>
   <p>Draft invention specifications authored by Justin Addam Higgins (JAH), in the forced Signature-One format.<br>
   Drafts &mdash; ready to review and file. Not granted patents. Not affiliated with the USPTO or any government agency.<br>
   Specs carrying a Signature line badge (Signature AI, Signature Software, Signature Code, Signature Gaming, Signature Hardware) are JAH's original designs in the same product area as a public patent record &mdash; not the patented invention itself.<br>
-  Published by Manon &nbsp;&middot;&nbsp; 2026 &nbsp;&middot;&nbsp; <a href="index.html">The Signature-One Archive</a> &nbsp;&middot;&nbsp; <a href="standard.html">The Spec Catalog Standard</a> &nbsp;&middot;&nbsp; <a href="methodology.html">Data &amp; Methodology</a></p>
+  Published by Manon &nbsp;&middot;&nbsp; 2026 &nbsp;&middot;&nbsp; <a href="index.html">The Signature-One Archive</a> &nbsp;&middot;&nbsp; <a href="standard.html">The Spec Catalog Standard</a> &nbsp;&middot;&nbsp; <a href="methodology.html">Data &amp; Methodology</a> &nbsp;&middot;&nbsp; <a href="data.html">Data &amp; files</a></p>
 </footer>
+<script src="js/shard-ranges.js"></script>
 <script src="osv.js"></script>
 <script src="js/jah-talk-fallback.js"></script>
 <script>
@@ -1203,6 +1246,44 @@ function letterOf(title) {
 function esc(s) {
   return String(s == null ? "" : s)
     .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+/* Line-numbered code/spec blocks (FIX-04): strict monospaced with horizontal
+   scroll. Idempotent — skips blocks already numbered. */
+function numberCodeBlocks(scope) {
+  if (!scope || !scope.querySelectorAll) return;
+  var pres = scope.querySelectorAll("pre.codeprev, pre.autoread");
+  for (var i = 0; i < pres.length; i++) {
+    var pre = pres[i];
+    if (pre.className.indexOf("ln") >= 0) continue;
+    var lines = pre.textContent.split("\n");
+    var h = "";
+    for (var j = 0; j < lines.length; j++) {
+      h += '<span class="ln-row"><span class="ln-n">' + (j + 1) +
+           '</span><span class="ln-t">' + esc(lines[j] === "" ? " " : lines[j]) + "</span></span>";
+    }
+    pre.innerHTML = h;
+    pre.className += " ln";
+  }
+}
+/* Shard-jump select (FIX-05): populated from SHARDRANGES (js/shard-ranges.js,
+   regenerated by code/build_sitemaps.py after every drip). */
+function buildShardJump() {
+  var sel = document.getElementById("shardjump");
+  if (!sel || typeof SHARDRANGES === "undefined") return;
+  var h = '<option value="">Shard jump&hellip;</option>';
+  for (var i = 0; i < SHARDRANGES.length; i++) {
+    var g = SHARDRANGES[i];
+    h += '<option value="' + g.a + '">' + esc(g.n) + " · " + g.a + "–" + g.b + "</option>";
+  }
+  sel.innerHTML = h;
+  sel.onchange = function () {
+    var a = sel.value;
+    sel.selectedIndex = 0;
+    if (!a) return;
+    var id = String(a), pad = "JAH-SPEC-";
+    while (id.length < 6) id = "0" + id;
+    openSpec(pad + id);
+  };
 }
 /* ============ JAH Signature-One Governance & Canonical Spec Schema v1.0 ============
    The JAH-SPEC-###### ID + stamp + content hash IS Manon's own patent governance:
@@ -2781,9 +2862,59 @@ function codeHTML(r) {
   }
   return h;
 }
+/* Validation-status block: separates the project's theory from independently
+   verifiable engineering facts. Every level is derived from recorded fields
+   only — nothing is invented about what was built or tested. */
+function validationBlockHTML(r) {
+  var kind = demoKind(r[16]);
+  var hasMfg = !!r[15];
+  var hasMeas = !!((r[17] || []).length) || !!(r[8] && Object.keys(r[8]).length);
+  var runnable = (kind === "software" || kind === "calculator");
+  var levels = [
+    ["Conceptual specification", true,
+     "the idea described in full: what it is, what it does, how it would work"],
+    ["Engineering specification", hasMeas,
+     "dimensions, tolerances, parameters, and measurements are listed"],
+    ["Manufacturing specification", hasMfg,
+     "process type and build steps for making it are specified"],
+    ["Runnable software", runnable,
+     "a working program is included: it simulates the design on your machine"],
+    ["Physically validated product", false,
+     "built, prototype-tested, independently verified — none in this catalog"]
+  ];
+  var lh = "";
+  for (var i = 0; i < levels.length; i++) {
+    var L = levels[i];
+    lh += '<li><span class="' + (L[1] ? "lvl-this" : "no") + '">' +
+          (L[1] ? "&#10003; THIS RECORD: " : "&mdash; ") + esc(L[0]) +
+          "</span> — " + esc(L[2]) + ".</li>";
+  }
+  var tested = '<li><span class="yes">Schema validation (SIGNATURE-1 VALID)</span> — passed. ' +
+    'This is a data/specification status, not physical validation.</li>';
+  if (runnable) {
+    tested += '<li><span class="yes">Software simulation</span> — the downloadable program ' +
+      'runs and simulates the design on any machine with Python 3.</li>';
+  }
+  tested += '<li><span class="no">Physical prototype</span> — none. ' +
+    '<span class="no">Manufacturing run</span> — none. ' +
+    '<span class="no">Independent lab test</span> — none.</li>';
+  return '<div class="valblock">' +
+    '<h4>What kind of specification is this?</h4><ul>' + lh + "</ul>" +
+    "<h4>What has actually been tested?</h4><ul>" + tested + "</ul>" +
+    "<h4>Validation status — theory vs. verifiable fact</h4><ul>" +
+    '<li><span class="yes">Verifiable:</span> the permanent ' + esc(r[0]) +
+    " ID, the SHA-256 content hash, schema validation, authorship (Justin Addam Higgins), " +
+    "and the prepared date are all independently checkable from the record itself.</li>" +
+    '<li><span class="no">Theory (not verified):</span> performance claims, cost or market ' +
+    "projections, and any strong wording such as &ldquo;factory-ready&rdquo; describe the " +
+    "design as specified — they are the inventor&rsquo;s theory, not measured results from " +
+    "a built prototype.</li></ul></div>";
+}
 function detailsHTML(r, i) {
   var abs = esc(r[2]);
-  return lensBar(r) +
+  return '<div class="draftbanner">DRAFT &mdash; NOT A GRANTED PATENT</div>' +
+    validationBlockHTML(r) +
+    lensBar(r) +
     '<div class="lenspane" data-pane="patent">' + jahIdentityHTML(r) + patentFrontPage(r) + patentHTML(r[14]) + figsHTML(r) + dlAllHTML(r) + '</div>' +
     '<div class="lenspane" data-pane="overview" style="display:none">' +
       '<h4>Abstract</h4><p>' + abs + '</p>' +
@@ -2792,6 +2923,7 @@ function detailsHTML(r, i) {
       '<h4>Signature-tool mapping</h4><table>' + toolRows(r[7]) + '</table>' +
       '<h4>Key parameters</h4><table>' + paramRows(r[8]) + '</table>' +
       '<h4>Autoread block</h4><pre class="autoread">' + esc(r[9]) + '</pre>' +
+      '<div class="filingnote"><b>SIGNATURE-1 VALID</b> = this record passes Signature-One schema validation — a data/specification status. It is <b>not</b> physical, prototype, or manufacturing validation.</div>' +
       '<h4>Reversed universal allowance algorithm</h4>' + stepsList(r[10]) +
     '</div>' +
     '<div class="lenspane" data-pane="make" style="display:none">' + mfgHTML(r[15]) + '</div>' +
@@ -2874,6 +3006,7 @@ function openDetails(cardEl) {
     body.innerHTML += specHelperHTML(specId);
     body.setAttribute("data-done", "1");
     body.style.display = "";
+    numberCodeBlocks(body);
     return done(full);
   }, function () {
     if (loading) { loading.style.display = ""; loading.textContent = "Could not load this spec. Please try again."; }
@@ -2981,7 +3114,7 @@ function card(r, i) {
       '<div class="detloading" style="display:none">ESTABLISHING UPLINK&hellip;</div>' +
       '<div class="detbody" style="display:none"></div>' +
     '</div>' +
-    '<div class="statusline">Draft specification &mdash; by Justin Addam Higgins (JAH), ready to file.</div>' +
+    '<div class="statusline"><b>DRAFT &mdash; NOT A GRANTED PATENT</b> &middot; by Justin Addam Higgins (JAH), ready to file.</div>' +
     '</div>';
   return h;
 }
@@ -3105,6 +3238,10 @@ function stampSpecSEO(r) {
       ld.id = "specJsonLd";
       document.head.appendChild(ld);
     }
+    /* Document versioning + architectural domain for the TechArticle schema. */
+    var tident = (r[14] && r[14].objects && r[14].objects.technical && r[14].objects.technical.identity) || {};
+    var ver = tident.version ? String(tident.version) : "1";
+    if (tident.revision !== undefined && tident.revision !== null && tident.revision !== "") ver += " rev " + String(tident.revision);
     ld.textContent = JSON.stringify({
       "@context": "https://schema.org",
       "@type": "TechArticle",
@@ -3114,8 +3251,11 @@ function stampSpecSEO(r) {
       "mainEntityOfPage": canon,
       "author": { "@type": "Person", "name": "Justin Addam Higgins" },
       "creator": { "@type": "Person", "name": "Justin Addam Higgins" },
-      "description": String(r[2] || "").substring(0, 500),
+      "publisher": { "@type": "Person", "name": "Justin Addam Higgins" },
+      "version": ver,
       "articleSection": r[3] || "",
+      "about": { "@type": "Thing", "name": String(r[3] || "") },
+      "description": String(r[2] || "").substring(0, 500),
       "datePublished": r[6] || "",
       "inLanguage": "en",
       "creativeWorkStatus": "Draft",
@@ -3460,6 +3600,8 @@ function bindWikiSearch(inputId, resId, lens) {
     buildFilters();
     apply();
     dataReady = true;
+    buildShardJump();
+    numberCodeBlocks(document);
     maybeRenderSections();
     loadWordIndexes();
   }

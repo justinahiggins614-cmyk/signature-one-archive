@@ -56,3 +56,4 @@
 2026-10-03 13:28:45 UTC spec drip fill (UNPUSHED — repo-size guard tripped): total=103962
 2026-10-03 15:29:21 UTC total=98636
 2026-10-03 17:30:02 UTC drip: +11513 new, 666199 total specs (main 110149 + 28 shards) (repo-size guard tripped at 985010349 bytes, not pushed; shard-30 needed)
+2026-10-03 15:30 EDT drip: +11520 new, 677719 total specs (guard tripped at 944041291 bytes > 850MB, not pushed; shard-31 needed)

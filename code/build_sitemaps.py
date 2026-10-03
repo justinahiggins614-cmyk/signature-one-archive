@@ -115,6 +115,13 @@ def stamp_static_count(total):
                        count=1, flags=re.S)
     if n != 1:
         raise RuntimeError("staticcount line not found in specs.html")
+    # Stamp the header count chip too, so it never shows a bare "..." before
+    # (or without) the JS index load; finishLoad() overwrites it live.
+    new_chip = '<b id="statCount">%s</b>' % format(total, ",")
+    html2, n3 = re.subn(r'<b id="statCount">.*?</b>', new_chip, html2,
+                        count=1, flags=re.S)
+    if n3 != 1:
+        raise RuntimeError("statCount chip not found in specs.html")
     new_dates = ('<p class="lastupdated">CATALOG DATA LAST UPDATED &nbsp;'
                  '<b id="lastUpdDate">%s</b> &nbsp;&middot;&nbsp; PAGE BUILD '
                  '<b id="pageBuildDate">%s</b></p>' % (TODAY, TODAY))

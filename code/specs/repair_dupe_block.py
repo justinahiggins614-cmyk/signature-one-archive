@@ -16,11 +16,13 @@ Repair policy (Manon's standing rule: NEVER delete data, repair by re-IDing):
   latest_id (matched via line name inside the member title).
 - revision_coverage KEYS stay: the generators' hot-scan was first-wins, so
   keys already mean the first occurrence.
-- all_ids.json / software_ids.json gain every post-repair ID.
+- all_ids.d sharded index / software_ids.json gain every post-repair ID.
 - state.json next_index = max_id + 1.
 """
 import json, re, os, gzip, glob, sys
 from collections import defaultdict
+
+import all_ids_store
 
 REPO = os.path.expanduser('~/workspace/signature-one-archive')
 HOT = os.path.join(REPO, 'data/specs.jsonl')
@@ -154,10 +156,9 @@ for a in amb_pl[:10]:
     print('  AMBIG PL:', a)
 
 # ---- 5. derived indexes: add every post-repair ID --------------------------
-ai_path = os.path.join(REPO, 'code/specs/all_ids.json')
-ai = json.load(open(ai_path))
+ai = all_ids_store.load_all_ids()
 n_ai = 0
-soft_ids = []
+new_entries = {}
 with open(HOT, encoding='utf-8') as fh:
     for ln in fh:
         ln = ln.strip()
@@ -166,11 +167,12 @@ with open(HOT, encoding='utf-8') as fh:
         r = json.loads(ln)
         sid = r['spec_id']
         if sid not in ai:
-            ai[sid] = [r.get('category', ''), r.get('line') or '', r.get('title', '')]
+            new_entries[sid] = [r.get('category', ''), r.get('line') or '',
+                                r.get('title', '')]
+            ai[sid] = new_entries[sid]
             n_ai += 1
-with open(ai_path, 'w', encoding='utf-8') as fh:
-    json.dump(ai, fh, separators=(',', ':'))
-print('all_ids.json: +', n_ai, 'total', len(ai))
+all_ids_store.add_new_ids(new_entries)
+print('all_ids store: +', n_ai, 'total', len(ai))
 
 sys.path.insert(0, os.path.join(REPO, 'code/specs'))
 try:

@@ -24,7 +24,6 @@ import generate_specs as g
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(HERE, "..", "..", "data")
-ALLIDS = os.path.join(HERE, "all_ids.json")
 LINES = os.path.join(HERE, "product_lines.json")
 
 CATMAP = {cat: (cat, kind, cpc, devs) for (cat, kind, cpc, devs) in g.ALLCATS}
@@ -36,6 +35,7 @@ SERIES = ["X-Series", "Pro Line", "Ultra Series", "Prime Line", "Nova Series",
 # share the id index with generate_revisions
 sys.path.insert(0, HERE)
 import generate_revisions as revmod
+import all_ids_store
 
 
 def load_json(path, default):
@@ -62,15 +62,17 @@ def main():
     used = set(st.get("used_titles", []))
     idx = st.get("next_index", 1)
 
-    ids = load_json(ALLIDS, None)
-    if ids is None:
+    ids = all_ids_store.load_all_ids()
+    if not ids:
         print("building full spec id index from volumes...", flush=True)
         ids = revmod.scan_all_ids()
-        save_json(ALLIDS, ids)
+        all_ids_store.save_all_ids(ids)
         print(f"  {len(ids)} specs indexed", flush=True)
+    before = set(ids)
     added = revmod.scan_hot_ids(ids)
     if added:
-        save_json(ALLIDS, ids)
+        all_ids_store.add_new_ids({k: v for k, v in ids.items()
+                                   if k not in before})
 
     lines = load_json(LINES, {})
     founders = [pid for pid, (cat, _ln, title) in ids.items()
@@ -142,7 +144,8 @@ def main():
 
     st["next_index"] = idx
     g.save_state(st)
-    save_json(ALLIDS, ids)
+    # ids is unchanged since load (hot-file additions were merged above),
+    # so no index rewrite is needed here.
     save_json(LINES, lines)
     print(f"done: +{made} product-line members across {len(lines)} lines, next_index={idx}")
 

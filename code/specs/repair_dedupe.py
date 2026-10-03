@@ -11,8 +11,8 @@ every line, so dupes would show as double cards). This script:
   4. clears the hot file, rewrites the manifest
   5. resets state.json: next_index = max numeric id + 1,
      used_titles rebuilt from surviving records
-  6. removes derived indexes (all_ids, revision_coverage, product_lines)
-     so generators rebuild them cleanly
+  6. removes derived indexes (all_ids.d sharded index, revision_coverage,
+     product_lines) so generators rebuild them cleanly
 
 Run from the repo root: python3 code/specs/repair_dedupe.py
 """
@@ -125,13 +125,17 @@ def main():
     print(f"state reset: next_index={maxidx + 1}, {len(titles)} titles", flush=True)
 
     # drop derived indexes - generators rebuild them
-    for name in ("all_ids.json", "revision_coverage.json",
+    for name in ("revision_coverage.json",
                  "product_lines.json", "software_ids.json",
                  "version_coverage.json"):
         p = os.path.join(HERE, name)
         if os.path.exists(p):
             os.remove(p)
             print(f"  removed {name}", flush=True)
+    ad = os.path.join(HERE, "all_ids.d")
+    if os.path.isdir(ad):
+        shutil.rmtree(ad)
+        print("  removed all_ids.d/ (sharded id index)", flush=True)
     print("repair complete")
 
 

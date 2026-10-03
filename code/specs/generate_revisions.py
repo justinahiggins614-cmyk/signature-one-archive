@@ -20,9 +20,10 @@ import sys
 
 import generate_specs as g
 
+import all_ids_store
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(HERE, "..", "..", "data")
-ALLIDS = os.path.join(HERE, "all_ids.json")
 COVERAGE = os.path.join(HERE, "revision_coverage.json")
 
 CATMAP = {cat: (cat, kind, cpc, devs) for (cat, kind, cpc, devs) in g.ALLCATS}
@@ -86,15 +87,17 @@ def main():
     used = set(st.get("used_titles", []))
     idx = st.get("next_index", 1)
 
-    ids = load_json(ALLIDS, None)
-    if ids is None:
+    ids = all_ids_store.load_all_ids()
+    if not ids:
         print("building full spec id index from volumes...", flush=True)
         ids = scan_all_ids()
-        save_json(ALLIDS, ids)
+        all_ids_store.save_all_ids(ids)
         print(f"  {len(ids)} specs indexed", flush=True)
+    before = set(ids)
     added = scan_hot_ids(ids)
     if added:
-        save_json(ALLIDS, ids)
+        all_ids_store.add_new_ids({k: v for k, v in ids.items()
+                                   if k not in before})
         print(f"  +{added} new specs from hot file", flush=True)
 
     # coverage: root_id -> [highest_rev, latest_spec_id, root_title, cat, line]
@@ -147,7 +150,8 @@ def main():
 
     st["next_index"] = idx
     g.save_state(st)
-    save_json(ALLIDS, ids)
+    # ids is unchanged since load (hot-file additions were merged above),
+    # so no index rewrite is needed here.
     save_json(COVERAGE, coverage)
     print(f"done: +{made} revisions, next_index={idx}")
 

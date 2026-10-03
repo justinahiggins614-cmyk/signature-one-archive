@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Data &amp; Methodology — Signature Spec Catalog Pending Patents</title>
-<meta name="description" content="How the Signature Spec Catalog is built and counted: the permanent JAH-SPEC-###### ID scheme, draft-vs-granted honesty, the 16-shard archive architecture, versioning, and what SIGNATURE-1 VALID means.">
+<meta name="description" content="How the Signature Spec Catalog is built and counted: the permanent JAH-SPEC-###### ID scheme, draft-vs-granted honesty, the 25-shard archive architecture, versioning, and what SIGNATURE-1 VALID means.">
 <link rel="canonical" href="https://justinahiggins614-cmyk.github.io/signature-one-archive/methodology.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,7 +15,7 @@
   "@type": "WebPage",
   "name": "Data & Methodology — Signature Spec Catalog",
   "url": "https://justinahiggins614-cmyk.github.io/signature-one-archive/methodology.html",
-  "description": "How the Signature Spec Catalog is built and counted: the permanent JAH-SPEC-###### ID scheme, draft-vs-granted honesty, the 16-shard archive architecture, versioning, and what SIGNATURE-1 VALID means.",
+  "description": "How the Signature Spec Catalog is built and counted: the permanent JAH-SPEC-###### ID scheme, draft-vs-granted honesty, the 25-shard archive architecture, versioning, and what SIGNATURE-1 VALID means.",
   "creator": { "@type": "Person", "name": "Justin Addam Higgins" },
   "inLanguage": "en"
 }
@@ -100,7 +100,7 @@ never rewords or copies other people's patents.</p>
 <p>The archive is split for scale and speed:</p>
 <ul>
   <li><b>150-spec data chunks</b>, lazy-loaded — the catalog page stays fast while the archive grows toward 1,000,000+ specs.</li>
-  <li><b>16 frozen shard repos</b> hold the oldest chunks (JAH-SPEC-000001 through JAH-SPEC-341550, 341,550 specs); the <b>main repo</b> holds the newest chunks and the search index. The file <code>data/index/shards.json</code> lists every shard in order — IDs are contiguous across shards with no gaps.</li>
+  <li><b>25 frozen shard repos</b> hold the oldest chunks (JAH-SPEC-000001 through JAH-SPEC-506550, 506,550 specs); the <b>main repo</b> holds the newest chunks and the search index. The file <code>data/index/shards.json</code> lists every shard in order — IDs are contiguous across shards with no gaps. (Auto-updated 2026-10-03.)</li>
   <li>An <b>850&nbsp;MB repo-size guard</b> on the data directory: when a drip run would cross it, the oldest chunks move sideways into a new shard repo. <b>Growth is always sideways — records are never cut or trimmed to make room.</b></li>
 </ul>
 
@@ -118,6 +118,13 @@ schema validation — a <b>data/specification status</b>, not physical or
 manufacturing validation. It says the record is well-formed under JAH's own
 format; it makes no claim about whether the invention works, is buildable, or is
 patentable.</p>
+
+<h2>6. The "Era" filter</h2>
+<p><b>Era</b> is the invention's <b>time context as classified when the spec was
+generated</b>: <b>Past</b> (a historical-style invention), <b>Current</b>
+(present-day), or <b>Future</b> (a projected, forward-looking concept). It is
+descriptive only — it is not a claim about when the invention was actually
+invented, filed, or built, and it carries no patent-status meaning.</p>
 
 <div class="disc">
   <b>Disclaimer.</b> Every specification in the Signature Spec Catalog is a <b>draft invention

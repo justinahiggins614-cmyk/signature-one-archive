@@ -26,7 +26,7 @@
     {
       "@type": "Dataset",
       "name": "Signature Spec Catalog: original draft patent specifications by Justin Addam Higgins (JAH)",
-      "description": "575,169 original draft invention specifications (as of 2026-10-03), each carrying a permanent JAH-SPEC-###### identifier. Every record is a draft specification — ready to review and file — not a granted patent, and not affiliated with the USPTO or any government agency.",
+      "description": "598,196 original draft invention specifications (as of 2026-10-03), each carrying a permanent JAH-SPEC-###### identifier. Every record is a draft specification — ready to review and file — not a granted patent, and not affiliated with the USPTO or any government agency.",
       "url": "https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html",
       "creator": { "@type": "Person", "name": "Justin Addam Higgins" },
       "datePublished": "2026-10-01",
@@ -584,7 +584,7 @@ a.fcard .fgo{margin-top:8px;color:#ff8080;font-weight:700;font-size:.85em}
     <span class="chip">Goal <b>1,000,000+</b> specs</span>
   </div>
   </details>
-  <p class="staticcount">575,169 original draft specifications published in this catalog (as of 2026-10-03). The live counter above refreshes from the same catalog index when the data loads.</p>
+  <p class="staticcount">598,196 original draft specifications published in this catalog (as of 2026-10-03). The live counter above refreshes from the same catalog index when the data loads.</p>
   <div class="hubstatus"><span class="pulse"></span>HUB ONLINE &nbsp;&middot;&nbsp; <b id="statNodes">&hellip;</b> NODES SYNCED &nbsp;&middot;&nbsp; UPLINK SECURE</div>
   <nav class="sitenav" aria-label="Site sections">
     <a href="#top">Home</a><a href="#catalogs">Catalogs</a><a href="#wiki">Wiki</a><a href="#leaks">Wiki Leaks</a><a href="#academy">Academy</a>
@@ -592,7 +592,7 @@ a.fcard .fgo{margin-top:8px;color:#ff8080;font-weight:700;font-size:.85em}
   <div class="nodedots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
   <div class="goalbar" aria-hidden="true"><div class="goalfill" id="goalFill"></div></div>
   <div class="goalabel">MISSION PROGRESS &mdash; <b id="goalPct">&hellip;</b> OF 1,000,000 SPECS</div>
-  <p class="lastupdated">CATALOG DATA LAST UPDATED &nbsp;<b id="lastUpdDate">2026-10-01</b></p>
+  <p class="lastupdated">CATALOG DATA LAST UPDATED &nbsp;<b id="lastUpdDate">2026-10-03</b> &nbsp;&middot;&nbsp; PAGE BUILD <b id="pageBuildDate">2026-10-03</b></p>
 </header>
 
 <div class="wrap">
@@ -621,7 +621,7 @@ a.fcard .fgo{margin-top:8px;color:#ff8080;font-weight:700;font-size:.85em}
       <option value="new">Newest first</option>
       <option value="old">Oldest first</option>
     </select>
-    &nbsp;<label for="eraf">Era:</label>
+    &nbsp;<label for="eraf" title="Era = the invention's time context as classified when the spec was generated: Past (historical-style invention), Current (present-day), Future (projected concept). Descriptive only — not a claim about when it was invented.">Era:</label>
     <select id="eraf">
       <option value="">All eras</option>
       <option value="Past">Past</option>
@@ -682,10 +682,10 @@ a.fcard .fgo{margin-top:8px;color:#ff8080;font-weight:700;font-size:.85em}
 <h4>Full written spec — verbatim</h4>
 <p><strong>A TEST RUN OF FORCED LOGIC 1 (BASIC TEST)</strong><br>
 <strong>SIGNATURE REVERSE SOLVE OF UNIVERSAL BIT TO CROSS-HAIR ZERO-IN ON A SPECIFICATION</strong></p>
-<p><strong>"A Basic Plasic Cup"</strong></p>
+<p><strong>"A Basic Plastic Cup"</strong></p>
 <p>The reverse universal dynamic bit is the black‑hole type collapse of all shape, rule, and dimension into one point of controlled creation, where the Signature's six tools mix in a vortex hither thither, appearing and disappearing in the state of there / not, able to pull every possible geometry, even seeming lack, into a single solvable origin. When reversed, that same vortex expands outward again, letting any object, rule, mechanism, or structure be created from the infinite‑able mix of line, triangle, square, cross, circle, and curvature. It is the universal allowance engine: all shapes, all sizes, all numbers, all states of presence and absence, all dynamic‑able, all valid, all able to collapse into one bit and then re‑emerge as whatever is needed to be made.</p>
-<p>This is the forced Code (like math but cyber able) reduction of the Specification. The Code (or Formula) will allow for a universal key solved reverse reduction to auto solve any of potentially boundless specks [software to hardware and boundbless ecosystems on ecosystems and more ... ])</p>
-<p><em>Basically, 'A' test of reverse 'A' black hole ceation</em></p>
+<p>This is the forced Code (like math but cyber able) reduction of the Specification. The Code (or Formula) will allow for a universal key solved reverse reduction to auto solve any of potentially boundless specks [software to hardware and boundless ecosystems on ecosystems and more ... ])</p>
+<p><em>Basically, 'A' test of reverse 'A' black hole creation</em></p>
 <hr>
 <p><strong>A BASIC PLASTIC CUP<br>
 FORCED BY MY UNIVERSAL REDUCTION ALGO<br>
@@ -1374,12 +1374,15 @@ function jahHashHex(text, cb) {
 }
 function jahCrossLinks(r) {
   var id = r[0];
+  var m = /JAH-SPEC-(\d+)/i.exec(id || "");
+  var wikiId = m ? "JAH-WIKI-SPEC-" + m[1] : "";
   return '<p class="snote"><b>Cross-site identity.</b> ' +
     'Spec: <b>' + esc(id) + '</b> &middot; ' +
     '<a href="specs.html?spec=' + encodeURIComponent(id) + '">this record</a> &middot; ' +
     '<a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/?dossier=' + encodeURIComponent(id) + '" target="_blank" rel="noopener">JAH-N dossier</a> &middot; ' +
-    '<a href="https://justinahiggins614-cmyk.github.io/jah-wiki/" target="_blank" rel="noopener">JAH Wiki</a> &middot; ' +
-    '<a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/" target="_blank" rel="noopener">AI Telephone Book</a></p>';
+    (wikiId ? '<a href="https://justinahiggins614-cmyk.github.io/jah-wiki/?page=' + encodeURIComponent(wikiId) + '" target="_blank" rel="noopener">JAH Wiki article</a> &middot; ' :
+              '<a href="https://justinahiggins614-cmyk.github.io/jah-wiki/" target="_blank" rel="noopener">JAH Wiki</a> &middot; ') +
+    '<a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/" target="_blank" rel="noopener">AI Phone Book</a></p>';
 }
 function jahCompletenessHTML(r) {
   var p = jahParseAutoread(r[9] || "");
@@ -3054,10 +3057,11 @@ will:1,would:1,could:1,should:1,they:1,we:1,our:1,us:1,if:1,not:1,no:1,but:1,so:
 very:1,more:1,many:1,other:1,than:1,just:1,like:1,also:1,over:1,through:1,before:1,
 after:1,each:1,these:1,those:1,then:1,now:1};
 function finderWords(sx){return String(sx==null?"":sx).toLowerCase().replace(/[^a-z0-9\s]/g," ").split(/\s+/).filter(function(w){return w.length>=3&&!FINDER_STOP[w];});}
-function specFinderCard(r){
+function specFinderCard(r, matchedWords){
   var id=r[0],perma="specs.html?spec="+encodeURIComponent(id);
   return '<a class="fcard" href="'+perma+'"><div class="fnum">'+esc(id)+'</div><h3>'+esc(r[1])+'</h3>'+
     '<div class="fmeta">Inventor: Justin Addam Higgins &middot; Prepared: '+esc(r[6]||"")+' &middot; CPC: '+esc(r[4]||"")+'</div>'+
+    (matchedWords&&matchedWords.length?'<div class="fmeta">Matched: '+esc(matchedWords.join(", "))+'</div>':"")+
     (r[2]?'<div class="fabs">'+esc(String(r[2]).slice(0,220))+'\u2026</div>':"")+
     '<div class="fgo">Take me there &rarr;</div></a>';
 }
@@ -3072,8 +3076,8 @@ function finderRun(){
   ws.forEach(function(w){
     state.q=w;apply();
     for(var i=0;i<filtered.length;i++){var r=filtered[i],k=r[0];
-      if(!seen[k]){seen[k]={r:r,n:0};ranked.push(seen[k]);}
-      seen[k].n++;}
+      if(!seen[k]){seen[k]={r:r,n:0,words:[]};ranked.push(seen[k]);}
+      seen[k].n++;if(seen[k].words.indexOf(w)<0)seen[k].words.push(w);}
   });
   state.q=sq;state.cat=sc;state.group=sg;state.era=se;apply();
   ranked.sort(function(a,b){return b.n-a.n;});
@@ -3081,7 +3085,7 @@ function finderRun(){
   if(!top.length){box.innerHTML='<div class="finder-none">No specs matched "'+esc(ws.join(" "))+'". Try fewer or different words.</div>';return;}
   box.innerHTML='<div class="finder-count">TOP '+top.length+' MATCH'+(top.length>1?"ES":"")+' FOR "'+esc(ws.join(" "))+'"</div>'+
     jahProvenance("Finder-AI results generated on this page by the keyword finder \u00B7 " + new Date().toISOString().slice(0,10))+
-    top.map(function(e){return specFinderCard(e.r);}).join("");
+    top.map(function(e){return specFinderCard(e.r, e.words);}).join("");
 }
 /* ================= SPEC HELPER (additive, 2026-10-02) =================
    Compact bubble on open spec records. Answers ONLY from the open record's
@@ -3284,7 +3288,11 @@ function groupCount(gname) {
 }
 function renderGroups() {
   var box = document.getElementById("groupgrid");
-  if (!box || !GROUPS.length) return;
+  if (!box) return;
+  if (!GROUPS.length) {
+    if (groupsReady) box.innerHTML = '<p class="sectsub">Catalog groups could not be loaded — check your connection and reload. Search and A&ndash;Z browsing still work.</p>';
+    return;
+  }
   var h = "";
   GROUPS.forEach(function (g) {
     var n = groupCount(g.name);
@@ -3333,6 +3341,28 @@ function stampSpecSEO(r) {
     var tident = (r[14] && r[14].objects && r[14].objects.technical && r[14].objects.technical.identity) || {};
     var ver = tident.version ? String(tident.version) : "1";
     if (tident.revision !== undefined && tident.revision !== null && tident.revision !== "") ver += " rev " + String(tident.revision);
+    /* Machine-readable validation taxonomy (mirrors validationBlockHTML's
+       honest defaults: only what the record's own fields establish is true;
+       nothing is ever claimed as physically tested). */
+    var vkind = "other";
+    try { vkind = (typeof demoKind === "function" ? demoKind(r[16]) : "other"); } catch (e) {}
+    var vHasMfg = !!r[15];
+    var vHasMeas = !!((r[17] || []).length) || !!(r[8] && Object.keys(r[8]).length);
+    var vRunnable = (vkind === "software" || vkind === "calculator");
+    var validationStatus = {
+      "SCHEMA_VALID": true,
+      "CONTENT_COMPLETE": vHasMeas,
+      "MATH_CHECKED": false,
+      "ENGINEERING_CHECKED": false,
+      "PHYSICALLY_TESTED": false,
+      "MANUFACTURING_TESTED": false,
+      "SAFETY_REVIEWED": false,
+      "REGULATORY_REVIEWED": false,
+      "PATENT_REVIEWED": false,
+      "HAS_MANUFACTURING_SPEC": vHasMfg,
+      "HAS_RUNNABLE_SOFTWARE": vRunnable,
+      "note": "SCHEMA_VALID means the record passes Signature-One schema validation only. No physical, manufacturing, safety, regulatory, or patent examination has been performed on any record in this catalog."
+    };
     ld.textContent = JSON.stringify({
       "@context": "https://schema.org",
       "@type": "TechArticle",
@@ -3351,6 +3381,7 @@ function stampSpecSEO(r) {
       "inLanguage": "en",
       "creativeWorkStatus": "Draft",
       "copyrightHolder": { "@type": "Person", "name": "Justin Addam Higgins" },
+      "validationStatus": validationStatus,
       "disclaimer": "Draft invention specification by Justin Addam Higgins (JAH), ready to review and file. Not a granted patent; not affiliated with the USPTO or any government agency."
     });
   } catch (e) {}

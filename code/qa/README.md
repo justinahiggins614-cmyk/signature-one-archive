@@ -11,6 +11,7 @@ These checkers are additive QA tooling. They never write to `data/`,
 | `check_counts.py` | Every `shards.json` entry resolves locally; spec-ID ranges contiguous (no gaps/overlaps); total count; all chunk files referenced by the main index exist; words/word-AI index counts |
 | `check_dupe_ids.py` | No duplicate spec IDs across the main index + all shard clones (default); `--fast` scans the main index only. A duplicate means a generator bug — report it, never delete data |
 | `check_missing_ids.py` | Each index holds one contiguous integer run of `JAH-SPEC-######` IDs — any hole inside an index means lost records |
+| `check_prose_machine.py` | Sampled prose-vs-machine agreement: 40 seeded records per index (main + every shard clone) verified that index rows (id/title/category/cpc/era/prepared) match the actual chunk records |
 
 Run all four:
 
@@ -20,6 +21,7 @@ python3 code/qa/check_links.py
 python3 code/qa/check_counts.py
 python3 code/qa/check_dupe_ids.py
 python3 code/qa/check_missing_ids.py
+python3 code/qa/check_prose_machine.py
 ```
 
 Exit 0 = clean. Exit 1 = findings printed; fix them or explicitly mark them dead.

@@ -21,7 +21,7 @@ deep-links (specs.html?spec=JAH-SPEC-######) live on the MAIN site; shard
 sitemaps only *list* URLs, they don't serve the pages.
 
 Ranges below were verified contiguous from the live indexes on 2026-10-02
-(shard-2: 1-52500 ... shard-25: 473551-490050, main: 490051-575169).
+(shard-2: 1-52500 ... shard-26: 490051-506550, main: 506551-598196).
 """
 import json
 import os
@@ -59,8 +59,9 @@ SHARDS = [
     ("signature-one-archive-shard-23", 440551, 457050),
     ("signature-one-archive-shard-24", 457051, 473550),
     ("signature-one-archive-shard-25", 473551, 490050),
+    ("signature-one-archive-shard-26", 490051, 506550),
 ]
-MAIN_RANGE = (490051, 563649)
+MAIN_RANGE = (506551, 563649)
 URL_LIMIT = 50000
 
 
@@ -91,7 +92,12 @@ def stamp_static_count(total):
     so crawlers see a real number without running JS. The drip adds ~11k
     specs every 2h, so re-stamp it here (this script already runs after every
     drip and `total` is verified against the shard ranges by the assert in
-    main()). Only the one <p class="staticcount"> line is touched.
+    main()). Also stamps the CATALOG DATA / PAGE BUILD dates on the
+    <p class="lastupdated"> line so the two dates never silently diverge:
+    catalog-data date = the data being published (today — the drip just
+    appended records), page-build date = when this page was stamped.
+    The live page's refreshLastUpdated() corrects the catalog-data date from
+    the GitHub API on load; these are the honest no-JS fallbacks.
     """
     path = os.path.join(MAIN, "specs.html")
     with open(path, encoding="utf-8") as f:
@@ -104,6 +110,13 @@ def stamp_static_count(total):
                        count=1, flags=re.S)
     if n != 1:
         raise RuntimeError("staticcount line not found in specs.html")
+    new_dates = ('<p class="lastupdated">CATALOG DATA LAST UPDATED &nbsp;'
+                 '<b id="lastUpdDate">%s</b> &nbsp;&middot;&nbsp; PAGE BUILD '
+                 '<b id="pageBuildDate">%s</b></p>' % (TODAY, TODAY))
+    html2, n2 = re.subn(r'<p class="lastupdated">.*?</p>', new_dates, html2,
+                        count=1, flags=re.S)
+    if n2 != 1:
+        raise RuntimeError("lastupdated line not found in specs.html")
     if html2 != html:
         with open(path, "w", encoding="utf-8") as f:
             f.write(html2)
@@ -134,6 +147,39 @@ def shard_number(dirname):
 def esc_html(s):
     return (s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
              .replace('"', "&quot;"))
+
+
+def stamp_methodology_shards():
+    """Keep methodology.html's shard-architecture paragraph honest.
+
+    The shard count grows every few drips; hand-maintained prose goes stale
+    (it once said "16 shards" when there were 26). Re-stamp it from the SHARDS
+    list every run — same source of truth as the sitemaps.
+    """
+    path = os.path.join(MAIN, "methodology.html")
+    with open(path, encoding="utf-8") as f:
+        html = f.read()
+    n = len(SHARDS)
+    first = min(first for _, first, _ in SHARDS)
+    last = max(last for _, _, last in SHARDS)
+    total = sum(last - first + 1 for _, first, last in SHARDS)
+    new_li = ('<li><b>%d frozen shard repos</b> hold the oldest chunks '
+              '(JAH-SPEC-%06d through JAH-SPEC-%06d, %s specs); the <b>main repo</b> '
+              'holds the newest chunks and the search index. The file '
+              '<code>data/index/shards.json</code> lists every shard in order — '
+              'IDs are contiguous across shards with no gaps. (Auto-updated %s.)</li>'
+              % (n, first, last, format(total, ","), TODAY))
+    html2, n2 = re.subn(r'<li><b>\d+ frozen shard repos</b>.*?</li>', new_li,
+                        html, count=1, flags=re.S)
+    if n2 != 1:
+        raise RuntimeError("shard paragraph not found in methodology.html")
+    # Also refresh the stale "16-shard" mentions in meta description + JSON-LD.
+    html2 = html2.replace("the 16-shard archive architecture",
+                          "the %d-shard archive architecture" % n)
+    if html2 != html:
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(html2)
+    print("stamped methodology.html shard paragraph: %d shards" % n)
 
 
 def write_shard_ranges(ml):
@@ -232,7 +278,7 @@ def main():
         print("shard %-32s %d-%d (%d urls)" % (dirname, first, last, n))
 
     # --- main repo's own newest chunks (repo ROOT, never data/) ---
-    # MAIN_RANGE start follows the newest shard (shard-25 ends at 490050); end follows state.json.
+    # MAIN_RANGE start follows the newest shard (shard-26 ends at 506550); end follows state.json.
     mf = MAIN_RANGE[0]
     with open(os.path.join(MAIN, "code", "specs", "state.json"), encoding="utf-8") as f:
         ml = json.load(f)["next_index"] - 1
@@ -276,6 +322,7 @@ def main():
     expected = sum(last - first + 1 for _, first, last in SHARDS) + (ml - mf + 1)
     assert total == expected, "expected %d, got %d" % (expected, total)
     stamp_static_count(total)
+    stamp_methodology_shards()
     write_shard_ranges(ml)
     write_data_page()
 

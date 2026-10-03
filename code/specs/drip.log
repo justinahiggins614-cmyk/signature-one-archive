@@ -53,3 +53,4 @@
 2026-10-03 03:28 EDT spec drip: +11515 new, 103161 in main repo (compact search index 609711 total rows, 0 dupes); REPO-SIZE GUARD TRIPPED (data 919970183 > 891813888) — NOT pushed, needs shard-27
 2026-10-03 05:23 EDT spec drip: +11515 new, 621226 total (27 shards + main), main repo 98176 in volumes, pushed OK (data 879MB, ~12.7MB under 850MB guard; compact search index rebuilt, sitemaps refreshed, wiki compact index current)
 2026-10-03 ~07:23 EDT spec drip: +11128 new (4000 new, 628 signature-line, 2000 hybrids, 2000 versions, 1500 revisions, 1000 product lines), 109304 in main repo (compact search index 632354 total rows, 27 shards + main, 0 dupes); REPO-SIZE GUARD TRIPPED (data 974449773 > 891813888) - NOT pushed, needs shard-28
+2026-10-03 13:28:45 UTC spec drip fill (UNPUSHED — repo-size guard tripped): total=103962

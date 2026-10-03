@@ -100,7 +100,7 @@ never rewords or copies other people's patents.</p>
 <p>The archive is split for scale and speed:</p>
 <ul>
   <li><b>150-spec data chunks</b>, lazy-loaded — the catalog page stays fast while the archive grows toward 1,000,000+ specs.</li>
-  <li><b>30 frozen shard repos</b> hold the oldest chunks (JAH-SPEC-000001 through JAH-SPEC-589050, 589,050 specs); the <b>main repo</b> holds the newest chunks and the search index. The file <code>data/index/shards.json</code> lists every shard in order — IDs are contiguous across shards with no gaps. (Auto-updated 2026-10-03.)</li>
+  <li><b>31 frozen shard repos</b> hold the oldest chunks (JAH-SPEC-000001 through JAH-SPEC-605550, 605,550 specs); the <b>main repo</b> holds the newest chunks and the search index. The file <code>data/index/shards.json</code> lists every shard in order — IDs are contiguous across shards with no gaps. (Auto-updated 2026-10-03.)</li>
   <li>An <b>850&nbsp;MB repo-size guard</b> on the data directory: when a drip run would cross it, the oldest chunks move sideways into a new shard repo. <b>Growth is always sideways — records are never cut or trimmed to make room.</b></li>
 </ul>
 

@@ -22,7 +22,7 @@ sitemaps only *list* URLs, they don't serve the pages.
 
 Ranges below were verified contiguous from the live indexes on 2026-10-02
 (shard-2: 1-52500 ... shard-26: 490051-506550, shard-27: 506551-523050, shard-28: 523051-539550,
- shard-29: 539551-556050, main: 556051-643512).
+ shard-29: 539551-556050, shard-30: 556051-572550, main: 572551-666199).
 """
 import json
 import os
@@ -64,8 +64,9 @@ SHARDS = [
     ("signature-one-archive-shard-27", 506551, 523050),
     ("signature-one-archive-shard-28", 523051, 539550),
     ("signature-one-archive-shard-29", 539551, 556050),
+    ("signature-one-archive-shard-30", 556051, 572550),
 ]
-MAIN_RANGE = (556051, 643512)
+MAIN_RANGE = (572551, 666199)
 URL_LIMIT = 50000
 
 
@@ -282,7 +283,7 @@ def main():
         print("shard %-32s %d-%d (%d urls)" % (dirname, first, last, n))
 
     # --- main repo's own newest chunks (repo ROOT, never data/) ---
-    # MAIN_RANGE start follows the newest shard (shard-29 ends at 556050); end follows state.json.
+    # MAIN_RANGE start follows the newest shard (shard-30 ends at 572550); end follows state.json.
     mf = MAIN_RANGE[0]
     with open(os.path.join(MAIN, "code", "specs", "state.json"), encoding="utf-8") as f:
         ml = json.load(f)["next_index"] - 1

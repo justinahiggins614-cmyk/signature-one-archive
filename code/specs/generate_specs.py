@@ -1026,20 +1026,43 @@ def build_ai_explainer(r, kind, title, category, params, toolmap, steps):
 ALLCATS = [(n, "software", c, devs) for n, c, devs in SWCATS] + \
           [(n, "hardware", c, devs) for n, c, devs in HWCATS]
 
+try:
+    import state_store
+except ImportError:  # pragma: no cover - path insurance for direct runs
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import state_store
+
+
 def load_state():
     if os.path.exists(STATE):
-        with open(STATE, encoding="utf-8") as fh:
-            st = json.load(fh)
-        st.setdefault("used_titles", [])
+        st = state_store.load_scalars()
+        titles = state_store.load_used_titles()
+        st["used_titles"] = titles
+        # Base length the append path in save_state() may extend. Generators
+        # only ever append to used_titles; the store write then touches just
+        # the tail part(s) instead of rewriting a 50MB file every drip run.
+        st["_titles_base"] = len(titles)
         return st
-    return {"seed": SEED, "next_index": 1, "used_titles": []}
+    return {"seed": SEED, "next_index": 1, "used_titles": [], "_titles_base": 0}
 
 def save_state(st):
+    base = st.get("_titles_base")
+    titles = st.get("used_titles", [])
+    if (base is not None and len(titles) >= base
+            and state_store.check_prefix(titles, base)):
+        # Normal path: only new titles since load; append to the tail part.
+        state_store.append_used_titles(titles[base:])
+    else:
+        # Another writer changed the store underneath us (or the base was
+        # never recorded). Guessing a merge could silently lose or duplicate
+        # dedup titles, so fail LOUDLY like the drip's duplicate-ID guard:
+        # the run stops and the parent repairs instead of corrupting state.
+        raise RuntimeError(
+            "state_store: used_titles diverged under us (base=%r, len=%d) - "
+            "another writer may be active. Refusing to save." % (base, len(titles))
+        )
     st["catset"] = CATSET
-    tmp = STATE + ".tmp"
-    with open(tmp, "w", encoding="utf-8") as fh:
-        json.dump(st, fh, separators=(",", ":"))
-    os.replace(tmp, STATE)
+    state_store.save_scalars(st)
 
 def random_date(r):
     days = (DATE_END - DATE_START).days

@@ -22,6 +22,7 @@ import json
 import os
 import re
 import shutil
+import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(HERE, "..", "..", "data")
@@ -115,13 +116,20 @@ def main():
     # clear hot file
     open(HOT, "w").close()
 
-    # reset state
+    # reset state (used_titles lives in the sharded state_store now, so a
+    # full rebuild goes through it - never back into the slim state.json)
+    try:
+        import state_store
+    except ImportError:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import state_store
     st = {}
     if os.path.exists(STATE):
         st = json.load(open(STATE, encoding="utf-8"))
     st["next_index"] = maxidx + 1
-    st["used_titles"] = titles
-    json.dump(st, open(STATE, "w", encoding="utf-8"))
+    st.pop("used_titles", None)
+    state_store.save_used_titles(titles)
+    state_store.save_scalars(st)
     print(f"state reset: next_index={maxidx + 1}, {len(titles)} titles", flush=True)
 
     # drop derived indexes - generators rebuild them

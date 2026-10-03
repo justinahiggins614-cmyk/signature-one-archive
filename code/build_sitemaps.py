@@ -21,7 +21,8 @@ deep-links (specs.html?spec=JAH-SPEC-######) live on the MAIN site; shard
 sitemaps only *list* URLs, they don't serve the pages.
 
 Ranges below were verified contiguous from the live indexes on 2026-10-02
-(shard-2: 1-52500 ... shard-26: 490051-506550, main: 506551-598196).
+(shard-2: 1-52500 ... shard-26: 490051-506550, shard-27: 506551-523050,
+ main: 523051-609711).
 """
 import json
 import os
@@ -60,8 +61,9 @@ SHARDS = [
     ("signature-one-archive-shard-24", 457051, 473550),
     ("signature-one-archive-shard-25", 473551, 490050),
     ("signature-one-archive-shard-26", 490051, 506550),
+    ("signature-one-archive-shard-27", 506551, 523050),
 ]
-MAIN_RANGE = (506551, 563649)
+MAIN_RANGE = (523051, 609711)
 URL_LIMIT = 50000
 
 
@@ -278,7 +280,7 @@ def main():
         print("shard %-32s %d-%d (%d urls)" % (dirname, first, last, n))
 
     # --- main repo's own newest chunks (repo ROOT, never data/) ---
-    # MAIN_RANGE start follows the newest shard (shard-26 ends at 506550); end follows state.json.
+    # MAIN_RANGE start follows the newest shard (shard-27 ends at 523050); end follows state.json.
     mf = MAIN_RANGE[0]
     with open(os.path.join(MAIN, "code", "specs", "state.json"), encoding="utf-8") as f:
         ml = json.load(f)["next_index"] - 1

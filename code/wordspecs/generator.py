@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Generate JAH-WORD spec records: a patent draft + working program for every
-IWB Dictionary headword, mix-and-match style.
+The Signature Dictionary headword, mix-and-match style.
 
 Reads the headword list from the dictionary build (alphabetical) and seeds each
 invention concept from the word's own IWB definition (all.jsonl).
@@ -128,7 +128,7 @@ def build_record(w, idx, spec_id, words, defs):
                     "into a buildable system: geometry derived from its definition, tuned for performance, "
                     "durability, and clean operation. The method raises functional uniformity and meets "
                     "endurance targets across bench qualification.") % (domain, concept_line)
-        line_note = "Word invention from the IWB Dictionary headword '%s'%s" % (w, (" (%s)" % pos) if pos else "")
+        line_note = "Word invention from the Signature Dictionary headword '%s'%s" % (w, (" (%s)" % pos) if pos else "")
         mix_from = None
         subj = "the '%s' apparatus" % w
     else:
@@ -139,7 +139,7 @@ def build_record(w, idx, spec_id, words, defs):
                     "device. Six Signature tools convert the bare word-form into a buildable system with "
                     "measurable parameters. The method raises encoding density and meets legibility targets "
                     "across bench qualification.") % w
-        line_note = "Word invention from the IWB Dictionary headword '%s' (form study)" % w
+        line_note = "Word invention from the Signature Dictionary headword '%s' (form study)" % w
         mix_from = None
         subj = "the '%s' lexical-form apparatus" % w
 
@@ -189,7 +189,7 @@ def build_record(w, idx, spec_id, words, defs):
                     "primary_function": "Embody %s as an operable six-tool mapped unit." % concept_line,
                     "intended_users": "Builders, makers, and product teams working from language-driven concepts.",
                     "advantages": "Deterministic derivation from a defined word; full machine-readable build record; mix-and-match blending with other word inventions.",
-                    "scalability": "The same derivation pipeline covers all 102,217 IWB Dictionary headwords.",
+                    "scalability": "The same derivation pipeline covers all 102,217 The Signature Dictionary headwords.",
                     "best_mode": "Build per the autoread block parameters; verify STATUS=SIGNATURE-1 VALID before use."},
                 "background": {
                     "text": "Dictionaries define words; engineering builds devices. This draft bridges the two with a deterministic word-to-apparatus pipeline under the Signature-One framework.",
@@ -197,11 +197,11 @@ def build_record(w, idx, spec_id, words, defs):
                 "summary": {
                     "text": abstract,
                     "core": "Six-tool geometry derived from the lexical concept '%s', bounded by key parameters, verified by autoread block." % w,
-                    "inputs": ["lexical concept '%s'" % w, "IWB Dictionary definition", "six-tool mapping"],
+                    "inputs": ["lexical concept '%s'" % w, "The Signature Dictionary definition", "six-tool mapping"],
                     "outputs": ["operable apparatus", "machine-readable build record", "working program"],
                     "embodiments": ["single-word embodiment", "blended word-pair embodiment", "lexical-form embodiment"]},
                 "definitions": {
-                    "Lexical concept": "The IWB Dictionary headword '%s' and its recorded meaning." % w,
+                    "Lexical concept": "The Signature Dictionary headword '%s' and its recorded meaning." % w,
                     "Six-tool mapping": "LINE, TRIANGLE, SQUARE, CROSS, CIRCLE, CURVATURE geometry assignments.",
                     "Autoread block": "The machine-readable parameter record validating the build."},
                 "architecture": {
@@ -285,7 +285,7 @@ def build_record(w, idx, spec_id, words, defs):
         "headline": "AI explainer: %s" % title,
         "what": "This is %s: a word-derived invention in Word Inventions. In plain words: the dictionary word '%s' rebuilt as a device you could manufacture." % (subj, w),
         "how_it_works": [
-            "Start with the IWB Dictionary headword '%s' and its recorded meaning." % w,
+            "Start with the Signature Dictionary headword '%s' and its recorded meaning." % w,
             "Map that meaning onto the six Signature tools \u2014 line, triangle, square, cross, circle, curvature.",
             "Derive every key parameter deterministically from the word itself, so the same word always yields the same build.",
             "Emit the autoread block: the machine-readable recipe any shop can follow.",

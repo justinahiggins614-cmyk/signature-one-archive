@@ -144,7 +144,7 @@ def build_word_ai(num, word, spec_id, defs):
         ["word", word],
         ["part of speech", pos_label],
         ["word patent", spec_id],
-        ["dictionary", "IWB Dictionary \u2014 ?w=" + word],
+        ["dictionary", "The Signature Dictionary \u2014 ?w=" + word],
     ]
 
     rules = []

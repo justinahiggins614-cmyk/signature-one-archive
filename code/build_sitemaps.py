@@ -23,17 +23,22 @@ sitemaps only *list* URLs, they don't serve the pages.
 Ranges below were verified contiguous from the live indexes on 2026-10-02
 (shard-2: 1-52500 ... shard-26: 490051-506550, shard-27: 506551-523050, shard-28: 523051-539550,
  shard-29: 539551-556050, shard-30: 556051-572550, shard-31: 572551-589050,
+ shard-32: 589051-605550, shard-33: 605551-622050,
  main: 589051-677719).
 """
 import json
 import os
 import re
-from datetime import date
+from datetime import datetime
+from zoneinfo import ZoneInfo
+
+# The network's dates are America/New_York, but this VM runs UTC — a bare
+# date.today() can stamp a bogus future date (e.g. 2026-10-04 at 9pm EDT).
+TODAY = datetime.now(ZoneInfo("America/New_York")).date().isoformat()
 
 HOME = os.path.expanduser("~")
 MAIN = os.path.join(HOME, "workspace", "signature-one-archive")
 SITE = "https://justinahiggins614-cmyk.github.io/signature-one-archive"
-TODAY = date.today().isoformat()
 
 # (shard_dir_name, first_id, last_id) -- shard-2 gets split files
 SHARDS = [
@@ -68,8 +73,9 @@ SHARDS = [
     ("signature-one-archive-shard-30", 556051, 572550),
     ("signature-one-archive-shard-31", 572551, 589050),
     ("signature-one-archive-shard-32", 589051, 605550),
+    ("signature-one-archive-shard-33", 605551, 622050),
 ]
-MAIN_RANGE = (605551, 689236)
+MAIN_RANGE = (622051, 689236)
 URL_LIMIT = 50000
 
 

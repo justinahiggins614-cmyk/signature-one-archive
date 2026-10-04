@@ -78,8 +78,9 @@ SHARDS = [
     ("signature-one-archive-shard-35", 638551, 655050),
     ("signature-one-archive-shard-36", 655051, 671550),
     ("signature-one-archive-shard-37", 671551, 688050),
+    ("signature-one-archive-shard-38", 688051, 704550),
 ]
-MAIN_RANGE = (688051, 769909)
+MAIN_RANGE = (704551, 769909)
 URL_LIMIT = 50000
 
 
@@ -401,7 +402,7 @@ def main():
         print("shard %-32s %d-%d (%d urls)" % (dirname, first, last, n))
 
     # --- main repo's own newest chunks (repo ROOT, never data/) ---
-    # MAIN_RANGE start follows the newest shard (shard-33 ends at 622050); end follows state.json.
+    # MAIN_RANGE start follows the newest shard (shard-38 ends at 704550); end follows state.json.
     mf = MAIN_RANGE[0]
     with open(os.path.join(MAIN, "code", "specs", "state.json"), encoding="utf-8") as f:
         ml = json.load(f)["next_index"] - 1

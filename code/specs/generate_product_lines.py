@@ -75,9 +75,16 @@ def main():
                                    if k not in before})
 
     lines = load_json(LINES, {})
-    founders = [pid for pid, (cat, _ln, title) in ids.items()
-                if title and cat in CATMAP
-                and not re.search(r" (Rev \d+|V\d+)$", title)]
+    # guard: skip malformed all_ids store entries (see note in
+    # generate_revisions.py — 2026-10-04 a backfill wrote 1000 bare [] entries)
+    founders = []
+    for pid, v in ids.items():
+        if not isinstance(v, (list, tuple)) or len(v) != 3:
+            continue
+        cat, _ln, title = v
+        if title and cat in CATMAP \
+                and not re.search(r" (Rev \d+|V\d+)$", title):
+            founders.append(pid)
     rr = random.Random()
     rr.shuffle(founders)
     line_ids = list(lines.keys())

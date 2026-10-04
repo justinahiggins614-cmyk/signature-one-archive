@@ -118,7 +118,13 @@ def main():
             if root in coverage:
                 rev, latest, rtitle, cat, line = coverage[root]
             else:
-                cat, line, rtitle = ids[root]
+                # guard: skip malformed all_ids store entries (2026-10-04 a
+                # store backfill wrote 1000 bare [] entries that crashed this
+                # unpack); the store has since been repaired, this is defense
+                entry = ids[root]
+                if not isinstance(entry, (list, tuple)) or len(entry) != 3:
+                    continue
+                cat, line, rtitle = entry
                 if not rtitle or cat not in CATMAP:
                     continue
                 # don't start a fresh chain on a revision or product-line

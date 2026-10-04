@@ -289,6 +289,15 @@
           border-radius: 2px; padding: 14px 16px; margin: 10px 0;
           scroll-margin-top: 64px; transition: box-shadow .2s, border-color .2s; }
   .card:hover { border-color: var(--red-dim); box-shadow: 0 0 20px rgba(255,34,34,.14); }
+  /* Deterministic product-cover art: thumbnail beside the card text, painted
+     lazily as the card nears the viewport (see js/cover-art.js). */
+  .cardflex { display: flex; gap: 12px; align-items: flex-start; }
+  .cardmain { flex: 1; min-width: 0; }
+  .speccov { flex: 0 0 148px; width: 148px; }
+  .detcov { max-width: 440px; margin: 0 auto 14px; }
+  .covph { width: 100%; aspect-ratio: 4/3; background: #101725; border-radius: 10px; overflow: hidden; }
+  .covph svg { display: block; width: 100%; height: auto; }
+  @media (max-width: 560px) { .speccov { flex-basis: 104px; width: 104px; } }
   .card .num { font-size: .76em; color: var(--red); font-weight: 700; letter-spacing: .08em;
     text-shadow: 0 0 8px rgba(255,34,34,.5); }
   .card h3 { margin: 6px 0 8px; font-size: 1.02em; line-height: 1.35; color: #f2f2f5;
@@ -1506,6 +1515,7 @@ STATUS=SIGNATURE-1_VALID</pre>
 <script src="js/shard-ranges.js"></script>
 <script src="osv.js"></script>
 <script src="js/jah-talk-fallback.js"></script>
+<script src="js/cover-art.js"></script>
 <script>
 /* ==== JAH global read-aloud controller (one per page): no stacked voices, no orphan audio ==== */
 (function(){
@@ -3262,6 +3272,7 @@ function validationBlockHTML(r) {
 function detailsHTML(r, i) {
   var abs = esc(r[2]);
   return '<div class="draftbanner">DRAFT &mdash; NOT A GRANTED PATENT</div>' +
+    specCoverNow(r) +
     jahRecordPanelHTML({status: "DRAFT SPECIFICATION", id: r[0], ver: "v1.0 (baseline)",
       source: "JAH_ORIGINAL \u2014 authored by Justin Addam Higgins", title: r[1],
       prov: "Draft specification authored by Justin Addam Higgins \u00B7 prepared " + (r[6] || "")} ) +
@@ -3510,11 +3521,26 @@ document.addEventListener("click", function (ev){
     }
   }
 }, false);
+/* Deterministic product-cover art (js/cover-art.js). Covers are additive:
+   a lazy thumbnail beside the card text, and a full cover on the detail
+   view. Every call is guarded so a cover failure can never break a card. */
+function specCover(r) {
+  try { return window.CoverArt ? CoverArt.ph(r[0], r[1], r[3]) : ""; }
+  catch (e) { return ""; }
+}
+function specCoverNow(r) {
+  try { return window.CoverArt ? '<div class="detcov">' + CoverArt.svg(r[0], r[1], r[3]) + "</div>" : ""; }
+  catch (e) { return ""; }
+}
+function paintSpecCovers(box) {
+  try { if (window.CoverArt) CoverArt.paintAll(box || document); } catch (e) {}
+}
 function card(r, i) {
   var id = esc(r[0]), title = esc(r[1]), abs = esc(r[2]);
   var meta = "Inventor: " + esc("Justin Addam Higgins") + " &middot; Owner: " + esc("Justin Addam Higgins") +
              "<br>Prepared: " + esc(r[6]) + " &middot; CPC: " + esc(r[4]);
   var h = '<div class="spec-card card" id="s' + i + '" data-letter="' + r[11] + '" data-spec="' + id + '" data-idx="' + i + '">' +
+    '<div class="cardflex"><div class="speccov">' + specCover(r) + '</div><div class="cardmain">' +
     '<div class="num">' + id + '</div>' +
     (r[12] ? '<div><span class="sigbadge">' + esc(r[12]).toUpperCase() + '</span></div>' : '') +
     variantBadge(r) +
@@ -3532,7 +3558,7 @@ function card(r, i) {
       '<div class="detbody" style="display:none"></div>' +
     '</div>' +
     '<div class="statusline"><b>DRAFT &mdash; NOT A GRANTED PATENT</b> &middot; by Justin Addam Higgins (JAH), ready to file.</div>' +
-    '</div>';
+    '</div></div></div>';
   return h;
 }
 function renderLetters() {
@@ -3583,6 +3609,7 @@ function render() {
       '<button type="button" class="emptyclear" data-clear="1">Clear search &amp; filters</button></div>';
   } else {
     box.innerHTML = slice.map(card).join("");
+    paintSpecCovers(box);
   }
   var label = filtered.length.toLocaleString() + " of " + DATA.length.toLocaleString() + " draft specs";
   if (state.q.trim()) label += ' &mdash; results for &ldquo;' + esc(state.q.trim()) + "&rdquo;";

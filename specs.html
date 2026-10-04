@@ -190,7 +190,6 @@
     #shardjump { max-width: 110px; }
     /* Keep the search row usable on narrow phones with the ? Guide button. */
     #go { padding: 0 14px; font-size: .85em; }
-    #guidebtn { padding: 0 10px; font-size: .7em; min-height: 44px; }
     #shardjump { max-width: 96px; font-size: .75em; }
   }
   /* Draft banner + validation block (honesty apparatus). */
@@ -345,60 +344,6 @@
     color: #ff8080; font-family: Orbitron, monospace; font-weight: 700;
     letter-spacing: .1em; text-transform: uppercase; cursor: pointer; }
   .emptyres .emptyclear:hover { background: rgba(255,34,34,.18); }
-  /* ? Guide button: sits with Search in the search row, secondary styling. */
-  #guidebtn { padding: 0 18px; min-height: 48px; border-radius: 2px; border: 1px solid var(--red-dim);
-    background: #0d0d12; color: #ff8080; font-family: Orbitron, monospace; font-size: .85em;
-    font-weight: 700; letter-spacing: .1em; cursor: pointer; white-space: nowrap; }
-  #guidebtn:hover { border-color: var(--red); color: #ffb3b3; box-shadow: 0 0 14px rgba(255,34,34,.35); }
-  /* Guide dialog: plain-language docs for every real feature. */
-  #guidedlg { position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,.72);
-    display: none; align-items: center; justify-content: center; padding: 16px; }
-  #guidedlg:not([hidden]) { display: flex; }
-  #guidedlg .guidebox { position: relative; max-width: 720px; width: 100%; max-height: 86vh;
-    overflow-y: auto; background: #0b0b10; border: 1px solid var(--red-dim);
-    border-top: 4px solid var(--red); border-radius: 2px; padding: 26px 24px 30px;
-    box-shadow: 0 0 40px rgba(255,34,34,.25); }
-  #guidedlg h2 { font-family: Orbitron, monospace; color: #fff; letter-spacing: .12em;
-    text-transform: uppercase; margin: 0 36px 6px 0; font-size: 1.15em;
-    text-shadow: 0 0 14px rgba(255,34,34,.6); }
-  #guidedlg h3 { font-family: Orbitron, monospace; color: #ff8080; letter-spacing: .1em;
-    text-transform: uppercase; font-size: .85em; margin: 18px 0 6px; }
-  #guidedlg p { color: #b9b9c4; font-size: .88em; line-height: 1.65; margin: 6px 0; }
-  #guidedlg .guidelede { border-left: 3px solid var(--red); padding-left: 12px; }
-  #guidedlg .guidemono { color: #ffe9a8; font-size: .92em; }
-  #guideclose { position: absolute; top: 10px; right: 10px; width: 44px; height: 44px;
-    border-radius: 2px; border: 1px solid var(--red-dim); background: #0d0d12;
-    color: #ff8080; font-size: 1.5em; line-height: 1; cursor: pointer; }
-  #guideclose:hover { border-color: var(--red); background: rgba(255,34,34,.12); }
-  /* First-time tour: prompt + step card, fixed bottom, never blocks content. */
-  #tourprompt { position: fixed; left: 50%; transform: translateX(-50%); bottom: 18px; z-index: 190;
-    max-width: 92vw; width: 420px; background: #0b0b10; border: 1px solid var(--red);
-    border-radius: 2px; padding: 14px 18px; box-shadow: 0 0 30px rgba(255,34,34,.4);
-    font-size: .88em; color: #b9b9c4; }
-  #tourprompt p { margin: 0 0 10px; line-height: 1.5; }
-  #tourprompt[hidden], #tourcard[hidden] { display: none; }
-  #tourcard { position: fixed; left: 50%; transform: translateX(-50%); bottom: 18px; z-index: 195;
-    max-width: 94vw; width: 520px; max-height: 62vh; overflow-y: auto;
-    background: #0b0b10; border: 1px solid var(--red); border-top: 4px solid var(--red);
-    border-radius: 2px; padding: 16px 20px 18px; box-shadow: 0 0 34px rgba(255,34,34,.45); }
-  #tourcard .tourkicker { color: var(--red); font-size: .68em; letter-spacing: .28em;
-    font-weight: 700; margin-bottom: 8px; }
-  #tourcard h3 { font-family: Orbitron, monospace; color: #fff; margin: 0 0 8px;
-    font-size: 1em; letter-spacing: .06em; text-shadow: 0 0 10px rgba(255,34,34,.5); }
-  #tourcard p { color: #b9b9c4; font-size: .86em; line-height: 1.6; margin: 6px 0; }
-  #tourcard p b { color: #ff8080; }
-  .tourbtnrow { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
-  .tourbtnrow button { flex: 1 1 0; min-height: 44px; padding: 10px 14px; border-radius: 2px;
-    font-family: Orbitron, monospace; font-size: .78em; font-weight: 700;
-    letter-spacing: .1em; text-transform: uppercase; cursor: pointer; }
-  #tourstart, #tournext { border: none; background: var(--red); color: #000;
-    box-shadow: 0 0 16px rgba(255,34,34,.5); }
-  #tourno, #tourskip, #tourback { border: 1px solid #3a3a44; background: #0d0d12; color: #9a9aa5; }
-  #tourno:hover, #tourskip:hover, #tourback:hover { border-color: var(--red); color: #ff8080; }
-  #tourback[disabled] { opacity: .35; cursor: default; }
-  /* Spotlight highlight on the element the current tour step describes. */
-  .tourhl { outline: 3px solid var(--red) !important; outline-offset: 3px;
-    box-shadow: 0 0 26px rgba(255,34,34,.55) !important; border-radius: 2px; }
   .noscript { max-width: 900px; margin: 20px auto; padding: 16px; background: #7f1d1d;
               color: #fff; border-radius: 2px; text-align: center; }
   footer { background: #050506; color: #8b8b95; font-size: .78em; padding: 28px 20px 36px;
@@ -704,6 +649,29 @@ html[data-theme="dark"]{filter:invert(1) hue-rotate(180deg)}
 html[data-theme="dark"] img,html[data-theme="dark"] video,html[data-theme="dark"] canvas,html[data-theme="dark"] svg{filter:invert(1) hue-rotate(180deg)}
 #jah-theme-toggle{position:fixed;right:14px;bottom:14px;z-index:99999;width:40px;height:40px;border-radius:50%;border:1px solid var(--red);background:#060608;color:#ff6b6b;font-size:20px;line-height:1;cursor:pointer;opacity:.7;box-shadow:0 2px 8px rgba(0,0,0,.4)}
 #jah-theme-toggle:hover{opacity:1}
+/* ---------- first-visit WELCOME overlay (2026-10-04 standard: centered modal, no scroll, no spotlight) ---------- */
+#jahWelcome{position:fixed;inset:0;z-index:100000;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,.78)}
+#jahWelcome.show{display:flex}
+#jahWelcomeCard{background:#0b0b10;border:2px solid #ff2222;border-radius:14px;padding:22px 20px;max-width:540px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 12px 40px rgba(0,0,0,.6);color:#d7d7de}
+#jahWelcomeCard h2{margin:0 0 4px;color:#ff8080;font-size:20px}
+#jahWelcomeCard .wsub{margin:4px 0 0;color:#9a9aa5;font-size:14px}
+#jahWelcomeCard ol{margin:10px 0 0;padding-left:22px;font-size:14px;line-height:1.55}
+#jahWelcomeCard ol li{margin:8px 0}
+#jahWelcomeCard ol li b{color:#fff}
+#jahWelcomeCard .wbtnrow{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+#jahGuide .btn,#jahWelcome .btn{min-height:48px;min-width:48px;font-size:16px;padding:12px 22px;border-radius:8px;border:1px solid #ff2222;background:#141419;color:#ffb3b3;cursor:pointer;font-family:inherit}
+#jahWelcomeOk{font-weight:700;background:#ff2222!important;color:#000!important;border:none!important}
+#jahGuideBtn{position:fixed;top:10px;right:10px;z-index:99900;background:#0d0d12;color:#ff8080;border:1px solid #ff2222;border-radius:50%;width:44px;height:44px;cursor:pointer;font-size:20px;font-weight:700}
+#jahGuide{position:fixed;inset:0;z-index:99900;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,.72)}
+#jahGuide.show{display:flex}
+#jahGuideCard{background:#0b0b10;border:1px solid #ff2222;border-radius:14px;max-width:680px;width:100%;max-height:86vh;overflow:auto;padding:20px 22px;color:#d7d7de}
+#jahGuideCard h2{margin-top:0;color:#ff8080}
+#jahGuideCard .gfeat{margin:0 0 14px;padding:10px 12px;background:#141419;border:1px solid #3a3a44;border-radius:10px}
+#jahGuideCard .gfeat b{color:#fff}
+#jahGuideCard .gfeat p{margin:4px 0 0;font-size:14px;line-height:1.5;color:#b9b9c4}
+#jahGuideCard .gfeat p b{color:#fff}
+#jahGuideCard .gfeat .guidemono{color:#ffe9a8}
+#jahGuideCloseRow{display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap;align-items:center;justify-content:space-between}
 </style>
 </head>
 <body>
@@ -716,7 +684,7 @@ b.addEventListener("click",function(){try{var d=document.documentElement;var dar
 paint();})();
 </script>
 <a class="skip" href="#browse">Skip to spec search</a>
-<nav class="jahnet" aria-label="JAH Network Global Ecosystem"><span class="jahnet-label">THE JAH NETWORK</span><span class="sitekicker">SITE 9 OF 27</span><span class="jahnet-here">YOU ARE HERE: SIGNATURE SPEC CATALOG</span><span class="jahnet-links"><a href="https://justinahiggins614-cmyk.github.io/signature-math/">1 Signature Math</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">2 Signature Universal Paradox Immune Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">3 The Signature Dictionary</a><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">4 JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">5 Wiki Leaks</a><a href="https://justinahiggins614-cmyk.github.io/signature-llama/">6 Signature Llama: The Fully Cyber Utilizable AI</a><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">7 The Signature AI Phone Book</a><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">8 Globally Rejustered Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html">9 Signature Spec Catalog Pending Patents</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">10 The Signature PC System Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-books/">11 The Signature Book Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-comics/">12 The Signature Comic Store</a><a href="https://justinahiggins614-cmyk.github.io/signature-newspapers/">13 The Signature Global Newspaper Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-backend/">14 The Signature AI Mad Scientist Creation Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-boundless-generators/">15 The Signature Boundless Generator Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/">16 The Signature AI Mix Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-olypics/">17 AI Olypics</a><a href="https://justinahiggins614-cmyk.github.io/signature-chip-maker/">18 The Signature Computer Chip Maker and Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-app-archive/">19 The Signature App Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-robot-matcher/">20 The Signature AI Robot Matcher</a><a href="https://justinahiggins614-cmyk.github.io/signature-experiment-solver/">21 The Signature Experiment Solver</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/">22 Signature AI Pixel</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-song-maker/">23 Signature Music Studio</a><a href="https://justinahiggins614-cmyk.github.io/signature-fixit/">24 The Signature Mr Fix-It</a><a href="https://justinahiggins614-cmyk.github.io/signature-university/">25 The Signature University</a><a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">26 The Signature Cyber Mega-Mall</a><a href="https://justinahiggins614-cmyk.github.io/signature-3d-print/">27 The Signature 3D Print Depository</a></span></nav>
+
 <div class="scanlines" aria-hidden="true"></div>
 <header id="top">
   <div class="eye" aria-hidden="true"></div>
@@ -761,7 +729,6 @@ paint();})();
   <div class="searchrow">
     <input id="q" type="search" aria-label="Search specs by title, keyword, spec ID, inventor, or category" placeholder="Search by title, keyword, spec ID, inventor, or category&hellip;" autocomplete="off">
     <button id="go" type="button">Search</button>
-    <button id="guidebtn" type="button" title="How to use this site — first-time guide">? Guide</button>
     <select id="shardjump" aria-label="Jump to a shard cluster"><option value="">Shard jump&hellip;</option></select>
   </div>
   <div class="filters" id="filters"></div>
@@ -778,57 +745,6 @@ paint();})();
       <option value="Current">Current</option>
       <option value="Future">Future</option>
     </select>
-  </div>
-</div>
-<div id="guidedlg" role="dialog" aria-modal="true" aria-labelledby="guideh" hidden>
-  <div class="guidebox">
-    <button id="guideclose" type="button" aria-label="Close guide">&times;</button>
-    <h2 id="guideh">How to use the Spec Catalog</h2>
-    <div class="guidebody">
-      <p class="guidelede">This catalog holds draft invention specifications by Justin Addam Higgins (JAH) &mdash; the paperwork prepared <i>before</i> filing a patent. They are <b>drafts, not granted patents</b>, and are not affiliated with the USPTO or any government agency.</p>
-      <h3>Search the catalog</h3>
-      <p>Type in the search box and press <b>Search</b> (or Enter) &mdash; results also filter as you type. You can search by <b>title</b>, <b>keyword</b>, <b>spec ID</b> (JAH-SPEC-######), <b>inventor</b> (Justin Addam Higgins), or <b>category</b>.</p>
-      <h3>Narrow it down</h3>
-      <p><b>Category pills</b> filter to one field of invention. <b>Sort</b> orders A&ndash;Z, newest first, or oldest first. <b>Era</b> picks Past, Current, or Future inventions (the invention&rsquo;s time context as classified when the spec was generated &mdash; descriptive only). Filters combine with search.</p>
-      <h3>Jump around</h3>
-      <p><b>A&ndash;Z letter buttons</b> jump to titles starting with that letter. <b>Shard jump</b> jumps straight to an ID range of the archive. <b>Show more</b> loads 100 more results at a time.</p>
-      <h3>Open a spec</h3>
-      <p>Every card is one draft spec: its permanent ID, title, abstract, category, and era. <b>Show abstract</b> toggles the abstract. <b>Spec details</b> opens the full record with seven <b>lenses</b>: Official Standard, Patent filing, Overview, Manufacture, AI explains, Code, and Demo.</p>
-      <h3>Read the record honestly</h3>
-      <p>Each record opens with a <b>DRAFT &mdash; NOT A GRANTED PATENT</b> banner and a validation block that says plainly what was actually tested. <b>SIGNATURE-1 VALID</b> means the record passes Signature-One <i>schema/data</i> validation &mdash; a data status, <b>not</b> physical, prototype, or manufacturing validation. Strong wording like &ldquo;factory-ready&rdquo; describes the design as specified &mdash; the inventor&rsquo;s theory, not measured results.</p>
-      <h3>AI explainer</h3>
-      <p>The <b>AI explains</b> lens gives a plain-English what-it-is and how-it-works, plus a <b>personal AI</b> you can ask anything about the product &mdash; it answers only from that spec&rsquo;s own record and says so when the record doesn&rsquo;t cover a question. Quick <b>Spec Helper</b> chips answer &ldquo;What is it?&rdquo; and &ldquo;How does it work?&rdquo; in one tap.</p>
-      <h3>Read aloud</h3>
-      <p><b>&#128266; Read aloud</b> in any spec&rsquo;s lens bar reads that section to you. A floating bar follows you with <b>pause</b>, <b>stop</b>, and <b>speed</b> controls.</p>
-      <h3>Copy &amp; download</h3>
-      <p><b>&#128203; Copy all</b> copies the full package text. <b>&#128279; Copy link</b> copies the spec&rsquo;s permanent share URL (<span class="guidemono">specs.html?spec=JAH-SPEC-######</span>). The Patent filing lens offers the <b>spec sheet</b> (.txt), <b>Download all</b> (the whole filing package as a .zip), <b>FIG. 1&ndash;3</b> as SVG files, the runnable <b>Python program</b> (.py), the <b>Arduino sketch</b> (.ino) for hardware, and the canonical record (.json).</p>
-      <h3>Working demo</h3>
-      <p><b>Run demo</b> in the Demo lens opens a working simulation of that exact spec &mdash; move the sliders to change inputs and watch the outputs update. Calculator specs get a real working calculator.</p>
-      <h3>Finder AI</h3>
-      <p>Describe what you&rsquo;re looking for in plain words (e.g. &ldquo;folding solar cooker&rdquo;) and the Finder scans the whole catalog and shows the top 5 matches.</p>
-      <h3>Catalog groups &amp; Academy</h3>
-      <p>Twenty-four <b>group cards</b> browse the catalog by field, each with a live count and a permanent <span class="guidemono">?group=</span> link. <b>Academy tracks</b> below them walk through the archive as guided lessons.</p>
-      <h3>Deep links &amp; sharing</h3>
-      <p>Every spec has a permanent URL: <span class="guidemono">specs.html?spec=JAH-SPEC-######</span>. It opens that exact spec and survives refresh &mdash; bookmark it, share it, file it. Each card&rsquo;s title is its link.</p>
-    </div>
-  </div>
-</div>
-<div id="tourprompt" hidden>
-  <p><b>New here?</b> Take the 1-minute tour of the Spec Catalog.</p>
-  <div class="tourbtnrow">
-    <button id="tourstart" type="button">Start tour</button>
-    <button id="tourno" type="button">Skip</button>
-  </div>
-</div>
-<div id="tourcard" hidden>
-  <div class="tourkicker">SPEC CATALOG TOUR &mdash; <span id="tourprog">1 OF 9</span></div>
-  <h3 id="tourwhat"></h3>
-  <p class="tourdoes"><b>What it does:</b> <span id="tourdoes"></span></p>
-  <p class="tourhow"><b>How to use it:</b> <span id="tourhow"></span></p>
-  <div class="tourbtnrow">
-    <button id="tourback" type="button">Back</button>
-    <button id="tournext" type="button">Next</button>
-    <button id="tourskip" type="button">End tour</button>
   </div>
 </div>
 <div class="finder" id="finder">
@@ -1446,6 +1362,7 @@ STATUS=SIGNATURE-1_VALID</pre>
 
 
 <button id="totop" type="button" title="Back to top">&#8593;</button>
+<nav class="jahnet" aria-label="JAH Network Global Ecosystem"><span class="jahnet-label">THE JAH NETWORK</span><span class="sitekicker">SITE 9 OF 27</span><span class="jahnet-here">YOU ARE HERE: SIGNATURE SPEC CATALOG</span><span class="jahnet-links"><a href="https://justinahiggins614-cmyk.github.io/signature-math/">1 Signature Math</a><a href="https://justinahiggins614-cmyk.github.io/jah-calculator/">2 Signature Universal Paradox Immune Calculator</a><a href="https://justinahiggins614-cmyk.github.io/jah-dictionary/">3 The Signature Dictionary</a><a href="https://justinahiggins614-cmyk.github.io/jah-wiki/">4 JAH Wiki</a><a href="https://justinahiggins614-cmyk.github.io/jah-n-wiki-leaks/">5 Wiki Leaks</a><a href="https://justinahiggins614-cmyk.github.io/signature-llama/">6 Signature Llama: The Fully Cyber Utilizable AI</a><a href="https://justinahiggins614-cmyk.github.io/jah-ai-models/">7 The Signature AI Phone Book</a><a href="https://justinahiggins614-cmyk.github.io/cyber-patent-catalog/">8 Globally Rejustered Patent Catalog</a><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html">9 Signature Spec Catalog Pending Patents</a><a href="https://justinahiggins614-cmyk.github.io/jah-computer-systems/">10 The Signature PC System Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-books/">11 The Signature Book Depository</a><a href="https://justinahiggins614-cmyk.github.io/signature-comics/">12 The Signature Comic Store</a><a href="https://justinahiggins614-cmyk.github.io/signature-newspapers/">13 The Signature Global Newspaper Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-backend/">14 The Signature AI Mad Scientist Creation Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-boundless-generators/">15 The Signature Boundless Generator Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-mixlab/">16 The Signature AI Mix Lab</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-olypics/">17 AI Olypics</a><a href="https://justinahiggins614-cmyk.github.io/signature-chip-maker/">18 The Signature Computer Chip Maker and Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-app-archive/">19 The Signature App Archive</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-robot-matcher/">20 The Signature AI Robot Matcher</a><a href="https://justinahiggins614-cmyk.github.io/signature-experiment-solver/">21 The Signature Experiment Solver</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-image-video-maker/">22 Signature AI Pixel</a><a href="https://justinahiggins614-cmyk.github.io/signature-ai-song-maker/">23 Signature Music Studio</a><a href="https://justinahiggins614-cmyk.github.io/signature-fixit/">24 The Signature Mr Fix-It</a><a href="https://justinahiggins614-cmyk.github.io/signature-university/">25 The Signature University</a><a href="https://justinahiggins614-cmyk.github.io/signature-cyber-mega-mall/">26 The Signature Cyber Mega-Mall</a><a href="https://justinahiggins614-cmyk.github.io/signature-3d-print/">27 The Signature 3D Print Depository</a></span></nav>
 <footer>
   <div class="fname">The Spec Catalog</div>
   <p>Draft invention specifications authored by Justin Addam Higgins (JAH), in the forced Signature-One format.<br>
@@ -4294,111 +4211,77 @@ window.addEventListener("load",function(){setTimeout(doScroll,900);});
 }catch(e){}
 })();
 </script>
-<script>
-/* First-time user guide: 1-minute spotlight tour + permanent Guide panel.
-   Tour state key: jah-tour-seen-specs (localStorage, this device only).
-   Keyboard: Esc closes, Left/Right arrows move between steps. */
-(function(){
-try{
-var KEY = "jah-tour-seen-specs";
-function seen(){ try { return !!localStorage.getItem(KEY); } catch(e){ return true; } }
-function mark(){ try { localStorage.setItem(KEY, "1"); } catch(e){} }
-var STEPS = [
- {sel:"header h1", what:"Welcome to the Spec Catalog",
-  does:"Over 677,000 draft invention specifications by Justin Addam Higgins (JAH), marching to 1,000,000. Every record is a draft \u2014 ready to review and file \u2014 never a granted patent.",
-  how:"This tour takes about a minute. Use Next / Back (or the arrow keys) to move; Esc or End tour leaves anytime. Nothing here changes the page \u2014 it just points things out."},
- {sel:"#q", what:"Search",
-  does:"Finds specs by title, keyword, spec ID (JAH-SPEC-######), inventor name, or category \u2014 across the whole archive, every shard included.",
-  how:"Type in the box and press Search (or Enter) \u2014 or just keep typing; results filter live as you type. Try a JAH-SPEC-###### ID to jump straight to a record."},
- {sel:"#filters", what:"Category filters, Sort, Era",
-  does:"Narrow the whole catalog to one field of invention, order results A\u2013Z or by date, or pick Past / Current / Future inventions. Filters combine with whatever you searched.",
-  how:"Tap a category pill (All fields resets), change the Sort dropdown, or pick an Era. The A\u2013Z letter buttons below the search jump to titles starting with that letter."},
- {sel:"#results", what:"Spec cards",
-  does:"Each card is one draft spec: its permanent ID, title, abstract, category, and era \u2014 every card carries a DRAFT \u2014 NOT A GRANTED PATENT line.",
-  how:"Click \u2018Show abstract\u2019 for the summary, or \u2018Spec details\u2019 to open the full record. Clicking a card\u2019s title opens its permanent ?spec= share link."},
- {sel:null, what:"The seven lenses",
-  does:"Every open spec has seven tabs: Official Standard, Patent filing, Overview, Manufacture, AI explains, Code, and Demo \u2014 the same record from every angle.",
-  how:"Open \u2018Spec details\u2019 on any card, then tap the lens tabs across the top of the record. The Patent filing lens holds the figures and the downloads."},
- {sel:null, what:"AI explainer + personal AI",
-  does:"The AI explains lens gives a plain-English what-it-is and how-it-works, plus a personal AI for that product. It answers only from the spec\u2019s own record \u2014 and says so when the record doesn\u2019t cover a question.",
-  how:"In any open spec, open the \u2018AI explains\u2019 lens and ask it anything about the product: what it is, how it works, its parameters, how to build it."},
- {sel:null, what:"Read aloud",
-  does:"Every section can read itself to you, with a floating bar that follows you down the page: pause, stop, and playback speed.",
-  how:"Tap the \u2018Read aloud\u2019 button in any spec\u2019s lens bar, then use the floating bar to pause or change speed."},
- {sel:null, what:"Copy & download",
-  does:"Copy all grabs the full package text; Copy link grabs the spec\u2019s permanent share URL. Downloads include the spec sheet, FIG. 1\u20133 as SVG files, the runnable Python program, the Arduino sketch for hardware, and the whole filing package as one zip.",
-  how:"All of these buttons live in the lens bar and the Patent filing lens of any open spec. Everything is generated from the record on the spot."},
- {sel:"#shardjump", what:"Shard jump + deep links",
-  does:"The archive is split across shard repos, and Shard jump takes you straight to an ID range. Every spec\u2019s title is its permanent specs.html?spec=JAH-SPEC-###### link \u2014 it opens that exact spec and survives refresh.",
-  how:"Pick a range from the Shard jump menu, or use the \u2018Copy link\u2019 button on any open spec to share its permanent URL anywhere."}
-];
-var i = 0, open = false;
-var card = document.getElementById("tourcard"), prompt = document.getElementById("tourprompt");
-function hl(el){
-  var olds = document.querySelectorAll(".tourhl");
-  for (var k = 0; k < olds.length; k++) olds[k].classList.remove("tourhl");
-  if (el && el.classList) {
-    el.classList.add("tourhl");
-    try { el.scrollIntoView({block:"center", behavior:"smooth"}); } catch(e){
-      try { el.scrollIntoView(true); } catch(x){}
-    }
-  }
-}
-function showStep(n){
-  i = Math.max(0, Math.min(STEPS.length - 1, n));
-  var s = STEPS[i];
-  document.getElementById("tourwhat").textContent = s.what;
-  document.getElementById("tourdoes").textContent = s.does;
-  document.getElementById("tourhow").textContent = s.how;
-  document.getElementById("tourprog").textContent = (i + 1) + " OF " + STEPS.length;
-  document.getElementById("tourback").disabled = (i === 0);
-  document.getElementById("tournext").textContent = (i === STEPS.length - 1) ? "Finish" : "Next";
-  hl(s.sel ? document.querySelector(s.sel) : null);
-  open = true;
-}
-function hideCard(){ if (card) card.hidden = true; open = false; hl(null); }
-function endTour(){ hideCard(); hidePrompt(); mark(); }
-function hidePrompt(){ if (prompt) prompt.hidden = true; }
-function startTour(){ hidePrompt(); if (card) card.hidden = false; showStep(0); }
-document.getElementById("tourstart").addEventListener("click", startTour);
-document.getElementById("tourno").addEventListener("click", function(){ hidePrompt(); mark(); });
-document.getElementById("tourback").addEventListener("click", function(){ showStep(i - 1); });
-document.getElementById("tournext").addEventListener("click", function(){
-  if (i >= STEPS.length - 1) endTour(); else showStep(i + 1);
-});
-document.getElementById("tourskip").addEventListener("click", endTour);
-/* Permanent Guide panel */
-var dlg = document.getElementById("guidedlg"), guideOpen = false;
-function openGuide(){ if (!dlg) return; dlg.hidden = false; guideOpen = true;
-  var c = document.getElementById("guideclose"); if (c) c.focus(); }
-function closeGuide(){ if (!dlg) return; dlg.hidden = true; guideOpen = false; }
-document.getElementById("guidebtn").addEventListener("click", openGuide);
-document.getElementById("guideclose").addEventListener("click", closeGuide);
-if (dlg) dlg.addEventListener("click", function(e){ if (e.target === dlg) closeGuide(); });
-document.addEventListener("keydown", function(e){
-  if (e.key === "Escape") {
-    if (guideOpen) closeGuide();
-    else if (open) endTour();
-    return;
-  }
-  if (open && e.key === "ArrowRight") { if (i >= STEPS.length - 1) endTour(); else showStep(i + 1); }
-  if (open && e.key === "ArrowLeft") { showStep(i - 1); }
-});
-/* First-visit prompt: show once the catalog has booted (or after a fallback
-   delay if the data load fails — the tour still explains the page). */
-if (!seen()) {
-  var shown = false, tries = 0;
-  var iv = setInterval(function(){
-    tries++;
-    var ready = (typeof DATA !== "undefined" && DATA && DATA.length) || tries > 32;
-    if (ready && !shown) {
-      shown = true; clearInterval(iv);
-      setTimeout(function(){ if (!seen() && prompt) prompt.hidden = false; }, 600);
-    }
-  }, 250);
-}
-}catch(e){}
-})();
-</script>
+
+<button id="jahGuideBtn" type="button" title="? Guide — show the welcome guide" aria-label="Open the welcome guide">?</button>
+<!-- first-visit WELCOME overlay (2026-10-04 standard: centered modal, no scroll, no spotlight) -->
+<div id="jahWelcome" aria-hidden="true">
+  <div id="jahWelcomeCard" role="dialog" aria-modal="true" aria-label="Welcome to the Signature Spec Catalog">
+    <h2>Welcome to the Signature Spec Catalog</h2>
+    <p class="wsub">Over 740,000 draft invention specifications, marching to 1,000,000. Here&rsquo;s how to use it:</p>
+    <ol>
+      <li><b>Search the catalog.</b> Type a title, keyword, or a JAH-SPEC-###### ID in the search box and press Search &mdash; results filter as you type.</li>
+      <li><b>Narrow it down.</b> Category pills, Sort, Era, the A&ndash;Z letter buttons, and Shard jump take you straight to the corner of the archive you want.</li>
+      <li><b>Open a spec.</b> &ldquo;Spec details&rdquo; opens the full record with seven lenses: Official Standard, Patent filing, Overview, Manufacture, AI explains, Code, Demo. Every record is a <b>draft &mdash; not a granted patent</b>.</li>
+      <li><b>Ask, listen, save.</b> The AI explains lens answers from that spec&rsquo;s own record; Read aloud speaks any section; Copy all and the Patent filing downloads save the package (.txt, .py, .ino, .zip).</li>
+    </ol>
+    <div class="wbtnrow">
+      <button class="btn" id="jahWelcomeOk" type="button">OK &mdash; Got it &#10003;</button>
+      <button class="btn" id="jahWelcomeFull" type="button">Full how-to guide</button>
+    </div>
+  </div>
+</div>
+<div id="jahGuide" aria-hidden="true">
+  <div id="jahGuideCard" role="dialog" aria-modal="true" aria-label="How to use the Signature Spec Catalog">
+    <div id="jahGuideCloseRow">
+      <h2 style="margin:0">How to use this site</h2>
+      <button class="btn" id="jahGuideClose" type="button">&#10005; Close</button>
+    </div>
+    <div class="gfeat"><b>Search the catalog</b><p><b>What:</b> the search box near the top. <b>Does:</b> finds specs by title, keyword, spec ID (JAH-SPEC-######), inventor, or category. <b>How:</b> type and press Search (or Enter) &mdash; or just keep typing; results filter live.</p></div>
+    <div class="gfeat"><b>Narrow it down</b><p><b>What:</b> category pills, Sort, Era. <b>Does:</b> filters to one field of invention, orders A&ndash;Z / newest / oldest, picks Past, Current, or Future. <b>How:</b> tap a pill (All fields resets); filters combine with search.</p></div>
+    <div class="gfeat"><b>Jump around</b><p><b>What:</b> A&ndash;Z letter buttons and Shard jump. <b>Does:</b> letters jump to titles starting with that letter; Shard jump goes to an ID range of the archive. <b>How:</b> tap a letter or pick a shard range; &ldquo;Show more&rdquo; loads 100 more results.</p></div>
+    <div class="gfeat"><b>Open a spec</b><p><b>What:</b> &ldquo;Spec details&rdquo; on any card. <b>Does:</b> opens the full record with seven lenses: Official Standard, Patent filing, Overview, Manufacture, AI explains, Code, Demo. <b>How:</b> tap &ldquo;Spec details&rdquo;; tap the lens tabs across the top.</p></div>
+    <div class="gfeat"><b>Read the record honestly</b><p><b>What:</b> the DRAFT banner and validation block. <b>Does:</b> every record is a <b>draft &mdash; not a granted patent</b>, not affiliated with the USPTO. SIGNATURE-1 VALID means schema/data validation only &mdash; not physical or manufacturing validation. <b>How:</b> read the banner before trusting any spec.</p></div>
+    <div class="gfeat"><b>AI explainer</b><p><b>What:</b> the &ldquo;AI explains&rdquo; lens. <b>Does:</b> plain-English what-it-is and how-it-works, plus a personal AI that answers only from that spec&rsquo;s own record. <b>How:</b> open the lens and ask anything about the product.</p></div>
+    <div class="gfeat"><b>Read aloud</b><p><b>What:</b> &ldquo;Read aloud&rdquo; in any lens bar. <b>Does:</b> speaks the section; a floating bar gives pause, stop, and speed. <b>How:</b> tap the button, control it from the floating bar.</p></div>
+    <div class="gfeat"><b>Copy &amp; download</b><p><b>What:</b> the lens-bar buttons and the Patent filing lens. <b>Does:</b> Copy all grabs the package text; Copy link grabs the permanent URL. Downloads: spec sheet (.txt), FIG. 1&ndash;3 (.svg), Python (.py), Arduino (.ino), whole package (.zip). <b>How:</b> all generated from the record on the spot.</p></div>
+    <div class="gfeat"><b>Working demo</b><p><b>What:</b> the Demo lens. <b>Does:</b> a working simulation of that exact spec. <b>How:</b> press &ldquo;Run demo&rdquo;, move the sliders.</p></div>
+    <div class="gfeat"><b>Finder AI</b><p><b>What:</b> the Finder box. <b>Does:</b> describe what you want in plain words; it shows the top 5 catalog matches. <b>How:</b> type e.g. &ldquo;folding solar cooker&rdquo;.</p></div>
+    <div class="gfeat"><b>Catalog groups &amp; Academy</b><p><b>What:</b> 24 group cards + Academy tracks. <b>Does:</b> browse by field with live counts and ?group= links; Academy walks the archive as lessons. <b>How:</b> tap a group card or a track.</p></div>
+    <div class="gfeat"><b>Deep links</b><p><b>What:</b> permanent spec URLs. <b>Does:</b> <span class="guidemono">specs.html?spec=JAH-SPEC-######</span> opens that exact spec and survives refresh. <b>How:</b> bookmark or share it.</p></div>
+    <div class="gfeat"><b>Show the welcome guide</b><p><b>What:</b> the short welcome overlay from your first visit. <b>Does:</b> the 4-step quick start &mdash; the page stays put, the overlay teaches. <b>How:</b> press the button below.</p></div>
+    <div class="btnrow" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px">
+      <button class="btn" id="jahGuideTour" type="button">&#9654; Show the welcome guide</button>
+      <button class="btn" id="jahGuideClose2" type="button">&#10005; Close guide</button>
+    </div>
+  </div>
+</div>
+<script>(function(){try{
+/* ---------- first-visit WELCOME overlay (2026-10-04 standard): centered modal.
+   NO auto-scroll, NO spotlight, NO section jumps — the page stays put, the overlay teaches. ---------- */
+var FLAG="jah-tour-seen-specs";
+function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
+var w=document.getElementById("jahWelcome"),
+    guide=document.getElementById("jahGuide"),
+    guideCard=document.getElementById("jahGuideCard"),
+    guideBtn=document.getElementById("jahGuideBtn");
+function openWelcome(){w.classList.add("show");w.setAttribute("aria-hidden","false");
+  try{document.getElementById("jahWelcomeOk").focus({preventScroll:true})}catch(e){}}
+function closeWelcome(){w.classList.remove("show");w.setAttribute("aria-hidden","true");ls(FLAG,"1")}
+document.getElementById("jahWelcomeOk").onclick=closeWelcome;
+document.getElementById("jahWelcomeFull").onclick=function(){closeWelcome();openGuide()};
+w.addEventListener("click",function(e){if(e.target===w)closeWelcome()});
+document.addEventListener("keydown",function(e){
+  if(w.classList.contains("show")&&e.key==="Escape"){closeWelcome();e.preventDefault()}});
+function openGuide(){guide.classList.add("show");guide.setAttribute("aria-hidden","false");
+  try{guideCard.scrollTop=0;document.getElementById("jahGuideClose").focus({preventScroll:true})}catch(e){}}
+function closeGuide(){guide.classList.remove("show");guide.setAttribute("aria-hidden","true");
+  try{guideBtn.focus({preventScroll:true})}catch(e){}}
+guideBtn.onclick=openWelcome;
+document.getElementById("jahGuideClose").onclick=closeGuide;
+document.getElementById("jahGuideClose2").onclick=closeGuide;
+document.getElementById("jahGuideTour").onclick=function(){closeGuide();openWelcome()};
+guide.addEventListener("click",function(e){if(e.target===guide)closeGuide()});
+if(!ls(FLAG)){setTimeout(openWelcome,900)}
+}catch(e){}})();</script>
 </body>
 </html>

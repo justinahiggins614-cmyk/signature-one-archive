@@ -68,6 +68,56 @@ def compact_rows(idx_lines):
         yield [spec_id, title, chunk, category], r
 
 
+def az_letter(title):
+    """Bucket key for the A-Z archive: first alphabetic char of title, else '#'."""
+    t = (title or "").strip().upper()
+    for ch in t:
+        if "A" <= ch <= "Z":
+            return ch
+        if ch.isalpha():
+            return "#"
+    return "#"
+
+
+def build_az_index(search_rows):
+    """Partition the compact search rows into per-letter archive files.
+
+    The specs.html Full Spec Archive lazy-loads one letter file at a time so
+    phones never download the whole 16MB+ index at once. Row layout:
+    [spec_id, title, category]. Called from main() so every 2h drip and every
+    shard move refreshes it alongside the compact search index.
+    """
+    from datetime import date
+    azdir = os.path.join(INDEXDIR, "az")
+    os.makedirs(azdir, exist_ok=True)
+    buckets = {}
+    for r in search_rows:
+        buckets.setdefault(az_letter(r[1]), []).append([r[0], r[1], r[4]])
+    counts = {}
+    for letter, rows in buckets.items():
+        rows.sort(key=lambda r: (r[1].lower(), r[0]))
+        out = os.path.join(azdir, letter + ".json.gz")
+        with gzip.open(out, "wt", encoding="utf-8") as f:
+            for row in rows:
+                f.write(json.dumps(row, ensure_ascii=False,
+                                  separators=(",", ":")) + "\n")
+        counts[letter] = len(rows)
+    total = sum(counts.values())
+    if total != len(search_rows):
+        print("ERROR: A-Z archive row count mismatch (%d vs %d)"
+              % (total, len(search_rows)), file=sys.stderr)
+        sys.exit(1)
+    manifest = {"total": total, "built": date.today().isoformat(),
+                "counts": {k: counts[k] for k in sorted(counts)}}
+    with open(os.path.join(azdir, "manifest.json"), "w",
+              encoding="utf-8") as f:
+        json.dump(manifest, f, separators=(",", ":"))
+    size_mb = sum(os.path.getsize(os.path.join(azdir, l + ".json.gz"))
+                  for l in counts) / 1e6
+    print("WROTE data/index/az/: %d letter files, %d rows, %.1fMB gz"
+          % (len(counts), total, size_mb))
+
+
 def main():
     os.makedirs(CACHEDIR, exist_ok=True)
     with open(os.path.join(INDEXDIR, "shards.json"), encoding="utf-8") as f:
@@ -167,6 +217,9 @@ def main():
     if dupes:
         print("ERROR: duplicate spec IDs in search index", file=sys.stderr)
         sys.exit(1)
+
+    # per-letter A-Z archive files for the specs.html Full Spec Archive
+    build_az_index(search_rows)
 
 
 if __name__ == "__main__":

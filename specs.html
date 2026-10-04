@@ -35,7 +35,7 @@
     {
       "@type": "Dataset",
       "name": "Signature Spec Catalog: original draft patent specifications by Justin Addam Higgins (JAH)",
-      "description": "723,840 original draft invention specifications (as of 2026-10-03), each carrying a permanent JAH-SPEC-###### identifier. Every record is a draft specification — ready to review and file — not a granted patent, and not affiliated with the USPTO or any government agency.",
+      "description": "723,840 original draft invention specifications (as of 2026-10-04), each carrying a permanent JAH-SPEC-###### identifier. Every record is a draft specification — ready to review and file — not a granted patent, and not affiliated with the USPTO or any government agency.",
       "url": "https://justinahiggins614-cmyk.github.io/signature-one-archive/specs.html",
       "creator": { "@type": "Person", "name": "Justin Addam Higgins" },
       "datePublished": "2026-10-01",
@@ -559,6 +559,50 @@
   .groupcard.active { border-color: var(--red); box-shadow: 0 0 18px rgba(255,34,34,.4); }
   a.groupcard { color: inherit; text-decoration: none; display: block; }
   a.groupcard:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+  .azmodes { display: flex; gap: 10px; justify-content: center; margin: 14px 0 18px; flex-wrap: wrap; }
+  .azmode { font-family: "Share Tech Mono", monospace; background: #0b0b10; color: #c9a227;
+    border: 1px solid #3a3a44; border-radius: 2px; padding: 9px 18px; font-size: .82em;
+    letter-spacing: .08em; cursor: pointer; }
+  .azmode.active, .azmode:hover { border-color: var(--red); color: #ffe9a8;
+    box-shadow: 0 0 14px rgba(255,34,34,.25); }
+  .azsec { background: rgba(12,12,17,.95); border: 1px solid #26262e; border-radius: 2px;
+    margin: 8px 0; }
+  .azsec > summary { cursor: pointer; padding: 12px 16px; list-style: none; display: flex;
+    align-items: baseline; gap: 14px; }
+  .azsec > summary::-webkit-details-marker { display: none; }
+  .azsec > summary::marker { content: ""; }
+  .azsec > summary:hover .azletter { text-shadow: 0 0 12px rgba(255,34,34,.6); }
+  .azsec > summary::before { content: "\25B8"; color: #8b8b95; font-size: .9em; }
+  .azsec[open] > summary::before { content: "\25BE"; color: var(--red); }
+  .azletter { font-family: Orbitron, monospace; font-size: 1.25em; color: var(--red);
+    min-width: 34px; }
+  .azcount { color: #8b8b95; font-size: .78em; letter-spacing: .08em; margin-left: auto;
+    text-align: right; }
+  .azbody { border-top: 1px solid #26262e; padding: 10px 12px 14px; }
+  .azitem { display: flex; align-items: baseline; gap: 10px; padding: 8px 10px;
+    border-bottom: 1px solid #1a1a20; color: inherit; text-decoration: none; font-size: .82em; }
+  .azitem:hover, .azitem:focus { background: #141419; }
+  .azitem:hover .aztitle { color: #ffe9a8; }
+  .azid { color: #c9a227; white-space: nowrap; font-size: .92em; }
+  .aztitle { color: #e8e8ee; flex: 1; min-width: 0; }
+  .azcat { color: #8b8b95; font-size: .85em; white-space: nowrap; overflow: hidden;
+    text-overflow: ellipsis; max-width: 30%; }
+  .azdraft { color: #0a0a0d; background: #c9a227; font-size: .66em; font-weight: bold;
+    letter-spacing: .16em; padding: 2px 8px; border-radius: 2px; white-space: nowrap; }
+  .azmore { display: block; margin: 12px auto 4px; font-family: "Share Tech Mono", monospace;
+    background: #0b0b10; color: #c9a227; border: 1px solid #3a3a44; border-radius: 2px;
+    padding: 9px 26px; cursor: pointer; font-size: .82em; letter-spacing: .08em; }
+  .azmore:hover { border-color: var(--red); color: #ffe9a8; }
+  .azload { color: #8b8b95; font-size: .82em; text-align: center; padding: 14px; }
+  .azcats { color: #8b8b95; font-size: .78em; line-height: 1.6; margin: 4px 0 0; }
+  .azbrowselink { display: inline-block; margin-top: 10px; color: #c9a227; font-size: .82em;
+    letter-spacing: .06em; text-decoration: none; }
+  .azbrowselink:hover { color: #ffe9a8; text-decoration: underline; }
+  @media (max-width: 560px) {
+    .azitem { flex-wrap: wrap; row-gap: 2px; }
+    .azcat { max-width: 100%; }
+    .azletter { font-size: 1.05em; }
+  }
   .staticcount { font-size: .82em; color: #b9b9c7; margin: 10px 0 0; letter-spacing: .03em; }
   a.speclink { color: inherit; text-decoration: none; }
   a.speclink:hover, a.speclink:focus { text-decoration: underline; color: #ffe9a8; }
@@ -689,7 +733,7 @@ paint();})();
     <span class="chip">Goal <b>1,000,000+</b> specs</span>
   </div>
   </details>
-  <p class="staticcount">723,840 original draft specifications published in this catalog (as of 2026-10-03). The live counter above refreshes from the same catalog index when the data loads.</p>
+  <p class="staticcount">723,840 original draft specifications published in this catalog (as of 2026-10-04). The live counter above refreshes from the same catalog index when the data loads.</p>
   <div class="hubstatus"><span class="pulse"></span>HUB ONLINE &nbsp;&middot;&nbsp; <b id="statNodes">723,840</b> NODES SYNCED &nbsp;&middot;&nbsp; UPLINK SECURE</div>
   <nav class="sitenav" aria-label="Site sections">
     <a href="#top">Home</a><a href="#catalogs">Catalogs</a><a href="#wiki">Wiki</a><a href="#leaks">Wiki Leaks</a><a href="#academy">Academy</a>
@@ -697,7 +741,7 @@ paint();})();
   <div class="nodedots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
   <div class="goalbar" aria-hidden="true"><div class="goalfill" id="goalFill" style="width:72.38%"></div></div>
   <div class="goalabel">MISSION PROGRESS &mdash; <b id="goalPct">72.38%</b> OF 1,000,000 SPECS</div>
-  <p class="lastupdated">CATALOG DATA LAST UPDATED &nbsp;<b id="lastUpdDate">2026-10-03</b> &nbsp;&middot;&nbsp; PAGE BUILD <b id="pageBuildDate">2026-10-03</b></p>
+  <p class="lastupdated">CATALOG DATA LAST UPDATED &nbsp;<b id="lastUpdDate">2026-10-04</b> &nbsp;&middot;&nbsp; PAGE BUILD <b id="pageBuildDate">2026-10-04</b></p>
 </header>
 
 <div class="wrap">
@@ -801,6 +845,17 @@ paint();})();
 <div id="loading" role="status" aria-live="polite"><span class="loadspin" aria-hidden="true"></span><span class="loadmsg">LOADING CATALOG DATA&hellip;</span></div>
 <div id="results" role="region" aria-label="Spec search results"></div>
 <button id="more" type="button" style="display:none">Show more</button>
+
+<div class="wrap" id="archive" style="margin-top:34px">
+  <h2 class="sect">The Full Spec Archive</h2>
+  <p class="sectsub">The whole catalog, browsable A&ndash;Z by spec title &mdash; <b id="archCount">723,840</b> draft specs, every one a full draft record with its own information page, lenses, tool, app, lab, and personal AI. Open a letter &mdash; its list loads on demand, so the page stays fast on phones. Every entry is a <b>draft &mdash; ready to file</b>, never a granted patent.</p>
+  <div class="azmodes" role="group" aria-label="Archive browse mode">
+    <button type="button" class="azmode active" data-azmode="letters">A&ndash;Z by title</button>
+    <button type="button" class="azmode" data-azmode="groups">By catalog group</button>
+  </div>
+  <div id="azletters"><p class="sectsub">Loading archive index&hellip;</p></div>
+  <div id="azgroups" hidden></div>
+</div>
 
 <div class="examples">
   <h2 class="sect">Example Specs &mdash; the format every spec follows</h2>
@@ -3493,6 +3548,7 @@ function maybeRenderSections() {
   if (!groupsReady || !dataReady) return;
   renderGroups();
   renderTracks();
+  renderAzGroups();
 }
 function groupCount(gname) {
   var n = 0;
@@ -3937,6 +3993,7 @@ function bindWikiSearch(inputId, resId, lens) {
     buildShardJump();
     numberCodeBlocks(document);
     maybeRenderSections();
+    buildArchive();
     loadWordIndexes();
   }
   document.getElementById("groupgrid").addEventListener("click", function (e) {
@@ -4021,6 +4078,144 @@ function bindWikiSearch(inputId, resId, lens) {
       loadShardIndex(shards[i], function () { next(i + 1); });
     })(0);
   }).catch(loadFail);
+
+  /* ---- Full Spec Archive: A-Z collapsible browse ----
+     Per-letter index files at data/index/az/<LETTER>.json.gz (+ manifest.json)
+     are built by code/build_search_index.py on every drip and every shard move.
+     A letter's file loads only when its <details> opens, so phones never pull
+     the whole catalog at once. Every entry deep-links to ?spec=<id> and stays
+     labeled DRAFT — drafts are never presented as granted patents. */
+  var AZLETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#".split("");
+  var AZ = { counts: null, rows: {}, shown: {}, loading: {} };
+  var AZ_PAGE = 250;
+  function azItemHtml(r) {
+    return '<a class="azitem" href="?spec=' + esc(r[0]) + '">' +
+      '<span class="azid">' + esc(r[0]) + '</span>' +
+      '<span class="aztitle">' + esc(r[1]) + '</span>' +
+      '<span class="azcat">' + esc(r[2] || "") + '</span>' +
+      '<span class="azdraft" title="Draft specification \u2014 ready to file. Not a granted patent.">DRAFT</span></a>';
+  }
+  function azRenderPage(L) {
+    var rows = AZ.rows[L] || [], shown = AZ.shown[L] || 0;
+    var body = document.querySelector('[data-azbody="' + L + '"]');
+    if (!body) return;
+    var h = "", i;
+    for (i = 0; i < shown && i < rows.length; i++) h += azItemHtml(rows[i]);
+    if (shown < rows.length) {
+      h += '<button type="button" class="azmore" data-azmore="' + L + '">SHOW MORE (' +
+        (rows.length - shown).toLocaleString() + ' REMAINING)</button>';
+    } else {
+      h += '<p class="sectsub">End of letter ' + esc(L) + ' \u2014 ' +
+        rows.length.toLocaleString() + ' drafts shown.</p>';
+    }
+    body.innerHTML = h;
+  }
+  function azLoadLetter(L) {
+    if (AZ.rows[L] || AZ.loading[L]) return;
+    AZ.loading[L] = true;
+    var body = document.querySelector('[data-azbody="' + L + '"]');
+    gunzipText("data/index/az/" + L + ".json.gz").then(function (text) {
+      var rows = [];
+      text.split("\n").forEach(function (ln) {
+        ln = ln.trim(); if (!ln) return;
+        try { rows.push(JSON.parse(ln)); } catch (x) { /* skip bad row */ }
+      });
+      AZ.rows[L] = rows;
+      AZ.shown[L] = Math.min(AZ_PAGE, rows.length);
+      delete AZ.loading[L];
+      azRenderPage(L);
+    }).catch(function () {
+      delete AZ.loading[L];
+      if (body) body.innerHTML = '<p class="azload">Could not load letter ' + esc(L) +
+        ' \u2014 check your connection and try again. Search still works.</p>';
+    });
+  }
+  function handleLetterParam() {
+    var L = null;
+    try { L = new URLSearchParams(window.location.search).get("letter"); } catch (e) { /* ignore */ }
+    if (!L) return;
+    L = String(L).trim().toUpperCase();
+    if (L.length !== 1 || AZLETTERS.indexOf(L) < 0) return;
+    var d = document.querySelector('#azletters details[data-letter="' + L + '"]');
+    if (!d) return;
+    d.open = true;
+    azLoadLetter(L);
+    var ar = document.getElementById("archive");
+    if (ar && ar.scrollIntoView) ar.scrollIntoView(true);
+  }
+  function renderAzLetters() {
+    var box = document.getElementById("azletters");
+    if (!box || !AZ.counts) return;
+    var h = "";
+    AZLETTERS.forEach(function (L) {
+      var n = AZ.counts[L] || 0;
+      h += '<details class="azsec" data-letter="' + L + '">' +
+        '<summary><span class="azletter">' + L + '</span>' +
+        '<span class="azcount">' + n.toLocaleString() + ' DRAFT SPECS</span></summary>' +
+        '<div class="azbody" data-azbody="' + L + '">' +
+        '<p class="azload">Open to load this letter&hellip;</p></div></details>';
+    });
+    box.innerHTML = h;
+    handleLetterParam();
+  }
+  function renderAzGroups() {
+    var box = document.getElementById("azgroups");
+    if (!box || !GROUPS.length || box.getAttribute("data-done")) return;
+    box.setAttribute("data-done", "1");
+    var h = "";
+    GROUPS.forEach(function (g) {
+      var n = groupCount(g.name);
+      h += '<details class="azsec">' +
+        '<summary><span class="azletter" style="font-size:.95em">' + esc(g.name) + '</span>' +
+        '<span class="azcount">' + n.toLocaleString() + ' DRAFT SPECS</span></summary>' +
+        '<div class="azbody"><p class="azcats">' + esc((g.categories || []).join(" \u00b7 ")) + '</p>' +
+        '<a class="azbrowselink" href="specs.html?group=' + encodeURIComponent(g.name) + '">Browse all ' +
+        n.toLocaleString() + ' drafts in ' + esc(g.name) + ' \u2192</a></div></details>';
+    });
+    box.innerHTML = h;
+  }
+  function buildArchive() {
+    var box = document.getElementById("azletters");
+    if (!box) return;
+    if (AZ.counts) { renderAzLetters(); return; }
+    fetch("data/index/az/manifest.json").then(function (resp) {
+      if (!resp.ok) throw new Error("HTTP " + resp.status);
+      return resp.json();
+    }).then(function (m) {
+      AZ.counts = m.counts || {};
+      var el = document.getElementById("archCount");
+      if (el && m.total) el.textContent = Number(m.total).toLocaleString();
+      renderAzLetters();
+    }).catch(function () {
+      box.innerHTML = '<p class="sectsub">The archive index could not be loaded \u2014 check your connection and reload. Search still works.</p>';
+    });
+  }
+  (function bindArchiveUI() {
+    var letters = document.getElementById("azletters");
+    if (letters) {
+      letters.addEventListener("toggle", function (e) {
+        var d = e.target;
+        if (d && d.tagName === "DETAILS" && d.open) azLoadLetter(d.getAttribute("data-letter"));
+      }, true);
+      letters.addEventListener("click", function (e) {
+        var b = e.target && e.target.closest ? e.target.closest("[data-azmore]") : null;
+        if (!b) return;
+        var L = b.getAttribute("data-azmore");
+        AZ.shown[L] = Math.min((AZ.shown[L] || 0) + AZ_PAGE, (AZ.rows[L] || []).length);
+        azRenderPage(L);
+      });
+    }
+    var modes = document.querySelectorAll(".azmode");
+    Array.prototype.forEach.call(modes, function (b) {
+      b.addEventListener("click", function () {
+        Array.prototype.forEach.call(modes, function (x) { x.classList.remove("active"); });
+        b.classList.add("active");
+        var isLetters = b.getAttribute("data-azmode") === "letters";
+        document.getElementById("azletters").hidden = !isLetters;
+        document.getElementById("azgroups").hidden = isLetters;
+      });
+    });
+  })();
 })();
 </script>
 <div id="aubar" style="display:none">

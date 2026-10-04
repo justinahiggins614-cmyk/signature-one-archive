@@ -164,6 +164,12 @@ def stamp_static_count(total):
                         html2, count=1, flags=re.S)
     if n5 != 1:
         raise RuntimeError("statNodes chip not found in specs.html")
+    # Stamp the Full Spec Archive's count chip too (same source of truth).
+    html2, n5b = re.subn(r'<b id="archCount">.*?</b>',
+                         '<b id="archCount">%s</b>' % format(total, ","),
+                         html2, count=1, flags=re.S)
+    if n5b != 1:
+        raise RuntimeError("archCount chip not found in specs.html")
     pct = min(100.0, total / 1000000 * 100)
     html2, n6 = re.subn(r'<b id="goalPct">.*?</b>',
                         '<b id="goalPct">%.2f%%</b>' % pct,
@@ -283,6 +289,20 @@ def write_data_page():
     rows.append((SITE + "/data/index/specs.sigline.json.gz",
                  "Signature-line index (public patent -> JAH-SPEC)"))
     rows.append((SITE + "/data/index/words.idx.json.gz", "Word-invention index (JAH-WORD-######)"))
+    # Full Spec Archive: per-letter lazy indexes + manifest (built by
+    # code/build_search_index.py alongside the compact search index)
+    try:
+        azm = json.load(open(os.path.join(MAIN, "data", "index", "az",
+                                          "manifest.json"), encoding="utf-8"))
+        rows.append((SITE + "/data/index/az/manifest.json",
+                     "A-Z archive manifest (%s draft specs, per-letter counts)"
+                     % format(azm.get("total", 0), ",")))
+        for L in sorted(azm.get("counts", {})):
+            rows.append((SITE + "/data/index/az/%s.json.gz" % L,
+                         "A-Z archive — letter %s (%s draft specs, titles + IDs)"
+                         % (L, format(azm["counts"][L], ","))))
+    except (OSError, ValueError):
+        pass
     rows.append((SITE + "/api.json", "Catalog API manifest"))
     rows.append((SITE + "/sitemap-index.xml", "Segmented sitemap index"))
     lis = "\n".join(
@@ -320,6 +340,32 @@ review and file; not granted patents; not affiliated with the USPTO.</p>
     with open(os.path.join(MAIN, "data.html"), "w", encoding="utf-8") as f:
         f.write(html)
     print("wrote data.html (%d anchors)" % len(rows))
+
+
+def check_az_manifest(total):
+    """Fail loud if the Full Spec Archive index is stale or missing.
+
+    code/build_search_index.py rebuilds data/index/az/ (per-letter files +
+    manifest.json) on every drip, BEFORE this script runs. If the manifest is
+    missing or its total disagrees with the freshly computed catalog total,
+    the archive would ship one run behind — stop the drip step instead of
+    silently publishing a stale archive.
+    """
+    mpath = os.path.join(MAIN, "data", "index", "az", "manifest.json")
+    if not os.path.exists(mpath):
+        raise RuntimeError("A-Z archive manifest missing: %s — run "
+                           "code/build_search_index.py first" % mpath)
+    with open(mpath, encoding="utf-8") as f:
+        m = json.load(f)
+    if m.get("total") != total:
+        raise RuntimeError("A-Z archive manifest total %s != catalog total "
+                           "%d — re-run code/build_search_index.py"
+                           % (m.get("total"), total))
+    if sum(m.get("counts", {}).values()) != total:
+        raise RuntimeError("A-Z archive letter counts do not sum to the "
+                           "catalog total — re-run code/build_search_index.py")
+    print("A-Z archive manifest OK: %d rows across %d letters"
+          % (total, len(m.get("counts", {}))))
 
 
 def main():
@@ -386,6 +432,7 @@ def main():
     print("index entries: %d, total spec urls: %d" % (len(index_entries), total))
     expected = sum(last - first + 1 for _, first, last in SHARDS) + (ml - mf + 1)
     assert total == expected, "expected %d, got %d" % (expected, total)
+    check_az_manifest(total)
     stamp_static_count(total)
     stamp_methodology_shards()
     write_shard_ranges(ml)

@@ -77,8 +77,9 @@ SHARDS = [
     ("signature-one-archive-shard-34", 622051, 638550),
     ("signature-one-archive-shard-35", 638551, 655050),
     ("signature-one-archive-shard-36", 655051, 671550),
+    ("signature-one-archive-shard-37", 671551, 688050),
 ]
-MAIN_RANGE = (671551, 746882)
+MAIN_RANGE = (688051, 769909)
 URL_LIMIT = 50000
 
 
@@ -359,15 +360,24 @@ def check_az_manifest(total):
                            "code/build_search_index.py first" % mpath)
     with open(mpath, encoding="utf-8") as f:
         m = json.load(f)
-    if m.get("total") != total:
+    # The Full Spec Archive covers BOTH JAH-SPEC records and JAH-WORD
+    # word-invention records (both live in the compact search index), so the
+    # manifest total must equal spec total + word total. The word count comes
+    # from code/wordspecs/state.json (ground truth, contiguous 1..N).
+    with open(os.path.join(MAIN, "code", "wordspecs", "state.json"),
+              encoding="utf-8") as f:
+        wn = json.load(f)["next_id"] - 1
+    expected_total = total + wn
+    if m.get("total") != expected_total:
         raise RuntimeError("A-Z archive manifest total %s != catalog total "
-                           "%d — re-run code/build_search_index.py"
-                           % (m.get("total"), total))
-    if sum(m.get("counts", {}).values()) != total:
+                           "%d (specs %d + words %d) — re-run "
+                           "code/build_search_index.py"
+                           % (m.get("total"), expected_total, total, wn))
+    if sum(m.get("counts", {}).values()) != expected_total:
         raise RuntimeError("A-Z archive letter counts do not sum to the "
                            "catalog total — re-run code/build_search_index.py")
-    print("A-Z archive manifest OK: %d rows across %d letters"
-          % (total, len(m.get("counts", {}))))
+    print("A-Z archive manifest OK: %d rows across %d letters (specs %d + "
+          "words %d)" % (expected_total, len(m.get("counts", {})), total, wn))
 
 
 def main():

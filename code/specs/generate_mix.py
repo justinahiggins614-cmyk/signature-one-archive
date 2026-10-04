@@ -27,6 +27,7 @@ STATE = os.path.join(HERE, "state.json")
 POOL_SAMPLE = 5000
 
 CATKIND = {n: k for n, k, _, _ in g.ALLCATS}
+KNOWN_CATS = set(CATKIND)
 
 
 def sample_pool():
@@ -48,6 +49,11 @@ def sample_pool():
                     d = json.loads(ln)
                 except Exception:
                     continue
+                if d.get("category") not in KNOWN_CATS:
+                    # e.g. "Word Inventions" from the word-spec volumes also listed
+                    # in the manifest: make_mix_spec looks parents up in ALLCATS,
+                    # so unknown-category entries cannot be mix parents.
+                    continue
                 n += 1
                 cand = (d["spec_id"], d["title"], d["category"],
                         d.get("key_parameters", {}), d.get("signature_tool_mapping", {}))
@@ -64,7 +70,13 @@ def make_mix_spec(idx, used, pool, seed):
     r = random.Random(seed)
     (idA, titleA, catA, paramsA, toolA), (idB, titleB, catB, paramsB, toolB) = r.sample(pool, 2)
     kind = CATKIND.get(catA, "hardware")
-    cat, kind, cpc, devs = next(c for c in g.ALLCATS if c[0] == catA)
+    info = next((c for c in g.ALLCATS if c[0] == catA), None)
+    if info is None:
+        # unknown-category parent (should not happen: pool filters them,
+        # but never crash the run) -> fall back to the other parent's
+        # category, else the first catalog entry.
+        info = next((c for c in g.ALLCATS if c[0] == catB), g.ALLCATS[0])
+    cat, kind, cpc, devs = info
     devA = g._dev_of(titleA)
     devB = g._dev_of(titleB)
     fn = r.choice(g.SW_FUNCS if kind == "software" else g.HW_FUNCS)

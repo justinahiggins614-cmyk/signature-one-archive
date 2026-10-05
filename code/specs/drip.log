@@ -77,3 +77,4 @@
 2026-10-05T07:47:07Z spec drip fill + shard-43: +11507 new, 884233 total specs / 936033 rows across main+42 shards
 2026-10-05 05:32 EDT | +11262 new (4000 new, 762 sigline, 2000 mix, 2000 versions, 1500 revisions, 1000 product lines) | main 147545 rows, network total 948095 | GUARD: data 893456306B > 850MB cap — NOT pushed, awaiting shard-44
 2026-10-05T09:38:15Z Spec drip fill + shard-44: +11262 specs, 895495 total specs / 948095 rows (specs+words) across main+43 shards
+2026-10-05 15:42:56 UTC | total specs: 91945

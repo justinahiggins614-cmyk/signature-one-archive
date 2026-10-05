@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="js/signin.js"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Catalog data files — Signature Spec Catalog</title>
@@ -95,5 +96,16 @@ review and file; not granted patents; not affiliated with the USPTO.</p>
     <li><a href="https://justinahiggins614-cmyk.github.io/signature-one-archive/sitemap-index.xml">Segmented sitemap index</a><br><span class="u">https://justinahiggins614-cmyk.github.io/signature-one-archive/sitemap-index.xml</span></li>
 </ul>
 <p><a href="specs.html">&larr; Back to the Spec Catalog</a></p>
+<script>
+(function () {
+  /* JAHProfile sign-in / profiles button (device-local profiles; Google-ready) */
+  var mount = document.querySelector('header .booksearch') ||
+              document.querySelector('nav.jtabbar') ||
+              document.querySelector('header nav') ||
+              document.querySelector('header') ||
+              document.body;
+  if (window.JAHProfile && JAHProfile.ui) JAHProfile.ui.renderButton(mount);
+})();
+</script>
 </body>
 </html>

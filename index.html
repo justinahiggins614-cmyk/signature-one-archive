@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="js/signin.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Signature-One Archive — Official Specification Documents</title>
@@ -621,5 +622,16 @@ Place all three dots last: (4.35, 4.80), (8.60, 4.20), (9.40, 4.20).</span></div
 <div class="jah-stamp" style="margin-top:10px;text-align:center;"><img src="assets/signature-stamp.jpg" alt="Official Signature stamp" style="height:64px;width:auto;border-radius:4px;"><div style="font-size:.72em;opacity:.75;margin-top:4px;">Official Signature stamp</div></div>
 </footer>
 <a class="top-link" href="#top" aria-label="Back to top">↑</a>
+<script>
+(function () {
+  /* JAHProfile sign-in / profiles button (device-local profiles; Google-ready) */
+  var mount = document.querySelector('header .booksearch') ||
+              document.querySelector('nav.jtabbar') ||
+              document.querySelector('header nav') ||
+              document.querySelector('header') ||
+              document.body;
+  if (window.JAHProfile && JAHProfile.ui) JAHProfile.ui.renderButton(mount);
+})();
+</script>
 </body>
 </html>

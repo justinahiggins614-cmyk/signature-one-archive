@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script>try{if(localStorage.getItem("jah-theme")==="dark")document.documentElement.dataset.theme="dark";}catch(e){}</script>
+<script src="js/signin.js"></script>
+<script>try{var _ps=(typeof JAHProfile!=='undefined')?JAHProfile.store:localStorage;if(_ps.get("jah-theme")==="dark")document.documentElement.dataset.theme="dark";}catch(e){}</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Signature Spec Catalog Pending Patents — Draft Patent Specifications by Justin Addam Higgins (JAH)</title>
@@ -687,9 +688,9 @@ html[data-theme="dark"] img,html[data-theme="dark"] video,html[data-theme="dark"
 <button id="jah-theme-toggle" type="button" title="Toggle dark mode" aria-label="Toggle dark mode">&#9681;</button>
 <script>
 /* UX-2026-10-03: dark-mode toggle wiring (opt-in; default look unchanged) */
-(function(){var b=document.getElementById("jah-theme-toggle");
+(function(){var PS=(typeof JAHProfile!=='undefined')?JAHProfile.store:localStorage;var b=document.getElementById("jah-theme-toggle");
 function paint(){try{b.innerHTML=(document.documentElement.dataset.theme==="dark")?"&#9728;":"&#9681;";}catch(e){}}
-b.addEventListener("click",function(){try{var d=document.documentElement;var dark=d.dataset.theme!=="dark";d.dataset.theme=dark?"dark":"";localStorage.setItem("jah-theme",dark?"dark":"light");}catch(e){}paint();});
+b.addEventListener("click",function(){try{var d=document.documentElement;var dark=d.dataset.theme!=="dark";d.dataset.theme=dark?"dark":"";PS.set("jah-theme",dark?"dark":"light");}catch(e){}paint();});
 paint();})();
 </script>
 <a class="skip" href="#browse">Skip to spec search</a>
@@ -2531,7 +2532,7 @@ function aiSocial(r, q) {
   if (typeof JAHtalk === "undefined") return null;
   var t = " " + String(q || "").toLowerCase() + " ";
   if (/\b(what are your duties|what is your duty|what do you do|what can you do|your duties|your job|your role|your abilities|explain your duties|who are you|your name|introduce yourself|what are you for|how are you)\b/.test(t))
-    return JAHtalk.chatFor(aiProf(r), 'spec:' + r[0]).reply(q);
+    return JAHtalk.chatFor(aiProf(r), (typeof JAHProfile!=='undefined'?JAHProfile.chatKey('spec:' + r[0]):('spec:' + r[0]))).reply(q);
   return null;
 }
 function aiAnswerRaw(r, q) {
@@ -4380,14 +4381,15 @@ function bindWikiSearch(inputId, resId, lens) {
 /* UX-2026-10-03 session restore — localStorage only; nothing leaves this device */
 (function(){
 try{
+var PS=(typeof JAHProfile!=='undefined')?JAHProfile.store:localStorage;
 var P=location.pathname;
 function sk(n){return "jah-sx:"+P+":"+n;}
 var recScrolled=false;
 function hasDeepLink(){try{var u=new URLSearchParams(location.search);return !!(u.get("spec")||u.get("word")||u.get("group"));}catch(e){return false;}}
 /* (a) scroll position: throttled save, restore after content settles */
 var st=null;
-window.addEventListener("scroll",function(){if(st)return;st=setTimeout(function(){st=null;try{localStorage.setItem(sk("y"),String(window.scrollY||window.pageYOffset||0));}catch(e){}},300);},{passive:true});
-function doScroll(){if(recScrolled||hasDeepLink())return;try{var y=parseInt(localStorage.getItem(sk("y"))||"0",10);if(y>0)window.scrollTo(0,y);}catch(e){}}
+window.addEventListener("scroll",function(){if(st)return;st=setTimeout(function(){st=null;try{PS.set(sk("y"),String(window.scrollY||window.pageYOffset||0));}catch(e){}},300);},{passive:true});
+function doScroll(){if(recScrolled||hasDeepLink())return;try{var y=parseInt(PS.get(sk("y"))||"0",10);if(y>0)window.scrollTo(0,y);}catch(e){}}
 /* (b) lens tab state: save per-spec on click; (c) last-opened record id */
 function lensKey(id){return sk("lens:")+id;}
 document.addEventListener("click",function(e){
@@ -4396,22 +4398,22 @@ document.addEventListener("click",function(e){
   try{
     var card=lb.closest(".spec-card");
     var sid=card?card.getAttribute("data-spec"):"";
-    if(sid)localStorage.setItem(lensKey(sid),lb.getAttribute("data-lens")||"");
+    if(sid)PS.set(lensKey(sid),lb.getAttribute("data-lens")||"");
   }catch(x){}
 },true);
 if(typeof openSpec==="function"){
   var _os=openSpec;
   openSpec=function(id,lens){
-    try{localStorage.setItem(sk("rec"),id);}catch(e){}
+    try{PS.set(sk("rec"),id);}catch(e){}
     var saved=null;
-    if(!lens){try{saved=localStorage.getItem(lensKey(id));}catch(e){}}
+    if(!lens){try{saved=PS.get(lensKey(id));}catch(e){}}
     return _os(id,lens||saved);
   };
 }
 function restoreRec(){
   try{
     if(hasDeepLink())return;
-    var id=localStorage.getItem(sk("rec"));
+    var id=PS.get(sk("rec"));
     if(!id)return;
     var card=document.querySelector('.spec-card[data-spec="'+id+'"]');
     if(card&&card.scrollIntoView){card.scrollIntoView();recScrolled=true;}
@@ -4478,7 +4480,8 @@ window.addEventListener("load",function(){setTimeout(doScroll,900);});
 /* ---------- first-visit WELCOME overlay (2026-10-04 standard): centered modal.
    NO auto-scroll, NO spotlight, NO section jumps — the page stays put, the overlay teaches. ---------- */
 var FLAG="jah-tour-seen-specs";
-function ls(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
+var PS=(typeof JAHProfile!=='undefined')?JAHProfile.store:localStorage;
+function ls(k,v){try{if(v===undefined)return PS.get(k);PS.set(k,v)}catch(e){return null}}
 var w=document.getElementById("jahWelcome"),
     guide=document.getElementById("jahGuide"),
     guideCard=document.getElementById("jahGuideCard"),
@@ -4502,5 +4505,16 @@ document.getElementById("jahGuideTour").onclick=function(){closeGuide();openWelc
 guide.addEventListener("click",function(e){if(e.target===guide)closeGuide()});
 if(!ls(FLAG)){setTimeout(openWelcome,900)}
 }catch(e){}})();</script>
+<script>
+(function () {
+  /* JAHProfile sign-in / profiles button (device-local profiles; Google-ready) */
+  var mount = document.querySelector('header .booksearch') ||
+              document.querySelector('nav.jtabbar') ||
+              document.querySelector('header nav') ||
+              document.querySelector('header') ||
+              document.body;
+  if (window.JAHProfile && JAHProfile.ui) JAHProfile.ui.renderButton(mount);
+})();
+</script>
 </body>
 </html>

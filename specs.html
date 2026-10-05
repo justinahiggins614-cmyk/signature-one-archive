@@ -2531,7 +2531,7 @@ function aiSocial(r, q) {
   if (typeof JAHtalk === "undefined") return null;
   var t = " " + String(q || "").toLowerCase() + " ";
   if (/\b(what are your duties|what is your duty|what do you do|what can you do|your duties|your job|your role|your abilities|explain your duties|who are you|your name|introduce yourself|what are you for|how are you)\b/.test(t))
-    return JAHtalk.reply(aiProf(r), q);
+    return JAHtalk.chatFor(aiProf(r), 'spec:' + r[0]).reply(q);
   return null;
 }
 function aiAnswerRaw(r, q) {

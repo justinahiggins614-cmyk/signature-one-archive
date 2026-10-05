@@ -3695,6 +3695,25 @@ function renderTracks() {
   });
   box.innerHTML = h;
 }
+/* Archive tab: catalog groups as collapsible sections. Top-level (not nested
+   in the boot closure) because maybeRenderSections() calls it; the nested
+   copy threw ReferenceError and killed the rest of finishLoad(). */
+function renderAzGroups() {
+  var box = document.getElementById("azgroups");
+  if (!box || !GROUPS.length || box.getAttribute("data-done")) return;
+  box.setAttribute("data-done", "1");
+  var h = "";
+  GROUPS.forEach(function (g) {
+    var n = groupCount(g.name);
+    h += '<details class="azsec">' +
+      '<summary><span class="azletter" style="font-size:.95em">' + esc(g.name) + '</span>' +
+      '<span class="azcount">' + n.toLocaleString() + ' DRAFT SPECS</span></summary>' +
+      '<div class="azbody"><p class="azcats">' + esc((g.categories || []).join(" \u00b7 ")) + '</p>' +
+      '<a class="azbrowselink" href="specs.html?group=' + encodeURIComponent(g.name) + '">Browse all ' +
+      n.toLocaleString() + ' drafts in ' + esc(g.name) + ' \u2192</a></div></details>';
+  });
+  box.innerHTML = h;
+}
 function stampSpecSEO(r) {
   /* Per-spec discoverability: descriptive title, canonical ?spec= URL, and a
      TechArticle JSON-LD block keyed by the permanent JAH-SPEC ID. Called
@@ -3769,6 +3788,19 @@ function openSpec(id, lens) {
     return;
   }
   stampSpecSEO(row);
+  /* Keep the address bar on the ?spec= deep link so the open record is
+     shareable and survives reload. pushState on user navigation (back button
+     returns to the list); replaceState when this URL already names the spec
+     (initial deep-link load, repeat opens). */
+  try {
+    var want = "specs.html?spec=" + encodeURIComponent(id);
+    var cur = "";
+    try { cur = window.location.search || ""; } catch (e) {}
+    if (window.history && window.history.pushState) {
+      if (cur.indexOf("spec=" + encodeURIComponent(id)) >= 0) window.history.replaceState({ spec: id }, "", want);
+      else window.history.pushState({ spec: id }, "", want);
+    }
+  } catch (e) {}
   state.q = ""; state.cat = ""; state.group = "";
   var qi = document.getElementById("q"); if (qi) qi.value = "";
   apply();
@@ -3791,6 +3823,16 @@ function openSpec(id, lens) {
     }
   });
 }
+/* Back/forward buttons: re-open the ?spec= record (or leave the list as-is
+   when no spec is named). Guarded so it only runs after data is ready. */
+window.addEventListener("popstate", function () {
+  try {
+    if (!window.DATA || !window.DATA.length) return;
+    var u = new URLSearchParams(window.location.search);
+    var sid = u.get("spec");
+    if (sid) openSpec(String(sid).trim().toUpperCase());
+  } catch (e) {}
+});
 function bindWikiSearch(inputId, resId, lens) {
   var inp = document.getElementById(inputId), res = document.getElementById(resId), t;
   if (!inp || !res) return;
@@ -3950,7 +3992,11 @@ function bindWikiSearch(inputId, resId, lens) {
     if (cb) { calcPress(cb.getAttribute("data-calc"), cb.getAttribute("data-k")); return; }
     var b = e.target.closest ? e.target.closest(".toggle") : null;
     if (!b) return;
-    var c = b.parentElement;
+    /* The toggle buttons live inside .cardmain, but the "open"/"expanded"
+       classes, data-spec, and _openPromise all belong on .spec-card (.card):
+       the CSS selectors (.card.open .abs, .card.expanded .details) and
+       openDetails() both key off the card element. */
+    var c = (b.closest ? b.closest(".spec-card") : null) || b.parentElement;
     if (b.getAttribute("data-t") === "abs") {
       c.classList.toggle("open");
       b.textContent = c.classList.contains("open") ? "Hide abstract" : "Show abstract";
@@ -4263,22 +4309,6 @@ function bindWikiSearch(inputId, resId, lens) {
     });
     box.innerHTML = h;
     handleLetterParam();
-  }
-  function renderAzGroups() {
-    var box = document.getElementById("azgroups");
-    if (!box || !GROUPS.length || box.getAttribute("data-done")) return;
-    box.setAttribute("data-done", "1");
-    var h = "";
-    GROUPS.forEach(function (g) {
-      var n = groupCount(g.name);
-      h += '<details class="azsec">' +
-        '<summary><span class="azletter" style="font-size:.95em">' + esc(g.name) + '</span>' +
-        '<span class="azcount">' + n.toLocaleString() + ' DRAFT SPECS</span></summary>' +
-        '<div class="azbody"><p class="azcats">' + esc((g.categories || []).join(" \u00b7 ")) + '</p>' +
-        '<a class="azbrowselink" href="specs.html?group=' + encodeURIComponent(g.name) + '">Browse all ' +
-        n.toLocaleString() + ' drafts in ' + esc(g.name) + ' \u2192</a></div></details>';
-    });
-    box.innerHTML = h;
   }
   function buildArchive() {
     var box = document.getElementById("azletters");

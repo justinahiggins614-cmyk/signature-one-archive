@@ -2778,8 +2778,7 @@ function auReadCard(det) {
   AU.label = (title ? title + " — " : "") + label;
   AU.q = auChunks(AU.label + ". " + pt.text);
   AU.i = 0; AU.active = true; AU.paused = false;
-  if (hasSpeech()) { try { window.speechSynthesis.cancel(); } catch (e) {} auSpeakNext(); }
-  else { auShowBar(true); auPaintBtn(); fxStart(AU.label + ". " + pt.text); fxMsg("This browser has no built-in voice — reading with the online voice instead."); }
+  auShowBar(true); auPaintBtn(); fxStart(AU.label + ". " + pt.text);
 }
 function auPauseToggle() {
   if (!AU.active) return;
@@ -3268,16 +3267,18 @@ function validationBlockHTML(r) {
     "a built prototype.</li></ul></div>";
 }
 function readSpecAloud(){
+  if(window.__JAHREAD&&!window.__JAHREAD.playGuard("readSpecAloud"))return;
   var el=document.querySelector('.lenspane[data-pane="overview"]')||document.body;
-  var txt=el.innerText||el.textContent||'';
-  txt=txt.replace(/\s+/g,' ').trim().slice(0,5000);
+  var txt=(el.innerText||el.textContent||'').replace(/\s+/g,' ').trim().slice(0,5000);
   if(!txt)return;
-  try{if(window.speechSynthesis){window.speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(txt);u.rate=1;u.lang='en-US';window.speechSynthesis.speak(u);}}catch(e){}
+  try{auStop()}catch(e){}
+  AU.label="Spec overview";AU.q=fxChunks(txt);AU.i=0;AU.active=true;AU.paused=false;
+  auShowBar(true);auPaintBtn();fxStart(txt);
 }
 function detailsHTML(r, i) {
   var abs = esc(r[2]);
   return '<div class="draftbanner">DRAFT &mdash; NOT A GRANTED PATENT</div>' +
-    '<div style="margin:8px 0"><button type="button" onclick="readSpecAloud()" style="background:#a00;color:#fff;border:1px solid #f00;padding:8px 16px;cursor:pointer;font:inherit">\U0001F50A Read spec aloud</button> <button type="button" onclick="if(window.speechSynthesis)window.speechSynthesis.cancel()" style="background:#333;color:#fff;border:1px solid #666;padding:8px 16px;cursor:pointer;font:inherit">\u23F9 Stop</button></div>' +
+    '<div style="margin:8px 0"><button type="button" onclick="readSpecAloud()" style="background:#a00;color:#fff;border:1px solid #f00;padding:8px 16px;cursor:pointer;font:inherit">\U0001F50A Read spec aloud</button> <button type="button" onclick="auStop()" style="background:#333;color:#fff;border:1px solid #666;padding:8px 16px;cursor:pointer;font:inherit">\u23F9 Stop</button></div>' +
     specCoverNow(r) +
     jahRecordPanelHTML({status: "DRAFT SPECIFICATION", id: r[0], ver: "v1.0 (baseline)",
       source: "JAH_ORIGINAL \u2014 authored by Justin Addam Higgins", title: r[1],
